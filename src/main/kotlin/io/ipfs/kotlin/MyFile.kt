@@ -3,28 +3,32 @@ package io.ipfs.kotlin
 import java.io.File
 import java.io.InputStream
 
-fun byteArrayOfFilePath(fil_p: String): ByteArray {
+/**
+ * Author : Emile Achadde 25 février 2020 at 17:00:54+01:00
+ */
+
+fun byteArrayOfFilePath(filPat: String): ByteArray {
     val (here, caller) = hereAndCaller()
     entering(here, caller)
 
-    val file = File(fil_p)
+    val file = File(filPat)
     val result:ByteArray = file.readBytes()
     
     exiting(here)
     return result
 }
 
-fun fileExtensionOfFilePath (fil_p:String): String {
-    val file = File(fil_p)
+fun fileExtensionOfFilePath (filPat:String): String {
+    val file = File(filPat)
     val ext = file.extension
     return ext
 }
 
-fun inputStreamOfFilePath(fil_p: String): InputStream {
+fun inputStreamOfFilePath(filPat: String): InputStream {
     val (here, caller) = hereAndCaller()
     entering(here, caller)
 
-    val file = File(fil_p)
+    val file = File(filPat)
     val result:InputStream = file.inputStream()
     
     exiting(here)
@@ -46,28 +50,29 @@ fun isFilePathOfWord(wor: String): Boolean {
     return result
 }
 
-fun lineListOfFileName (nof: String) : MutableList<String> {
+fun lineListOfFileName (filPat: String) : List<String> {
     val (here, caller) = hereAndCaller()
     entering(here, caller)
 
-    if (isTrace(here)) println("$here: input nof '$nof'")
+    if (isTrace(here)) println("$here: input filPat '$filPat'")
 
-    val result = mutableListOf<String>()
- 
-    File(nof).useLines {
-    	lines -> lines.forEach { result.add(it)}
-	}
-
-  if (isTrace(here)) println ("$here: output result '$result'")	
-  exiting(here)
-  return result
+    val result = try {
+	File(filPat).readLines()
+    }
+    catch(e: java.io.IOException) {
+	fatalErrorPrint("file '$filPat' were read", "it failed reading", "Check",here)
+    }
+    
+    if (isTrace(here)) println ("$here: output result '$result'")	
+    exiting(here)
+    return result
 }
 
-fun outputWriteOfFilePath(fil_p: String, content: String) {
+fun outputWriteOfFilePath(filPat: String, content: String) {
     val (here, caller) = hereAndCaller()
     entering(here, caller)
 	
-    File(fil_p).bufferedWriter().use { out -> out.write(content)}
+    File(filPat).bufferedWriter().use { out -> out.write(content)}
     
     exiting(here)
 }
@@ -107,24 +112,36 @@ fun standardInputReadLine(): String {
     return str
 }
 
-fun stringListOfFilePath(fil_p: String): List<String> {
+fun stringListOfFilePath(filPat: String): List<String> {
     val (here, caller) = hereAndCaller()
     entering(here, caller)
 
-    val file = File(fil_p)
+    val file = File(filPat)
     val bufferedReader = file.bufferedReader()
-    val result:List<String> = bufferedReader.readLines()
-    
+
+    val result:List<String> = try {
+	bufferedReader.readLines()
+    }
+    catch(e: java.io.IOException) {
+	fatalErrorPrint("file '$filPat' were read", "it failed reading", "Check",here)
+    }
+
     exiting(here)
     return result
 }
 
-fun stringReadOfFilePath(fil_p: String): String {
+fun stringReadOfFilePath(filPat: String): String {
     val (here, caller) = hereAndCaller()
     entering(here, caller)
 
-    val file = File(fil_p)
-    val result: String = file.readText() 
+    val file = File(filPat)
+    val result: String = 
+	try {
+	    file.readText() 
+	}
+    catch(e: java.io.IOException) {
+	fatalErrorPrint("file '$filPat' were read", "it failed reading", "Check",here)
+    }
     
     exiting(here)
     return result
