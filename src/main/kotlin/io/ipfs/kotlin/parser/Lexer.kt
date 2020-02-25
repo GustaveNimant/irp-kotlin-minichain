@@ -16,7 +16,7 @@ fun hasKeywordPreviousOfLexemeList (met_l: List<Lexeme>): Boolean {
 
     if (isTrace(here)) println("$here: input met_l '$met_l'")
     
-    val lex = KeywordWithQmHash("previous")
+    val lex = Lexeme.KeywordWithQmHash("previous")
     val result = met_l.contains(lex)
 
     if (isTrace(here)) println("$here: output result '$result'")
@@ -110,7 +110,7 @@ fun isKeywordWithQmHashOfLexeme(lex: Lexeme): Boolean {
     entering(here, caller)
 
     println("$here: input lex '$lex'")
-    val result = lex is KeywordWithQmHash
+    val result = lex is Lexeme.KeywordWithQmHash
 
     if (isTrace(here)) println("$here: output result '$result'")
     exiting(here)
@@ -287,7 +287,7 @@ fun lexemeListFromUserKeywordValueOfStringDollared (str: String) : List<Lexeme> 
 	      	  val sub = lin.substring(position)
 		  val word = nextWordOfEndCharOfString('$', sub)
 		  if (isFromUserKeywordValueOfString(word)) {
-    		    val lex = FromUserKeywordValue(word)
+    		    val lex = Lexeme.FromUserKeywordValue(word)
 		    lexemeList.add (lex)	
 		    position = position + word.length 
 		  }
@@ -306,7 +306,7 @@ fun lexemeListFromUserKeywordValueOfStringDollared (str: String) : List<Lexeme> 
 	  catch (e: java.lang.StringIndexOutOfBoundsException) {
 	  	val cha = lin.get(position)
 	  	if (cha.equals('$')) {
-	     	   val lex = TokenEndOfLine
+	     	   val lex = Lexeme.TokenEndOfLine
 		   lexemeList.add (lex)
 	     	   if (isLoop(here)) println("$here: setting End Of Line")
 	     	   Done = true			
@@ -455,7 +455,7 @@ fun lexemeListMetaOfDollarString (lin: String) : Pair<List<Lexeme>, Int> {
       catch (e: java.lang.StringIndexOutOfBoundsException) {
 	val cha = lin.get(position-1)
 	if (cha.equals('$')) {
-	  val lex = TokenEndOfLine
+	  val lex = Lexeme.TokenEndOfLine
           lexemeList.add (lex)
 	  if (isLoop(here)) println("$here: setting End Of Line")
 	    Done = true			
@@ -507,7 +507,7 @@ fun lexemeListMetaValueOfStringDollared (lin: String) : List<Lexeme> {
 		  val word = nextWordOfEndCharOfString('$', str)
 		  if (isSpotOfString(word)) {
 		     position = position + word.length 
-    		      val lex = Spot (word)
+    		      val lex = Lexeme.Spot (word)
 		      lexemeList.add(lex)
 		  }
 		  else {
@@ -520,7 +520,7 @@ fun lexemeListMetaValueOfStringDollared (lin: String) : List<Lexeme> {
 	  catch (e: java.lang.StringIndexOutOfBoundsException) {
 	  	val cha = lin.get(position-1)
 	  	if (cha.equals('$')) {
-	     	   val lex = TokenEndOfLine
+	     	   val lex = Lexeme.TokenEndOfLine
 		   lexemeList.add (lex)
 	     	   if (isLoop(here)) println("$here: setting End Of Line")
 	     	   Done = true			
@@ -573,7 +573,7 @@ fun lexemeListOfAuthorLine (lin: String) : Pair<List<Lexeme>, Int> {
 	      	  val str = lin.substring(position)
 		  val word = nextWordOfEndCharOfString('$', str)
 		  if (isAuthorNameOfString(word)) {
-    		     val lex = AuthorName (word)
+    		     val lex = Lexeme.AuthorName (word)
 		     lexemeList.add (lex)
 		     position = position + word.length 
 		  }
@@ -591,7 +591,7 @@ fun lexemeListOfAuthorLine (lin: String) : Pair<List<Lexeme>, Int> {
 	  catch (e: java.lang.StringIndexOutOfBoundsException) {
 	  	val cha = lin.get(position-1)
 	  	if (cha.equals('$')) {
-	     	   val lex = TokenEndOfLine
+	     	   val lex = Lexeme.TokenEndOfLine
 		   lexemeList.add (lex)	
 	     	   if (isLoop(here)) println("$here: setting End Of Line")
 	     	   Done = true			
@@ -645,7 +645,7 @@ fun lexemeListOfDateLine (lin: String) : Pair<List<Lexeme>, Int> {
 		  val cha_l = listOf(' ','$')
 		  val word = nextWordOfEndCharListOfString(cha_l, str)
 		  if (isDateOfString(word)) {
-    		     val lex = DateValue (word)
+    		     val lex = Lexeme.DateValue (word)
 		     lexemeList.add (lex)
 		     position = position + word.length
 		  }
@@ -658,7 +658,7 @@ fun lexemeListOfDateLine (lin: String) : Pair<List<Lexeme>, Int> {
 	      	  val str = lin.substring(position)
 		  val word = nextWordOfEndCharOfString('$', str)
 		  if (isDateOfString(word)) {
-    		     val lex = DateValue (word)
+    		     val lex = Lexeme.DateValue (word)
 		     lexemeList.add (lex)
 		     position = position + word.length
 		  }
@@ -676,7 +676,7 @@ fun lexemeListOfDateLine (lin: String) : Pair<List<Lexeme>, Int> {
 	  catch (e: java.lang.StringIndexOutOfBoundsException) {
 	  	val cha = lin.get(position-1)
 	  	if (cha.equals('$')) {
-	     	  val lex = TokenEndOfLine
+	     	  val lex = Lexeme.TokenEndOfLine
 		  lexemeList.add (lex)
 	     	  if (isLoop(here)) println("$here: setting End Of Line")
 	     	  Done = true			
@@ -719,7 +719,7 @@ fun lexemeListOfDollarStringDollar (dol_dol: String): Pair<List<Lexeme>, Int> {
        throw Exception(message)
   }
 
-  val lex = TextWordConstant(dol_dol)
+  val lex = Lexeme.TextWordConstant(dol_dol)
   lexemeList.add(lex)
   val position = dol_dol.length
   
@@ -863,7 +863,7 @@ fun lexemeListOfMembersRemainderString (str: String) : Pair<List<Lexeme>, Int> {
 	         val word = nextWordOfEndCharListOfString(cha_l, sub)
 		 if (isAuthorNameOfString(word)) {
 		     position = position + word.length 
-    		     val lex = AuthorName (word)
+    		     val lex = Lexeme.AuthorName (word)
 		     lexemeList.add (lex)
 		  }
 		  else {
@@ -877,7 +877,7 @@ fun lexemeListOfMembersRemainderString (str: String) : Pair<List<Lexeme>, Int> {
 	  val cha = str.get(position-1)
 	  val cha_l = listOf('$', ' ', '\'', '"')
 	  if (cha_l.contains(cha)) { 
-	    val lex = TokenEndOfLine
+	    val lex = Lexeme.TokenEndOfLine
             lexemeList.add (lex)
 	    if (isLoop(here)) println("$here: setting End Of Line")
 	      Done = true			
@@ -930,7 +930,7 @@ fun lexemeListOfMutableLine (lin: String) : Pair<List<Lexeme>, Int> {
 		  val word = nextWordOfEndCharOfString('$', str)
 		  if (isFilePathOfString(word)) {
 		     position = position + word.length 
-    		     val lex = FilePath (word)
+    		     val lex = Lexeme.FilePath (word)
 		     lexemeList.add (lex)
 		  }
 		  else {
@@ -947,7 +947,7 @@ fun lexemeListOfMutableLine (lin: String) : Pair<List<Lexeme>, Int> {
 	  catch (e: java.lang.StringIndexOutOfBoundsException) {
 	  	val cha = lin.get(position-1)
 	  	if (cha.equals('$')) {
-	     	   val lex = TokenEndOfLine
+	     	   val lex = Lexeme.TokenEndOfLine
 		   lexemeList.add (lex)
 	     	   if (isLoop(here)) println("$here: setting End Of Line")
 	     	   Done = true			
@@ -1005,7 +1005,7 @@ fun lexemeListOfNextLine (lin: String) : Pair<List<Lexeme>, Int> {
 	      	  val str = lin.substring(position)
 		  val word = nextWordOfEndCharOfString('$', str)
 		  if (isNextNameOfString(word)) {
-    		     val lex = NextName (word)
+    		     val lex = Lexeme.NextName (word)
 		     lexemeList.add (lex)
 		     position = position + word.length 
 		     }		     
@@ -1023,7 +1023,7 @@ fun lexemeListOfNextLine (lin: String) : Pair<List<Lexeme>, Int> {
 	  catch (e: java.lang.StringIndexOutOfBoundsException) {
 	  	val cha = lin.get(position-1)
 	  	if (cha.equals('$')) {
-	     	   val lex = TokenEndOfLine
+	     	   val lex = Lexeme.TokenEndOfLine
 		   lexemeList.add (lex)		
 	     	   if (isLoop(here)) println("$here: setting End Of Line")
 	     	   Done = true			
@@ -1070,7 +1070,7 @@ fun lexemeListOfNonSharpedLine (lin: String) : List<Lexeme> {
 	    if (isLoop(here)) println("$here: when str '$str'")
 	    val cha_l = listOf(' ','$')
 	    val word = nextWordOfEndCharListOfString(cha_l, str)
-	    val lex = TextWordConstant(word)
+	    val lex = Lexeme.TextWordConstant(word)
 	    if (isLoop(here)) println("$here: when lex '$lex'")
 	    lexemeList.add(lex)
 	    position = position + word.length
@@ -1079,8 +1079,8 @@ fun lexemeListOfNonSharpedLine (lin: String) : List<Lexeme> {
 	'{' -> {
 	    val str = lin.substring(position)
 	    val word = nextWordInBracketsOfString (str)
-            val lex = TextVariableSubstituable(word)
-            val lex_l = listOf(TokenLeftCurvedBracket, TokenLeftCurvedBracket, lex, TokenRightCurvedBracket, TokenRightCurvedBracket)
+            val lex = Lexeme.TextVariableSubstituable(word)
+            val lex_l = listOf(Lexeme.TokenLeftCurvedBracket, Lexeme.TokenLeftCurvedBracket, lex, Lexeme.TokenRightCurvedBracket, Lexeme.TokenRightCurvedBracket)
 	    lexemeList.addAll(lex_l)
 	    position = position + word.length + 4
 	}
@@ -1129,7 +1129,7 @@ somekeyword: somevalue$  '
 	    }
       	      if (isLoop(here)) println ("$here: while Done at previous position $pos with cha '$cha' in lin '$lin'")
 
-	    val lex = TokenEndOfLine
+	    val lex = Lexeme.TokenEndOfLine
 	    lexemeList.add(lex)
 	    if (isLoop(here)) println ("$here: EndOfLine added")
       	    Done = true			
@@ -1177,7 +1177,7 @@ fun lexemeListOfParentsLine (lin: String) : Pair<List<Lexeme>, Int> {
 	      	  val str = lin.substring(position)
 		  val word = nextWordOfEndCharOfString('$', str)
 		  if (isQmHashOfString(word)) {
-    		     val lex = QmHash (word)
+    		     val lex = Lexeme.QmHash (word)
 		     lexemeList.add (lex)	
 		     position = position + word.length 
 	  	  }
@@ -1195,7 +1195,7 @@ fun lexemeListOfParentsLine (lin: String) : Pair<List<Lexeme>, Int> {
 	  catch (e: java.lang.StringIndexOutOfBoundsException) {
 	  	val cha = lin.get(position-1)
 	  	if (cha.equals('$')) {
-	     	   val lex = TokenEndOfLine
+	     	   val lex = Lexeme.TokenEndOfLine
 		   lexemeList.add (lex)
 	     	   if (isLoop(here)) println("$here: setting End Of Line")
 	     	   Done = true			
@@ -1249,7 +1249,7 @@ fun lexemeListOfPreviousLine (lin: String) : Pair<List<Lexeme>, Int> {
 		  val word = nextWordOfEndCharOfString('$', str)
 		  if (isQmHashOfString(word)) {
 		     position = position + word.length 
-    		     val lex = QmHash (word)
+    		     val lex = Lexeme.QmHash (word)
 		     lexemeList.add (lex)
 		  }
 		  else {
@@ -1266,7 +1266,7 @@ fun lexemeListOfPreviousLine (lin: String) : Pair<List<Lexeme>, Int> {
 	  catch (e: java.lang.StringIndexOutOfBoundsException) {
 	  	val cha = lin.get(position-1)
 	  	if (cha.equals('$')) {
-	     	   val lex = TokenEndOfLine
+	     	   val lex = Lexeme.TokenEndOfLine
 		   lexemeList.add (lex)
 	     	   if (isLoop(here)) println("$here: setting End Of Line")
 	     	   Done = true			
@@ -1319,7 +1319,7 @@ fun lexemeListOfQmHashLine (lin: String) : Pair<List<Lexeme>, Int> {
 	      	  val str = lin.substring(position)
 		  val word = nextWordOfEndCharOfString('$', str)
 		  if (isZ2HashOfString(word)) {
-    		     val lex = Z2Hash (word)
+    		     val lex = Lexeme.Z2Hash (word)
 		     lexemeList.add (lex)
 		     position = position + word.length 
 		  }
@@ -1337,7 +1337,7 @@ fun lexemeListOfQmHashLine (lin: String) : Pair<List<Lexeme>, Int> {
 	  catch (e: java.lang.StringIndexOutOfBoundsException) {
 	  	val cha = lin.get(position-1)
 	  	if (cha.equals('$')) {
-	     	   val lex = TokenEndOfLine
+	     	   val lex = Lexeme.TokenEndOfLine
              	   lexemeList.add (lex)
 	     	   if (isLoop(here)) println("$here: setting End Of Line")
 	     	   Done = true			
@@ -1383,7 +1383,7 @@ fun lexemeListOfSharpedLine (lin: String) : List<Lexeme> {
 	    }
 	    else {
 	       Done = true
-	       TokenEmptySharpedLine
+	       Lexeme.TokenEmptySharpedLine
 	    }
 	}
 	' ' -> {
@@ -1415,7 +1415,7 @@ fun lexemeListOfSharpedLine (lin: String) : List<Lexeme> {
 	if (! cha.equals('$')) {
 	val cha_l = listOf(' ', '\'', '"')
 	if (cha_l.contains(cha)) { 
-	  val lex = TokenEndOfLine
+	  val lex = Lexeme.TokenEndOfLine
           lexemeList.add (lex)
 	  if (isLoop(here)) println("$here: setting End Of Line")
 	  }
@@ -1468,7 +1468,7 @@ fun lexemeListOfSignatureLine (lin: String) : Pair<List<Lexeme>, Int> {
 		  val word = nextWordOfEndCharOfString('$', str)
 		  if (isSignatureOfString(word)) {
 		     position = position + word.length 
-    		     Signature (word)
+    		     Lexeme.Signature (word)
 		  }
 		  else {
 		       val message = "$here: Error word '$word' is not a valid Spot field"
@@ -1480,7 +1480,7 @@ fun lexemeListOfSignatureLine (lin: String) : Pair<List<Lexeme>, Int> {
 	  catch (e: java.lang.StringIndexOutOfBoundsException) {
 	  	val cha = lin.get(position-1)
 	  	if (cha.equals('$')) {
-	     	   val lex = TokenEndOfLine
+	     	   val lex = Lexeme.TokenEndOfLine
              	   lexemeList.add (lex)
 	     	   if (isLoop(here)) println("$here: setting End Of Line")
 	     	   Done = true			
@@ -1533,7 +1533,7 @@ fun lexemeListOfSourceLine (lin: String) : Pair<List<Lexeme>, Int> {
 	      	  val str = lin.substring(position)
 		  val word = nextWordOfEndCharOfString(',', str)
 		  if (isFilePathOfString(word)) {
-    		     val lex = FilePath (word)
+    		     val lex = Lexeme.FilePath (word)
 		     lexemeList.add (lex)
 		     position = position + word.length 
 		  }
@@ -1551,7 +1551,7 @@ fun lexemeListOfSourceLine (lin: String) : Pair<List<Lexeme>, Int> {
 	  catch (e: java.lang.StringIndexOutOfBoundsException) {
 	  	val cha = lin.get(position-1)
 	  	if (cha.equals('$')) {
-	     	   val lex = TokenEndOfLine
+	     	   val lex = Lexeme.TokenEndOfLine
              	   lexemeList.add (lex)
 	     	   if (isLoop(here)) println("$here: setting End Of Line")
 	     	   Done = true			
@@ -1609,7 +1609,7 @@ fun lexemeListOfSpotLine (lin: String) : Pair<List<Lexeme>, Int> {
 	      	  val str = lin.substring(position)
 		  val word = nextWordOfEndCharOfString('$', str)
 		  if (isSpotOfString(word)) {
-    		     val lex = Spot (word)
+    		     val lex = Lexeme.Spot (word)
 		     lexemeList.add (lex)
 		     position = position + word.length 
 		     }
@@ -1627,7 +1627,7 @@ fun lexemeListOfSpotLine (lin: String) : Pair<List<Lexeme>, Int> {
 	  catch (e: java.lang.StringIndexOutOfBoundsException) {
 	  	val cha = lin.get(position-1)
 	  	if (cha.equals('$')) {
-	     	   val lex = TokenEndOfLine
+	     	   val lex = Lexeme.TokenEndOfLine
              	   lexemeList.add (lex)
 	     	   if (isLoop(here)) println("$here: setting End Of Line")
 	     	   Done = true			
@@ -1683,7 +1683,7 @@ fun lexemeListOfTextString (str: String) : Pair<List<Lexeme>, Int> {
 	      in 'a' .. 'z', in 'A' .. 'Z' -> {
 	        val cha_l = listOf(' ', ':', '$')
 	    	val word = nextWordOfEndCharListOfString (cha_l, str)
-    	  	val lex = TextWordConstant (word)
+    	  	val lex = Lexeme.TextWordConstant (word)
 		lexemeList.add (lex)
 	  	position = position + word.length
 
@@ -1755,7 +1755,7 @@ fun lexemeListOfTicLine (lin: String) : Pair<List<Lexeme>, Int> {
 		  val word = nextWordOfEndCharOfString('$', str)
 		  if (isTicOfString(word)) {
 		     position = position + word.length 
-    		     val lex = Tic (word)
+    		     val lex = Lexeme.Tic (word)
 		     lexemeList.add (lex)
 		  }
 		  else {
@@ -1772,7 +1772,7 @@ fun lexemeListOfTicLine (lin: String) : Pair<List<Lexeme>, Int> {
 	  catch (e: java.lang.StringIndexOutOfBoundsException) {
 	  	val cha = lin.get(position-1)
 	  	if (cha.equals('$')) {
-	     	   val lex = TokenEndOfLine
+	     	   val lex = Lexeme.TokenEndOfLine
              	   lexemeList.add (lex)
 	     	   if (isLoop(here)) println("$here: setting End Of Line")
 	     	   Done = true			
@@ -1826,13 +1826,13 @@ fun nameKeywordWithOfLexeme(lex: Lexeme): String {
 
     println("$here: input lex '$lex'")
     val result = when (lex) {
-    	is KeywordWithZ2Hash -> lex.name 
-	is KeywordWithDate -> lex.name     
-    	is KeywordWithFile -> lex.name 
-    	is KeywordWithInteger -> lex.name 
-    	is KeywordWithQmHash -> lex.name  
-    	is KeywordWithString -> lex.name   
-        is KeywordWithPersonName -> lex.name
+    	is Lexeme.KeywordWithZ2Hash -> lex.name 
+	is Lexeme.KeywordWithDate -> lex.name     
+    	is Lexeme.KeywordWithFile -> lex.name 
+    	is Lexeme.KeywordWithInteger -> lex.name 
+    	is Lexeme.KeywordWithQmHash -> lex.name  
+    	is Lexeme.KeywordWithString -> lex.name   
+        is Lexeme.KeywordWithPersonName -> lex.name
 	else -> "none"
     }
     

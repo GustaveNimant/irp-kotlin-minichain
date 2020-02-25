@@ -12,7 +12,7 @@ fun blockKindOfMetaLexemeList (met_l: List<Lexeme>): String {
 
     var result = "genesis"
     for (lex in met_l) {
-      	if (lex is KeywordWithQmHash && lex.name == "previous") {	
+      	if (lex is Lexeme.KeywordWithQmHash && lex.name == "previous") {	
        	   result = "current"
 	   break
       }
@@ -36,84 +36,84 @@ fun leafedNodeAndStackOfLexemeMetaStack (lex_met_s: Stack<Lexeme>): Pair<Mutable
         if (isDebug(here)) println ("$here: while lex '$lex'")
 
       	when (lex) {
-      	  is TokenEndOfLine -> {
+      	  is Lexeme.TokenEndOfLine -> {
 	     Done=true
 	     if (isDebug(here)) println ("$here: while EndOfLine reached")
 	  }
-     	  is KeywordWithDate -> {
+     	  is Lexeme.KeywordWithDate -> {
 	    var nod_nam = lex.name
 	    node = MutableTreeNode<String>(nod_nam)
 	  }
-     	  is KeywordWithFile -> {
+     	  is Lexeme.KeywordWithFile -> {
 	    var nod_nam = lex.name
 	    node = MutableTreeNode<String>(nod_nam)
 	  }
-	  is KeywordWithQmHash -> {
+	  is Lexeme.KeywordWithQmHash -> {
 	    var nod_nam = lex.name
 	    node = MutableTreeNode<String>(nod_nam)
 	  }
-	  is KeywordWithString -> {
+	  is Lexeme.KeywordWithString -> {
 	    var nod_nam = lex.name
 	    node = MutableTreeNode<String>(nod_nam)
 	  }
-	  is KeywordWithZ2Hash -> {
+	  is Lexeme.KeywordWithZ2Hash -> {
 	    var nod_nam = lex.name
 	    node = MutableTreeNode<String>(nod_nam)
 	  }
-     	  is KeywordWithInteger -> {
+     	  is Lexeme.KeywordWithInteger -> {
 	    var nod_nam = lex.name
 	    node = MutableTreeNode<String>(nod_nam)
 	  }
-	  is KeywordWithPersonName -> {
+	  is Lexeme.KeywordWithPersonName -> {
 	    var nod_nam = lex.name
 	    node = MutableTreeNode<String>(nod_nam)
 	  }
-	  is AuthorName -> {
+	  is Lexeme.AuthorName -> {
 	    var lea_val = lex.name
 	    var leaf = MutableTreeNode<String>(lea_val)
 	    node.addChild(leaf)
 	  }
-	  is NextName -> {
+	  is Lexeme.NextName -> {
 	    var lea_val = lex.name
 	    var leaf = MutableTreeNode<String>(lea_val)
 	    node.addChild(leaf)
 	  }
-	  is FilePath -> {
+	  is Lexeme.FilePath -> {
 	    var lea_val = lex.name
 	    var leaf = MutableTreeNode<String>(lea_val)
 	    node.addChild(leaf)
           }
-	  is DateValue -> {
+	  is Lexeme.DateValue -> {
 	    var lea_val = lex.value
 	    var leaf = MutableTreeNode<String>(lea_val)
 	    node.addChild(leaf)
 	  }
-	  is QmHash -> {
+	  is Lexeme.QmHash -> {
 	    var lea_val = lex.hash
 	    var leaf = MutableTreeNode<String>(lea_val)
 	    node.addChild(leaf)
 	  }
-	  is Z2Hash -> {
+	  is Lexeme.Z2Hash -> {
 	    var lea_val = lex.hash
 	    var leaf = MutableTreeNode<String>(lea_val)
 	    node.addChild(leaf)
 	  }
-	  is Signature -> {
+	  is Lexeme.Signature -> {
 	    var lea_val = lex.value
 	    var leaf = MutableTreeNode<String>(lea_val)
 	    node.addChild(leaf)
 	  }
-	  is Spot -> {
+	  is Lexeme.Spot -> {
 	    var lea_val = lex.value
 	    var leaf = MutableTreeNode<String>(lea_val)
 	    node.addChild(leaf)
 	  }
-	  is Tic  -> {
+	  is Lexeme.Tic  -> {
 	    var lea_val = lex.value
 	    var leaf = MutableTreeNode<String>(lea_val)
 	    node.addChild(leaf)
 	  }
-	  is TokenDollar, is TokenVee, is TokenSharp, is TokenSpace -> {
+	  is Lexeme.TokenDollar, is Lexeme.TokenVee, is Lexeme.TokenSharp, is Lexeme.TokenSpace -> {
 	    if(isVerbose(here)) println ("$here: lexeme skipped '$lex'")
 	    MutableTreeNode<String>("skipped")
 	  }
@@ -217,7 +217,7 @@ fun provideMetaLexemeList () : List<Lexeme> {
     for (lex in lex_l) {
     	if (isDebug(here)) if (isDebug(here)) println ("$here: for lex '$lex'")
 
-	if (lex is TokenSharp) {
+	if (lex is Lexeme.TokenSharp) {
 	   is_meta = true
 	}
 	
@@ -226,7 +226,7 @@ fun provideMetaLexemeList () : List<Lexeme> {
 	   if (isDebug(here)) println ("$here: added lex '$lex'")
 	}
 	
-	if (is_meta && (lex is TokenEndOfLine)){
+	if (is_meta && (lex is Lexeme.TokenEndOfLine)){
 	   is_meta = false
 	   if (isDebug(here)) println ("$here: meta set to false")
 	}
@@ -254,7 +254,7 @@ fun provideRecordTextList () : List<String> {
     for (lex in lex_l) {
         if (isDebug(here)) println ("$here: for lex '$lex'")	
         when (lex) {
-       	   is TokenEndOfLine -> {
+       	   is Lexeme.TokenEndOfLine -> {
 	      rec_l.add (rec)
 	      rec = ""
 	   }
@@ -285,11 +285,11 @@ fun provideTextLexemeList () : List<Lexeme> {
     for (lex in lex_l) {
     	if (isDebug(here)) if (isDebug(here)) println ("$here: for lex '$lex'")
 
-	if (lex is TokenSharp) {
+	if (lex is Lexeme.TokenSharp) {
 	   is_meta = true
 	}
 	
-	if (is_meta && (lex is TokenEndOfLine)){
+	if (is_meta && (lex is Lexeme.TokenEndOfLine)){
 	   is_meta = false
 	   if (isDebug(here)) println ("$here: meta set to false")
 	}
@@ -327,7 +327,7 @@ fun provideTreeMetaRecordList () : List<MutableTreeNode<String>> {
       try {	  
       	var lex = lex_met_s.pop()
       	if (isDebug(here)) println ("$here: while lex '$lex'")
-      	if (lex is TokenSharp) {
+      	if (lex is Lexeme.TokenSharp) {
 	  var (tree, lex_s) = leafedNodeAndStackOfLexemeMetaStack (lex_met_s)
 	  tree_l.add(tree)
 	  lex_met_s = lex_s

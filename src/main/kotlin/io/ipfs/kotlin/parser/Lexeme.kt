@@ -5,7 +5,7 @@ import java.io.File
 import java.util.Stack
 import java.lang.Character.MIN_VALUE as nullChar
 
-sealed class Lexeme ()
+sealed class Lexeme {
   data class KeywordWithPersonName (val name: String) : Lexeme ()
   data class KeywordWithDate (val name: String) : Lexeme ()
   data class KeywordWithQmHash (val name: String) : Lexeme ()
@@ -54,55 +54,57 @@ sealed class Lexeme ()
   object TokenLeftSquareBracket : Lexeme ()
   object TokenRightCurvedBracket : Lexeme ()
   object TokenRightSquareBracket : Lexeme ()
+}
 
 fun fullnameOfLexeme (lexeme: Lexeme): String {
+
     val string = when (lexeme) {
 
-	is AuthorName -> "AuthorName("+lexeme.name+")"
-	is Comment -> "Comment("+lexeme.name+")"
-	is DateValue -> "DateValue("+lexeme.value+")"
-	is FilePath -> "FilePath("+lexeme.name+")"
-	is FromUserKeywordValue -> "FromUserKeywordValue("+lexeme.name+")"
-	is NextName -> "NextName("+lexeme.name+")"
-	is QmHash -> "QmHash("+lexeme.hash+")"
-	is Signature -> "Signature("+lexeme.value+")"	
-	is Spot -> "Spot("+lexeme.value+")"
-	is TextRecordConstant -> "TextRecordConstant("+lexeme.record+")"
-	is TextStringConstant -> "TextStringConstant("+lexeme.string+")"
-	is TextVariableSubstituable -> "TextVariableSubstituable("+lexeme.variable+")"	
-	is TextWordConstant -> "TextWordConstant("+lexeme.word+")"
-	is Tic -> "Tic("+lexeme.value+")"	
-	is Z2Hash -> "Z2Hash("+lexeme.hash+")"
+	is Lexeme.AuthorName -> "AuthorName("+lexeme.name+")"
+	is Lexeme.Comment -> "Comment("+lexeme.name+")"
+	is Lexeme.DateValue -> "DateValue("+lexeme.value+")"
+	is Lexeme.FilePath -> "FilePath("+lexeme.name+")"
+	is Lexeme.FromUserKeywordValue -> "FromUserKeywordValue("+lexeme.name+")"
+	is Lexeme.NextName -> "NextName("+lexeme.name+")"
+	is Lexeme.QmHash -> "QmHash("+lexeme.hash+")"
+	is Lexeme.Signature -> "Signature("+lexeme.value+")"	
+	is Lexeme.Spot -> "Spot("+lexeme.value+")"
+	is Lexeme.TextRecordConstant -> "TextRecordConstant("+lexeme.record+")"
+	is Lexeme.TextStringConstant -> "TextStringConstant("+lexeme.string+")"
+	is Lexeme.TextVariableSubstituable -> "TextVariableSubstituable("+lexeme.variable+")"	
+	is Lexeme.TextWordConstant -> "TextWordConstant("+lexeme.word+")"
+	is Lexeme.Tic -> "Tic("+lexeme.value+")"	
+	is Lexeme.Z2Hash -> "Z2Hash("+lexeme.hash+")"
 
-	is KeywordWithDate    -> "KeywordWithDate("+lexeme.name+")"
-    	is KeywordWithFile    -> "KeywordWithFile("+lexeme.name+")"
-    	is KeywordWithInteger -> "KeywordWithInteger("+lexeme.name+")"
-    	is KeywordWithQmHash  -> "KeywordWithQmHash("+lexeme.name+")"
-    	is KeywordWithString  -> "KeywordWithString("+lexeme.name+")"
-        is KeywordWithPersonName -> "KeywordWithPersonName("+lexeme.name+")"
-	is KeywordWithZ2Hash -> "KeywordWithZ2Hash("+lexeme.name+")"
+	is Lexeme.KeywordWithDate    -> "KeywordWithDate("+lexeme.name+")"
+    	is Lexeme.KeywordWithFile    -> "KeywordWithFile("+lexeme.name+")"
+    	is Lexeme.KeywordWithInteger -> "KeywordWithInteger("+lexeme.name+")"
+    	is Lexeme.KeywordWithQmHash  -> "KeywordWithQmHash("+lexeme.name+")"
+    	is Lexeme.KeywordWithString  -> "KeywordWithString("+lexeme.name+")"
+        is Lexeme.KeywordWithPersonName -> "KeywordWithPersonName("+lexeme.name+")"
+	is Lexeme.KeywordWithZ2Hash -> "KeywordWithZ2Hash("+lexeme.name+")"
 
-	is KeywordFromUser -> "KeywordFromUser("+lexeme.name+")"
+	is Lexeme.KeywordFromUser -> "KeywordFromUser("+lexeme.name+")"
 
-	TokenAt	-> "TokenAt"
-	TokenLeftCurvedBracket -> "TokenLeftCurvedBracket"
-	TokenLeftSquareBracket -> "TokenLeftSquareBracket"
-	TokenRightCurvedBracket -> "TokenRightCurvedBracket"
-	TokenRightSquareBracket -> "TokenRightSquareBracket"
-	TokenColon	-> "TokenColon"
-	TokenComma	-> "TokenComma"
-	TokenDollar	-> "TokenDollar"
-	TokenDot	-> "TokenDot"
-	TokenEmptyLine  -> "TokenEmptyLine"
-	TokenEmptySharpedLine -> "TokenEmptySharpedLine"
-	TokenEndOfLine	-> "TokenEndOfLine"
-	TokenHyphen	-> "TokenHyphen"
-	TokenSemicolon	-> "TokenSemicolon"
-	TokenSharp	-> "TokenSharp"
-	TokenSkipped    -> "skipped "
-	TokenSpace	-> "TokenSpace"
-	TokenUnknown    -> "unknown "
-	TokenVee	-> "TokenVee"
+	Lexeme.TokenAt	-> "TokenAt"
+	Lexeme.TokenLeftCurvedBracket -> "TokenLeftCurvedBracket"
+	Lexeme.TokenLeftSquareBracket -> "TokenLeftSquareBracket"
+	Lexeme.TokenRightCurvedBracket -> "TokenRightCurvedBracket"
+	Lexeme.TokenRightSquareBracket -> "TokenRightSquareBracket"
+	Lexeme.TokenColon	-> "TokenColon"
+	Lexeme.TokenComma	-> "TokenComma"
+	Lexeme.TokenDollar	-> "TokenDollar"
+	Lexeme.TokenDot	-> "TokenDot"
+	Lexeme.TokenEmptyLine  -> "TokenEmptyLine"
+	Lexeme.TokenEmptySharpedLine -> "TokenEmptySharpedLine"
+	Lexeme.TokenEndOfLine	-> "TokenEndOfLine"
+	Lexeme.TokenHyphen	-> "TokenHyphen"
+	Lexeme.TokenSemicolon	-> "TokenSemicolon"
+	Lexeme.TokenSharp	-> "TokenSharp"
+	Lexeme.TokenSkipped    -> "skipped "
+	Lexeme.TokenSpace	-> "Lexeme.TokenSpace"
+	Lexeme.TokenUnknown    -> "unknown "
+	Lexeme.TokenVee	-> "TokenVee"
 	}
     return string
 }
@@ -113,54 +115,54 @@ fun isInMetaOfLexeme(lex: Lexeme): Boolean {
 
     if (isTrace(here)) println("$here: input lex '$lex'")
     val result = when (lex) {
-	is TextRecordConstant  -> false
-	is TextStringConstant  -> false
-	is TextVariableSubstituable  -> false
-	is TextWordConstant  -> false
+	is Lexeme.TextRecordConstant  -> false
+	is Lexeme.TextStringConstant  -> false
+	is Lexeme.TextVariableSubstituable  -> false
+	is Lexeme.TextWordConstant  -> false
 
-	is FromUserKeywordValue  -> false
+	is Lexeme.FromUserKeywordValue  -> false
 
-	TokenAt	         -> true
-	TokenColon	 -> true
-	TokenComma	 -> true
-	TokenDollar	 -> true
-	TokenDot	 -> true
-	TokenEndOfLine	 -> true
-	TokenHyphen	 -> true
-	TokenSemicolon	 -> true
-	TokenSharp	 -> true
-	TokenLeftCurvedBracket -> true
-        TokenLeftSquareBracket -> true
-	TokenRightCurvedBracket -> true
-        TokenRightSquareBracket -> true
-	TokenSpace	 -> true
+	Lexeme.TokenAt	         -> true
+	Lexeme.TokenColon	 -> true
+	Lexeme.TokenComma	 -> true
+	Lexeme.TokenDollar	 -> true
+	Lexeme.TokenDot	 -> true
+	Lexeme.TokenEndOfLine	 -> true
+	Lexeme.TokenHyphen	 -> true
+	Lexeme.TokenSemicolon	 -> true
+	Lexeme.TokenSharp	 -> true
+	Lexeme.TokenLeftCurvedBracket -> true
+        Lexeme.TokenLeftSquareBracket -> true
+	Lexeme.TokenRightCurvedBracket -> true
+        Lexeme.TokenRightSquareBracket -> true
+	Lexeme.TokenSpace	 -> true
 
-	is AuthorName  -> true
-	is Comment  -> true
-	is DateValue  -> true
-	is FilePath  -> true
-	is NextName  -> true
-	is QmHash  -> true
-	is Signature  -> true
-	is Spot  -> true
-	is Tic  -> true
-	is Z2Hash  -> true
+	is Lexeme.AuthorName  -> true
+	is Lexeme.Comment  -> true
+	is Lexeme.DateValue  -> true
+	is Lexeme.FilePath  -> true
+	is Lexeme.NextName  -> true
+	is Lexeme.QmHash  -> true
+	is Lexeme.Signature  -> true
+	is Lexeme.Spot  -> true
+	is Lexeme.Tic  -> true
+	is Lexeme.Z2Hash  -> true
 
-	is KeywordWithDate     -> true
-    	is KeywordWithFile     -> true
-    	is KeywordWithInteger  -> true
-    	is KeywordWithQmHash   -> true
-    	is KeywordWithString   -> true
-        is KeywordWithPersonName -> true
-	is KeywordWithZ2Hash  -> true
+	is Lexeme.KeywordWithDate     -> true
+    	is Lexeme.KeywordWithFile     -> true
+    	is Lexeme.KeywordWithInteger  -> true
+    	is Lexeme.KeywordWithQmHash   -> true
+    	is Lexeme.KeywordWithString   -> true
+        is Lexeme.KeywordWithPersonName -> true
+	is Lexeme.KeywordWithZ2Hash  -> true
 
-	is KeywordFromUser -> false
+	is Lexeme.KeywordFromUser -> false
 
-	TokenSkipped     -> true
-	TokenUnknown     -> true
-	TokenVee	 -> true
-	TokenEmptyLine   -> true
-	TokenEmptySharpedLine  -> true
+	Lexeme.TokenSkipped     -> true
+	Lexeme.TokenUnknown     -> true
+	Lexeme.TokenVee	 -> true
+	Lexeme.TokenEmptyLine   -> true
+	Lexeme.TokenEmptySharpedLine  -> true
     }
     exiting(here + " with result '$result'")
     return result
@@ -225,54 +227,54 @@ fun isInTextOfLexeme(lex: Lexeme): Boolean {
 
     if (isTrace(here)) println("$here: input lex '$lex'")
     val result = when (lex) {
-	is TextRecordConstant  -> true
-	is TextStringConstant  -> true
-	is TextVariableSubstituable  -> true
-	is TextWordConstant  -> true
+	is Lexeme.TextRecordConstant  -> true
+	is Lexeme.TextStringConstant  -> true
+	is Lexeme.TextVariableSubstituable  -> true
+	is Lexeme.TextWordConstant  -> true
 
-	TokenAt		 -> true
-	TokenColon	 -> true
-	TokenLeftSquareBracket -> true
-	TokenLeftCurvedBracket -> true
-	TokenRightSquareBracket -> true
-	TokenRightCurvedBracket -> true
-	TokenComma	 -> true
-	TokenDollar	 -> true
-	TokenDot	 -> true
-	TokenEndOfLine	 -> true
-	TokenHyphen	 -> true
-	TokenSemicolon	 -> true
-	TokenSharp	 -> true
-	TokenSpace	 -> true
+	Lexeme.TokenAt		 -> true
+	Lexeme.TokenColon	 -> true
+	Lexeme.TokenLeftSquareBracket -> true
+	Lexeme.TokenLeftCurvedBracket -> true
+	Lexeme.TokenRightSquareBracket -> true
+	Lexeme.TokenRightCurvedBracket -> true
+	Lexeme.TokenComma	 -> true
+	Lexeme.TokenDollar	 -> true
+	Lexeme.TokenDot	 -> true
+	Lexeme.TokenEndOfLine	 -> true
+	Lexeme.TokenHyphen	 -> true
+	Lexeme.TokenSemicolon	 -> true
+	Lexeme.TokenSharp	 -> true
+	Lexeme.TokenSpace	 -> true
 
-	is AuthorName  -> false
-	is Comment  -> false
-	is DateValue  -> false
-	is FilePath  -> false
-	is KeywordWithZ2Hash  -> false
-	is NextName  -> false
-	is QmHash  -> false
-	is Signature  -> false
-	is Spot  -> false
-	is Tic  -> false
-	is Z2Hash  -> false
+	is Lexeme.AuthorName  -> false
+	is Lexeme.Comment  -> false
+	is Lexeme.DateValue  -> false
+	is Lexeme.FilePath  -> false
+	is Lexeme.KeywordWithZ2Hash  -> false
+	is Lexeme.NextName  -> false
+	is Lexeme.QmHash  -> false
+	is Lexeme.Signature  -> false
+	is Lexeme.Spot  -> false
+	is Lexeme.Tic  -> false
+	is Lexeme.Z2Hash  -> false
 
-	is FromUserKeywordValue  -> true
+	is Lexeme.FromUserKeywordValue  -> true
 	
-	is KeywordWithDate     -> false
-    	is KeywordWithFile     -> false
-    	is KeywordWithInteger  -> false
-    	is KeywordWithQmHash   -> false
-    	is KeywordWithString   -> false
-        is KeywordWithPersonName  -> false
+	is Lexeme.KeywordWithDate     -> false
+    	is Lexeme.KeywordWithFile     -> false
+    	is Lexeme.KeywordWithInteger  -> false
+    	is Lexeme.KeywordWithQmHash   -> false
+    	is Lexeme.KeywordWithString   -> false
+        is Lexeme.KeywordWithPersonName  -> false
 
-        is KeywordFromUser  -> true
+        is Lexeme.KeywordFromUser  -> true
 
-	TokenSkipped     -> false
-	TokenUnknown     -> false
-	TokenVee	 -> false
-	TokenEmptyLine   -> false
-	TokenEmptySharpedLine  -> false
+	Lexeme.TokenSkipped     -> false
+	Lexeme.TokenUnknown     -> false
+	Lexeme.TokenVee	 -> false
+	Lexeme.TokenEmptyLine   -> false
+	Lexeme.TokenEmptySharpedLine  -> false
     }
     exiting(here + " with result '$result'")
     return result
@@ -285,20 +287,20 @@ fun lexemeOfWord (keyword: String) : Lexeme {
     if (isTrace(here)) println("$here: input keyword: '$keyword'")
 
    var lexeme = when (keyword) {
-       "Author" -> KeywordWithPersonName (keyword)
-       "Date" -> KeywordWithDate (keyword)
-       "Source" -> KeywordWithFile (keyword)
-       "Signature" -> KeywordWithString (keyword)      
-       "members" -> KeywordWithString (keyword)
-       "mutable" -> KeywordWithFile (keyword)
-       "parents" -> KeywordWithQmHash (keyword)
-       "previous" -> KeywordWithQmHash (keyword)
-       "next" -> KeywordWithString (keyword)
-       "tic" -> KeywordWithInteger (keyword)       
-       "qm" -> KeywordWithZ2Hash (keyword)
-       "spot" -> KeywordWithInteger (keyword)       
+       "Author" -> Lexeme.KeywordWithPersonName (keyword)
+       "Date" -> Lexeme.KeywordWithDate (keyword)
+       "Source" -> Lexeme.KeywordWithFile (keyword)
+       "Signature" -> Lexeme.KeywordWithString (keyword)      
+       "members" -> Lexeme.KeywordWithString (keyword)
+       "mutable" -> Lexeme.KeywordWithFile (keyword)
+       "parents" -> Lexeme.KeywordWithQmHash (keyword)
+       "previous" -> Lexeme.KeywordWithQmHash (keyword)
+       "next" -> Lexeme.KeywordWithString (keyword)
+       "tic" -> Lexeme.KeywordWithInteger (keyword)       
+       "qm" -> Lexeme.KeywordWithZ2Hash (keyword)
+       "spot" -> Lexeme.KeywordWithInteger (keyword)       
        else -> {
-       	    KeywordFromUser (keyword)
+       	    Lexeme.KeywordFromUser (keyword)
 	}
   }
   
@@ -313,13 +315,13 @@ fun isKeywordWithOfLexeme(lex: Lexeme): Boolean {
 
     if (isTrace(here)) println("$here: input lex '$lex'")
     val result = when (lex) {
-    	is KeywordWithZ2Hash -> true 
-	is KeywordWithDate -> true     
-    	is KeywordWithFile -> true 
-    	is KeywordWithInteger -> true 
-    	is KeywordWithQmHash -> true  
-    	is KeywordWithString -> true   
-        is KeywordWithPersonName -> true
+    	is Lexeme.KeywordWithZ2Hash -> true 
+	is Lexeme.KeywordWithDate -> true     
+    	is Lexeme.KeywordWithFile -> true 
+    	is Lexeme.KeywordWithInteger -> true 
+    	is Lexeme.KeywordWithQmHash -> true  
+    	is Lexeme.KeywordWithString -> true   
+        is Lexeme.KeywordWithPersonName -> true
 	else -> false
     }
     exiting(here + " with result '$result'")
@@ -380,50 +382,50 @@ fun nextWordOfString(pos:Int, lin: String): String {
 fun stringValueOfLexeme (lexeme: Lexeme): String {
     val string = when (lexeme) {
 
-	is AuthorName -> lexeme.name
-	is Comment -> lexeme.name
-	is DateValue -> lexeme.value
-	is FilePath -> lexeme.name
-	is FromUserKeywordValue -> lexeme.name
-	is NextName -> lexeme.name
-	is QmHash -> lexeme.hash
-	is Signature -> lexeme.value	
-	is Spot -> lexeme.value
-	is TextRecordConstant -> lexeme.record
-	is TextStringConstant -> lexeme.string
-	is TextVariableSubstituable -> lexeme.variable	
-	is TextWordConstant -> lexeme.word
-	is Tic -> lexeme.value	
-	is Z2Hash -> lexeme.hash
+	is Lexeme.AuthorName -> lexeme.name
+	is Lexeme.Comment -> lexeme.name
+	is Lexeme.DateValue -> lexeme.value
+	is Lexeme.FilePath -> lexeme.name
+	is Lexeme.FromUserKeywordValue -> lexeme.name
+	is Lexeme.NextName -> lexeme.name
+	is Lexeme.QmHash -> lexeme.hash
+	is Lexeme.Signature -> lexeme.value	
+	is Lexeme.Spot -> lexeme.value
+	is Lexeme.TextRecordConstant -> lexeme.record
+	is Lexeme.TextStringConstant -> lexeme.string
+	is Lexeme.TextVariableSubstituable -> lexeme.variable	
+	is Lexeme.TextWordConstant -> lexeme.word
+	is Lexeme.Tic -> lexeme.value	
+	is Lexeme.Z2Hash -> lexeme.hash
 
-	is KeywordWithDate    -> lexeme.name
-    	is KeywordWithFile    -> lexeme.name
-    	is KeywordWithInteger -> lexeme.name
-    	is KeywordWithQmHash  -> lexeme.name
-    	is KeywordWithString  -> lexeme.name
-        is KeywordWithPersonName -> lexeme.name
-        is KeywordFromUser -> lexeme.name	
-	is KeywordWithZ2Hash -> lexeme.name
+	is Lexeme.KeywordWithDate    -> lexeme.name
+    	is Lexeme.KeywordWithFile    -> lexeme.name
+    	is Lexeme.KeywordWithInteger -> lexeme.name
+    	is Lexeme.KeywordWithQmHash  -> lexeme.name
+    	is Lexeme.KeywordWithString  -> lexeme.name
+        is Lexeme.KeywordWithPersonName -> lexeme.name
+        is Lexeme.KeywordFromUser -> lexeme.name	
+	is Lexeme.KeywordWithZ2Hash -> lexeme.name
 
-	TokenAt         -> "@"
-	TokenColon	-> ":"	
-	TokenComma	-> ","
-	TokenDollar	-> "\$"
-	TokenDot	-> "."
-	TokenEmptyLine  -> ""
-	TokenEmptySharpedLine -> ""
-	TokenEndOfLine	-> "\n"
-	TokenHyphen	-> "-"
-	TokenSemicolon	-> ";"
-	TokenSharp	-> "#"
-	TokenSpace	-> " "
-	TokenVee	-> "v"
-	TokenLeftSquareBracket	-> "["
-	TokenLeftCurvedBracket	-> "{"
-	TokenRightSquareBracket	-> "]"
-	TokenRightCurvedBracket	-> "}"
-	TokenUnknown    -> "unknown"
-	TokenSkipped    -> "skipped"
+	Lexeme.TokenAt         -> "@"
+	Lexeme.TokenColon	-> ":"	
+	Lexeme.TokenComma	-> ","
+	Lexeme.TokenDollar	-> "\$"
+	Lexeme.TokenDot	-> "."
+	Lexeme.TokenEmptyLine  -> ""
+	Lexeme.TokenEmptySharpedLine -> ""
+	Lexeme.TokenEndOfLine	-> "\n"
+	Lexeme.TokenHyphen	-> "-"
+	Lexeme.TokenSemicolon	-> ";"
+	Lexeme.TokenSharp	-> "#"
+	Lexeme.TokenSpace	-> " "
+	Lexeme.TokenVee	-> "v"
+	Lexeme.TokenLeftSquareBracket	-> "["
+	Lexeme.TokenLeftCurvedBracket	-> "{"
+	Lexeme.TokenRightSquareBracket	-> "]"
+	Lexeme.TokenRightCurvedBracket	-> "}"
+	Lexeme.TokenUnknown    -> "unknown"
+	Lexeme.TokenSkipped    -> "skipped"
 	}
     return string
 }
@@ -435,17 +437,17 @@ fun tokenOfChar(cha: Char, pos: Int, lin: String) : Lexeme {
     if (isTrace(here)) println("$here: input cha '$cha'")
 
     val token = when (cha) {
-    		'@' -> TokenAt
-		'#' -> TokenSharp
-		'$' -> TokenDollar
-		' ' -> TokenSpace
-		'\n' -> TokenEndOfLine
-		'v' -> TokenVee
-		',' -> TokenComma
-		':' -> TokenColon
-		';' -> TokenSemicolon
-		'.' -> TokenDot	
-		'-' -> TokenHyphen
+    		'@' -> Lexeme.TokenAt
+		'#' -> Lexeme.TokenSharp
+		'$' -> Lexeme.TokenDollar
+		' ' -> Lexeme.TokenSpace
+		'\n' -> Lexeme.TokenEndOfLine
+		'v' -> Lexeme.TokenVee
+		',' -> Lexeme.TokenComma
+		':' -> Lexeme.TokenColon
+		';' -> Lexeme.TokenSemicolon
+		'.' -> Lexeme.TokenDot	
+		'-' -> Lexeme.TokenHyphen
 	else -> {
              val message = "$here: Error unknown Character '$cha' at position $pos of line '$lin'"
     	     throw Exception(message)
@@ -456,4 +458,3 @@ fun tokenOfChar(cha: Char, pos: Int, lin: String) : Lexeme {
 	exiting(here)
 	return token
 }
-

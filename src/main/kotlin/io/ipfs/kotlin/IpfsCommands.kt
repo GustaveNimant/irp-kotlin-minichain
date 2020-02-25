@@ -49,6 +49,11 @@ fun ipfsExecuteOfWordList(wor_l: List<String>) {
 			val h_l = hel_l.filter({h -> h.contains("-ipfs ")})
 			printOfStringList(h_l)
     		}
+		"pee" -> {
+		        wor_s.clear()
+			val peeH = ipfsConfigIdentityPeeId()
+			println ("Peerid '$peeH'")
+    		}
 		else -> {
 		    fatalErrorPrint ("command were 'add', 'get'","'"+wor+"'", "Check input", here)
 		} // else
@@ -116,6 +121,21 @@ fun ipfsCommit (): String {
     val result = LocalIpfs().info.version()!!.Commit
     if(isTrace(here)) println ("$here: output result '$result'")
 	
+    exiting(here)
+    return result
+}
+
+fun ipfsConfigIdentityPeeId (): String {
+    val (here, caller) = hereAndCaller()
+    entering(here, caller)
+
+    val result = LocalIpfs().info.version()!!.Commit
+    if(isTrace(here)) println ("$here: output result '$result'")
+
+    if (result.isNullOrEmpty()){
+	fatalErrorPrint("peerid is not empty", "it is empty", "Check Peer", here)
+    }
+    
     exiting(here)
     return result
 }

@@ -61,6 +61,7 @@ fun helpList(): List<String> {
 	"gradlew run --args=\"-ipfs add <path> : add a file or a directory to Ipfs",
 	"gradlew run --args=\"-ipfs add <string> : add a string to Ipfs",
 	"gradlew run --args=\"-ipfs get <MultiHash> ",
+	"gradlew run --args=\"-ipfs peerid (ipfs --offline config Identity.PeerID)",
 	"gradlew run --args=\"-trace <function name>|all\" print input and output data",
 	"gradlew run --args=\"-verbose<function name>|all\"",
 	"gradlew run --args=\"-loop<function name>|all\" print message inside a loop",
