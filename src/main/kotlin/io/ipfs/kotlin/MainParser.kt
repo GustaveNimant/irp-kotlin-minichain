@@ -21,9 +21,9 @@ fun main(args: Array<String>) {
   val lex_l = provideLexemeList ()
   val tree =
       if (hasKeywordPreviousOfLexemeList(lex_l)) {
-        provideBlockCurrentMutableTreeNode()
+        provideBlockCurrentTreeNode()
       } else {
-        provideBlockGenesisMutableTreeNode()
+        provideBlockGenesisTreeNode()
       }
 
   println("Parser tree:")

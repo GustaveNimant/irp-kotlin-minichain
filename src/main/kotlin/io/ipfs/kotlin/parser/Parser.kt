@@ -1,10 +1,16 @@
 package io.ipfs.kotlin.parser
-// The Parser : List of Lexemes => Tree of Domain Entities
 
 import io.ipfs.kotlin.*
 import java.io.File
 import java.util.Stack
 import java.lang.Character.MIN_VALUE as nullChar
+
+/**
+ * Definition : The Parser : List of Lexemes => Tree of Domain Entities
+ * Done : 25 février 2020 MutableTree => Tree
+ * What to do : check the result seems to be empty ! 
+ * Author : Emile Achadde 25 février 2020 at 16:31:52+01:00
+ */
 
 fun blockKindOfMetaLexemeList (met_l: List<Lexeme>): String {
     val (here, caller) = hereAndCaller()
@@ -22,7 +28,7 @@ fun blockKindOfMetaLexemeList (met_l: List<Lexeme>): String {
     return result
 }
 
-fun leafedNodeAndStackOfLexemeMetaStack (lex_met_s: Stack<Lexeme>): Pair<MutableTreeNode<String>, Stack<Lexeme>> {
+fun leafedNodeAndStackOfLexemeMetaStack (lex_met_s: Stack<Lexeme>): Pair<TreeNode<String>, Stack<Lexeme>> {
 // Set up a Leafed Node (ex.: qm / z2....)
     val (here, caller) = hereAndCaller()
     entering(here, caller)
@@ -126,79 +132,65 @@ fun leafedNodeAndStackOfLexemeMetaStack (lex_met_s: Stack<Lexeme>): Pair<Mutable
       catch (e:java.util.EmptyStackException) {Done = true }
     }
 
-    if (isTrace(here)) println ("$here: output nodMut $nodMut")
+    val nodImm = nodMut.toTreeNode()
+    if (isTrace(here)) println ("$here: output nodImm $nodImm")
     if (isTrace(here)) println ("$here: output lex_met_s '$lex_met_s'")
 	
     exiting(here)
-    return Pair (nodMut, lex_met_s)
+    return Pair (nodImm, lex_met_s)
 }
 
-fun provideBlockCurrentMutableTreeNode () : MutableTreeNode<String> {
+fun provideBlockCurrentTreeNode () : TreeNode<String> {
     val (here, caller) = hereAndCaller()
     entering(here, caller)
 
 // <BlockCurrent> ::= <TreeMeta> <TreeText>
 
-    val tree = MutableTreeNode<String> ("block-current")
-    val treeMeta = provideBlockMetaMutableTreeNode ()
-    val treeText = provideBlockTextMutableTreeNode ()
-
-    tree.addChild (treeMeta)
-    tree.addChild (treeText)
+    val treeMeta = provideBlockMetaTreeNode ()
+    val treeText = provideBlockTextTreeNode ()
+    val tree = TreeNode("block-current", listOf(treeMeta, treeText))
 
     if (isTrace(here)) println ("$here: output tree '$tree'")	
     exiting(here)
     return tree
 }
 
-fun provideBlockGenesisMutableTreeNode () : MutableTreeNode<String> {
+fun provideBlockGenesisTreeNode () : TreeNode<String> {
     val (here, caller) = hereAndCaller()
     entering(here, caller)
 
 // <BlockGenesis> ::= <TreeMeta> <TreeText>
 
-    val tree = MutableTreeNode<String> ("block-genesis")
-    val treeMeta = provideBlockMetaMutableTreeNode ()
-    val treeText = provideBlockTextMutableTreeNode ()
-
-// Building 
-    tree.addChild(treeMeta)
-    tree.addChild(treeText)
-
+    val treeMeta = provideBlockMetaTreeNode ()
+    val treeText = provideBlockTextTreeNode ()
+    val tree = TreeNode("block-genesis", listOf(treeMeta, treeText))
+    
     exiting(here)
     return tree
 }
 
-fun provideBlockMetaMutableTreeNode () : MutableTreeNode<String> {
+fun provideBlockMetaTreeNode () : TreeNode<String> {
     val (here, caller) = hereAndCaller()
     entering(here, caller)
 
 // <TreeMeta> ::= TreeMetaRecordList ::= { TreeMetaRecord }
 
-    val tree = MutableTreeNode<String> ("block-meta")
     val nod_l = provideTreeMetaRecordList ()
-
-    for (nod in nod_l) {
-    	tree.addChild (nod)
-    }
+    val tree = TreeNode("block-meta", nod_l)
 
     if (isTrace(here)) println ("$here: output tree '$tree'")	
     exiting(here)
     return tree
 }
 
-fun provideBlockTextMutableTreeNode () : MutableTreeNode<String> {
+fun provideBlockTextTreeNode () : TreeNode<String> {
     val (here, caller) = hereAndCaller()
     entering(here, caller)
 
 // <TreeText> ::= TreeTextRecordList
 
-    val tree = MutableTreeNode<String> ("block-text")
     val nod_l = provideTreeTextRecordList ()
-
-    for (nod in nod_l) {
-    	tree.addChild (nod)
-    }
+    val tree = TreeNode<String> ("block-text", nod_l)
 
     if (isTrace(here)) println ("$here: output tree '$tree'")	
     exiting(here)
@@ -211,7 +203,7 @@ fun provideMetaLexemeList () : List<Lexeme> {
 
     val lex_l = provideLexemeList ()
 
-    var metaList = mutableListOf<Lexeme>()
+    var metMul = mutableListOf<Lexeme>()
     var is_meta = false
 
     for (lex in lex_l) {
@@ -222,7 +214,7 @@ fun provideMetaLexemeList () : List<Lexeme> {
 	}
 	
 	if (is_meta) {
-	   metaList.add (lex)
+	   metMul.add (lex)
 	   if (isDebug(here)) println ("$here: added lex '$lex'")
 	}
 	
@@ -231,11 +223,12 @@ fun provideMetaLexemeList () : List<Lexeme> {
 	   if (isDebug(here)) println ("$here: meta set to false")
 	}
     }
-    
-    if (isTrace(here)) println ("$here: output metaList "+ fullnameListOfLexemeList(metaList))
+
+    val result = metMul.toList()
+    if (isTrace(here)) println ("$here: output result "+ fullnameListOfLexemeList(result))
     
     exiting(here)
-    return metaList
+    return result
 }
 
 fun provideRecordTextList () : List<String> {
@@ -252,7 +245,7 @@ fun provideRecordTextList () : List<String> {
     var rec_l = mutableListOf<String>()
 	
     for (lex in lex_l) {
-        if (isDebug(here)) println ("$here: for lex '$lex'")	
+        if (isLoop(here)) println ("$here: for lex '$lex'")	
         when (lex) {
        	   is Lexeme.TokenEndOfLine -> {
 	      rec_l.add (rec)
@@ -279,11 +272,11 @@ fun provideTextLexemeList () : List<Lexeme> {
 
     val lex_l = provideLexemeList ()
 
-    var textList = mutableListOf<Lexeme>()
+    var texMul = mutableListOf<Lexeme>()
     var is_meta = false
 
     for (lex in lex_l) {
-    	if (isDebug(here)) if (isDebug(here)) println ("$here: for lex '$lex'")
+    	if (isLoop(here)) println ("$here: for lex '$lex'")
 
 	if (lex is Lexeme.TokenSharp) {
 	   is_meta = true
@@ -291,23 +284,24 @@ fun provideTextLexemeList () : List<Lexeme> {
 	
 	if (is_meta && (lex is Lexeme.TokenEndOfLine)){
 	   is_meta = false
-	   if (isDebug(here)) println ("$here: meta set to false")
+	   if (isLoop(here)) println ("$here: meta set to false")
 	}
 
 	if (! is_meta) {
-	   textList.add (lex)
-	   if (isDebug(here)) println ("$here: added lex '$lex'")
+	   texMul.add (lex)
+	   if (isLoop(here)) println ("$here: added lex '$lex'")
 	}
 	
     }
-    
-    if (isTrace(here)) println ("$here: output textList "+ fullnameListOfLexemeList(textList))
+
+    val result = texMul.toList()
+    if (isTrace(here)) println ("$here: output result "+ fullnameListOfLexemeList(result))
     
     exiting(here)
-    return textList
+    return result
 }
 
-fun provideTreeMetaRecordList () : List<MutableTreeNode<String>> {
+fun provideTreeMetaRecordList () : List<TreeNode<String>> {
     val (here, caller) = hereAndCaller()
     entering(here, caller)
 
@@ -320,19 +314,19 @@ fun provideTreeMetaRecordList () : List<MutableTreeNode<String>> {
     val lex_met_l = provideMetaLexemeList ()
     var lex_met_s = teeStackOfTeeList (lex_met_l)
     
-    var tree_l = mutableListOf<MutableTreeNode<String>>()
+    var treMut = mutableListOf<TreeNode<String>>()
     var Done = false
     
     while (! Done) {
       try {	  
       	var lex = lex_met_s.pop()
-      	if (isDebug(here)) println ("$here: while lex '$lex'")
+      	if (isLoop(here)) println ("$here: while lex '$lex'")
       	if (lex is Lexeme.TokenSharp) {
 	  var (tree, lex_s) = leafedNodeAndStackOfLexemeMetaStack (lex_met_s)
-	  tree_l.add(tree)
+	  treMut.add(tree)
 	  lex_met_s = lex_s
-	  if (isDebug(here)) println ("$here: while added tree '$tree")	
-	  if (isDebug(here)) println ("$here: while lex_met_s '$lex_met_s")	
+	  if (isLoop(here)) println ("$here: while added tree '$tree")	
+	  if (isLoop(here)) println ("$here: while lex_met_s '$lex_met_s")	
         }
       }
       catch (e:java.util.EmptyStackException) {
@@ -340,13 +334,14 @@ fun provideTreeMetaRecordList () : List<MutableTreeNode<String>> {
         Done = true
       }
     }
-    if (isTrace(here)) println ("$here: output tree_l '$tree_l'")	
+    val result = treMut.toList()
+    if (isTrace(here)) println ("$here: output result '$result'")	
 
     exiting(here)
-    return tree_l
+    return result
 }
 
-fun provideTreeTextRecordList () : List<MutableTreeNode<String>> {
+fun provideTreeTextRecordList(): List<TreeNode<String>> {
     val (here, caller) = hereAndCaller()
     entering(here, caller)
 
@@ -354,16 +349,11 @@ fun provideTreeTextRecordList () : List<MutableTreeNode<String>> {
 
     val nam_l = provideRecordTextList ()
 
-    var rec_tl = mutableListOf<MutableTreeNode<String>>()   
-    for (nam in nam_l) {
-        var nod = MutableTreeNode<String>(nam)
-    	rec_tl.add (nod)
-    }
-
-    val tree_l = rec_tl.toList()
-    if (isTrace(here)) println ("$here: output tree_l '$tree_l'")
+    val empty_l: List<TreeNode<String>> = listOf()
+    var result = nam_l.map { nam -> TreeNode(nam, empty_l)}   
+    if (isTrace(here)) println ("$here: output result result")
 
     exiting(here)
-    return tree_l
+    return result
 }
 

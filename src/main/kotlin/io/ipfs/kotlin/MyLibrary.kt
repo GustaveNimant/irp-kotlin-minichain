@@ -7,6 +7,12 @@ import java.lang.Character.MIN_VALUE as nullChar
 import java.util.Base64
 import java.util.Stack
 
+/**
+ * What is it : some basic tools
+ * Done : 25 février 2020 MutableTree => Tree
+ * Author : Emile Achadde 25 février 2020 at 16:31:52+01:00
+ */
+
 class MyLibrary
 
 // beginning of library
@@ -23,6 +29,12 @@ class MutableTreeNode<T>(value:T){
         node.parent = this
     }
 
+    fun toTreeNode(): TreeNode<T> {
+
+	val sib_l = children.toList()
+	val nodImm = TreeNode(value, sib_l.map { sib -> sib.toTreeNode()})
+	return nodImm
+	}
     override fun toString(): String {
         var s = "${value}"
         if (!children.isEmpty()) {
@@ -32,12 +44,11 @@ class MutableTreeNode<T>(value:T){
     }
 }
 
-class TreeNode<T>(value:T, children : List<TreeNode<T>>){
-    
-    fun ofMutableTreeNode(nodMut: MutableTreeNode<T>): TreeNode<T> {
-	return TreeNode<T>(nodMut.value, (nodMut.children).map { t -> ofMutableTreeNode (t)})
-    }
+// data class LeafNode<T>(val value:T):TreeNode<T>
 
+class TreeNode<T>(value:T, children : List<TreeNode<T>>){
+    val node = value
+    val siblings = children 
 }
 
 data class pairString (val first: String, val second: String)
