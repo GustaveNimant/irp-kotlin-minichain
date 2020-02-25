@@ -22,12 +22,12 @@ fun blockKindOfMetaLexemeList (met_l: List<Lexeme>): String {
     return result
 }
 
-fun leafedNodeAndStackOfLexemeMetaStack (lex_met_s: Stack<Lexeme>): Pair<TreeNode<String>, Stack<Lexeme>> {
+fun leafedNodeAndStackOfLexemeMetaStack (lex_met_s: Stack<Lexeme>): Pair<MutableTreeNode<String>, Stack<Lexeme>> {
 // Set up a Leafed Node (ex.: qm / z2....)
     val (here, caller) = hereAndCaller()
     entering(here, caller)
 
-    var node = TreeNode<String>("")
+    var node = MutableTreeNode<String>("")
     var Done = false
     
     while (! Done) {
@@ -42,84 +42,84 @@ fun leafedNodeAndStackOfLexemeMetaStack (lex_met_s: Stack<Lexeme>): Pair<TreeNod
 	  }
      	  is KeywordWithDate -> {
 	    var nod_nam = lex.name
-	    node = TreeNode<String>(nod_nam)
+	    node = MutableTreeNode<String>(nod_nam)
 	  }
      	  is KeywordWithFile -> {
 	    var nod_nam = lex.name
-	    node = TreeNode<String>(nod_nam)
+	    node = MutableTreeNode<String>(nod_nam)
 	  }
 	  is KeywordWithQmHash -> {
 	    var nod_nam = lex.name
-	    node = TreeNode<String>(nod_nam)
+	    node = MutableTreeNode<String>(nod_nam)
 	  }
 	  is KeywordWithString -> {
 	    var nod_nam = lex.name
-	    node = TreeNode<String>(nod_nam)
+	    node = MutableTreeNode<String>(nod_nam)
 	  }
 	  is KeywordWithZ2Hash -> {
 	    var nod_nam = lex.name
-	    node = TreeNode<String>(nod_nam)
+	    node = MutableTreeNode<String>(nod_nam)
 	  }
      	  is KeywordWithInteger -> {
 	    var nod_nam = lex.name
-	    node = TreeNode<String>(nod_nam)
+	    node = MutableTreeNode<String>(nod_nam)
 	  }
 	  is KeywordWithPersonName -> {
 	    var nod_nam = lex.name
-	    node = TreeNode<String>(nod_nam)
+	    node = MutableTreeNode<String>(nod_nam)
 	  }
 	  is AuthorName -> {
 	    var lea_val = lex.name
-	    var leaf = TreeNode<String>(lea_val)
+	    var leaf = MutableTreeNode<String>(lea_val)
 	    node.addChild(leaf)
 	  }
 	  is NextName -> {
 	    var lea_val = lex.name
-	    var leaf = TreeNode<String>(lea_val)
+	    var leaf = MutableTreeNode<String>(lea_val)
 	    node.addChild(leaf)
 	  }
 	  is FilePath -> {
 	    var lea_val = lex.name
-	    var leaf = TreeNode<String>(lea_val)
+	    var leaf = MutableTreeNode<String>(lea_val)
 	    node.addChild(leaf)
           }
 	  is DateValue -> {
 	    var lea_val = lex.value
-	    var leaf = TreeNode<String>(lea_val)
+	    var leaf = MutableTreeNode<String>(lea_val)
 	    node.addChild(leaf)
 	  }
 	  is QmHash -> {
 	    var lea_val = lex.hash
-	    var leaf = TreeNode<String>(lea_val)
+	    var leaf = MutableTreeNode<String>(lea_val)
 	    node.addChild(leaf)
 	  }
 	  is Z2Hash -> {
 	    var lea_val = lex.hash
-	    var leaf = TreeNode<String>(lea_val)
+	    var leaf = MutableTreeNode<String>(lea_val)
 	    node.addChild(leaf)
 	  }
 	  is Signature -> {
 	    var lea_val = lex.value
-	    var leaf = TreeNode<String>(lea_val)
+	    var leaf = MutableTreeNode<String>(lea_val)
 	    node.addChild(leaf)
 	  }
 	  is Spot -> {
 	    var lea_val = lex.value
-	    var leaf = TreeNode<String>(lea_val)
+	    var leaf = MutableTreeNode<String>(lea_val)
 	    node.addChild(leaf)
 	  }
 	  is Tic  -> {
 	    var lea_val = lex.value
-	    var leaf = TreeNode<String>(lea_val)
+	    var leaf = MutableTreeNode<String>(lea_val)
 	    node.addChild(leaf)
 	  }
 	  is TokenDollar, is TokenVee, is TokenSharp, is TokenSpace -> {
 	    if(isVerbose(here)) println ("$here: lexeme skipped '$lex'")
-	    TreeNode<String>("skipped")
+	    MutableTreeNode<String>("skipped")
 	  }
 	  else -> {
 	    if(isVerbose(here)) println ("$here: lexeme skipped '$lex'")
-	    TreeNode<String>("skipped")
+	    MutableTreeNode<String>("skipped")
 	  }
        }
        }
@@ -133,15 +133,15 @@ fun leafedNodeAndStackOfLexemeMetaStack (lex_met_s: Stack<Lexeme>): Pair<TreeNod
     return Pair (node, lex_met_s)
 }
 
-fun provideBlockCurrentTreeNode () : TreeNode<String> {
+fun provideBlockCurrentMutableTreeNode () : MutableTreeNode<String> {
     val (here, caller) = hereAndCaller()
     entering(here, caller)
 
 // <BlockCurrent> ::= <TreeMeta> <TreeText>
 
-    val tree = TreeNode<String> ("block-current")
-    val treeMeta = provideBlockMetaTreeNode ()
-    val treeText = provideBlockTextTreeNode ()
+    val tree = MutableTreeNode<String> ("block-current")
+    val treeMeta = provideBlockMetaMutableTreeNode ()
+    val treeText = provideBlockTextMutableTreeNode ()
 
     tree.addChild (treeMeta)
     tree.addChild (treeText)
@@ -151,15 +151,15 @@ fun provideBlockCurrentTreeNode () : TreeNode<String> {
     return tree
 }
 
-fun provideBlockGenesisTreeNode () : TreeNode<String> {
+fun provideBlockGenesisMutableTreeNode () : MutableTreeNode<String> {
     val (here, caller) = hereAndCaller()
     entering(here, caller)
 
 // <BlockGenesis> ::= <TreeMeta> <TreeText>
 
-    val tree = TreeNode<String> ("block-genesis")
-    val treeMeta = provideBlockMetaTreeNode ()
-    val treeText = provideBlockTextTreeNode ()
+    val tree = MutableTreeNode<String> ("block-genesis")
+    val treeMeta = provideBlockMetaMutableTreeNode ()
+    val treeText = provideBlockTextMutableTreeNode ()
 
 // Building 
     tree.addChild(treeMeta)
@@ -169,13 +169,13 @@ fun provideBlockGenesisTreeNode () : TreeNode<String> {
     return tree
 }
 
-fun provideBlockMetaTreeNode () : TreeNode<String> {
+fun provideBlockMetaMutableTreeNode () : MutableTreeNode<String> {
     val (here, caller) = hereAndCaller()
     entering(here, caller)
 
 // <TreeMeta> ::= TreeMetaRecordList ::= { TreeMetaRecord }
 
-    val tree = TreeNode<String> ("block-meta")
+    val tree = MutableTreeNode<String> ("block-meta")
     val nod_l = provideTreeMetaRecordList ()
 
     for (nod in nod_l) {
@@ -187,13 +187,13 @@ fun provideBlockMetaTreeNode () : TreeNode<String> {
     return tree
 }
 
-fun provideBlockTextTreeNode () : TreeNode<String> {
+fun provideBlockTextMutableTreeNode () : MutableTreeNode<String> {
     val (here, caller) = hereAndCaller()
     entering(here, caller)
 
 // <TreeText> ::= TreeTextRecordList
 
-    val tree = TreeNode<String> ("block-text")
+    val tree = MutableTreeNode<String> ("block-text")
     val nod_l = provideTreeTextRecordList ()
 
     for (nod in nod_l) {
@@ -307,7 +307,7 @@ fun provideTextLexemeList () : List<Lexeme> {
     return textList
 }
 
-fun provideTreeMetaRecordList () : List<TreeNode<String>> {
+fun provideTreeMetaRecordList () : List<MutableTreeNode<String>> {
     val (here, caller) = hereAndCaller()
     entering(here, caller)
 
@@ -320,7 +320,7 @@ fun provideTreeMetaRecordList () : List<TreeNode<String>> {
     val lex_met_l = provideMetaLexemeList ()
     var lex_met_s = teeStackOfTeeList (lex_met_l)
     
-    var tree_l = mutableListOf<TreeNode<String>>()
+    var tree_l = mutableListOf<MutableTreeNode<String>>()
     var Done = false
     
     while (! Done) {
@@ -346,7 +346,7 @@ fun provideTreeMetaRecordList () : List<TreeNode<String>> {
     return tree_l
 }
 
-fun provideTreeTextRecordList () : List<TreeNode<String>> {
+fun provideTreeTextRecordList () : List<MutableTreeNode<String>> {
     val (here, caller) = hereAndCaller()
     entering(here, caller)
 
@@ -354,9 +354,9 @@ fun provideTreeTextRecordList () : List<TreeNode<String>> {
 
     val nam_l = provideRecordTextList ()
 
-    var rec_tl = mutableListOf<TreeNode<String>>()   
+    var rec_tl = mutableListOf<MutableTreeNode<String>>()   
     for (nam in nam_l) {
-        var nod = TreeNode<String>(nam)
+        var nod = MutableTreeNode<String>(nam)
     	rec_tl.add (nod)
     }
 

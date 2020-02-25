@@ -11,17 +11,33 @@ class MyLibrary
 
 // beginning of library
 
+class MutableTreeNode<T>(value:T){
+    var value:T = value
+
+    var parent:MutableTreeNode<T>? = null
+
+    var children:MutableList<MutableTreeNode<T>> = mutableListOf()
+
+    fun addChild(node:MutableTreeNode<T>){
+        children.add(node)
+        node.parent = this
+    }
+
+    override fun toString(): String {
+        var s = "${value}"
+        if (!children.isEmpty()) {
+            s += " {" + children.map { it.toString() } + " }"
+        }
+        return s
+    }
+}
+
 class TreeNode<T>(value:T){
     var value:T = value
 
     var parent:TreeNode<T>? = null
 
-    var children:MutableList<TreeNode<T>> = mutableListOf()
-
-    fun addChild(node:TreeNode<T>){
-        children.add(node)
-        node.parent = this
-    }
+    var children:List<TreeNode<T>> = listOf()
 
     override fun toString(): String {
         var s = "${value}"
