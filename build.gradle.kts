@@ -56,5 +56,5 @@ dependencies {
 }
 
 application {
-    mainClassName = "io.ipfs.kotlin.MainParserKt"
+    mainClassName = "io.ipfs.kotlin.MainIpfsKt"
 }
