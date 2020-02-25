@@ -27,7 +27,7 @@ fun leafedNodeAndStackOfLexemeMetaStack (lex_met_s: Stack<Lexeme>): Pair<Mutable
     val (here, caller) = hereAndCaller()
     entering(here, caller)
 
-    var node = MutableTreeNode<String>("")
+    var nodMut = MutableTreeNode<String>("")
     var Done = false
     
     while (! Done) {
@@ -42,76 +42,76 @@ fun leafedNodeAndStackOfLexemeMetaStack (lex_met_s: Stack<Lexeme>): Pair<Mutable
 	  }
      	  is Lexeme.KeywordWithDate -> {
 	    var nod_nam = lex.name
-	    node = MutableTreeNode<String>(nod_nam)
+	    nodMut = MutableTreeNode<String>(nod_nam)
 	  }
      	  is Lexeme.KeywordWithFile -> {
 	    var nod_nam = lex.name
-	    node = MutableTreeNode<String>(nod_nam)
+	    nodMut = MutableTreeNode<String>(nod_nam)
 	  }
 	  is Lexeme.KeywordWithQmHash -> {
 	    var nod_nam = lex.name
-	    node = MutableTreeNode<String>(nod_nam)
+	    nodMut = MutableTreeNode<String>(nod_nam)
 	  }
 	  is Lexeme.KeywordWithString -> {
 	    var nod_nam = lex.name
-	    node = MutableTreeNode<String>(nod_nam)
+	    nodMut = MutableTreeNode<String>(nod_nam)
 	  }
 	  is Lexeme.KeywordWithZ2Hash -> {
 	    var nod_nam = lex.name
-	    node = MutableTreeNode<String>(nod_nam)
+	    nodMut = MutableTreeNode<String>(nod_nam)
 	  }
      	  is Lexeme.KeywordWithInteger -> {
 	    var nod_nam = lex.name
-	    node = MutableTreeNode<String>(nod_nam)
+	    nodMut = MutableTreeNode<String>(nod_nam)
 	  }
 	  is Lexeme.KeywordWithPersonName -> {
 	    var nod_nam = lex.name
-	    node = MutableTreeNode<String>(nod_nam)
+	    nodMut = MutableTreeNode<String>(nod_nam)
 	  }
 	  is Lexeme.AuthorName -> {
 	    var lea_val = lex.name
 	    var leaf = MutableTreeNode<String>(lea_val)
-	    node.addChild(leaf)
+	    nodMut.addChild(leaf)
 	  }
 	  is Lexeme.NextName -> {
 	    var lea_val = lex.name
 	    var leaf = MutableTreeNode<String>(lea_val)
-	    node.addChild(leaf)
+	    nodMut.addChild(leaf)
 	  }
 	  is Lexeme.FilePath -> {
 	    var lea_val = lex.name
 	    var leaf = MutableTreeNode<String>(lea_val)
-	    node.addChild(leaf)
+	    nodMut.addChild(leaf)
           }
 	  is Lexeme.DateValue -> {
 	    var lea_val = lex.value
 	    var leaf = MutableTreeNode<String>(lea_val)
-	    node.addChild(leaf)
+	    nodMut.addChild(leaf)
 	  }
 	  is Lexeme.QmHash -> {
 	    var lea_val = lex.hash
 	    var leaf = MutableTreeNode<String>(lea_val)
-	    node.addChild(leaf)
+	    nodMut.addChild(leaf)
 	  }
 	  is Lexeme.Z2Hash -> {
 	    var lea_val = lex.hash
 	    var leaf = MutableTreeNode<String>(lea_val)
-	    node.addChild(leaf)
+	    nodMut.addChild(leaf)
 	  }
 	  is Lexeme.Signature -> {
 	    var lea_val = lex.value
 	    var leaf = MutableTreeNode<String>(lea_val)
-	    node.addChild(leaf)
+	    nodMut.addChild(leaf)
 	  }
 	  is Lexeme.Spot -> {
 	    var lea_val = lex.value
 	    var leaf = MutableTreeNode<String>(lea_val)
-	    node.addChild(leaf)
+	    nodMut.addChild(leaf)
 	  }
 	  is Lexeme.Tic  -> {
 	    var lea_val = lex.value
 	    var leaf = MutableTreeNode<String>(lea_val)
-	    node.addChild(leaf)
+	    nodMut.addChild(leaf)
 	  }
 	  is Lexeme.TokenDollar, is Lexeme.TokenVee, is Lexeme.TokenSharp, is Lexeme.TokenSpace -> {
 	    if(isVerbose(here)) println ("$here: lexeme skipped '$lex'")
@@ -125,12 +125,12 @@ fun leafedNodeAndStackOfLexemeMetaStack (lex_met_s: Stack<Lexeme>): Pair<Mutable
        }
       catch (e:java.util.EmptyStackException) {Done = true }
     }
-    
-    if (isTrace(here)) println ("$here: output node '$node'")
+
+    if (isTrace(here)) println ("$here: output nodMut $nodMut")
     if (isTrace(here)) println ("$here: output lex_met_s '$lex_met_s'")
 	
     exiting(here)
-    return Pair (node, lex_met_s)
+    return Pair (nodMut, lex_met_s)
 }
 
 fun provideBlockCurrentMutableTreeNode () : MutableTreeNode<String> {

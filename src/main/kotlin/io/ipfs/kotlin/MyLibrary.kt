@@ -32,20 +32,12 @@ class MutableTreeNode<T>(value:T){
     }
 }
 
-class TreeNode<T>(value:T){
-    var value:T = value
-
-    var parent:TreeNode<T>? = null
-
-    var children:List<TreeNode<T>> = listOf()
-
-    override fun toString(): String {
-        var s = "${value}"
-        if (!children.isEmpty()) {
-            s += " {" + children.map { it.toString() } + " }"
-        }
-        return s
+class TreeNode<T>(value:T, children : List<TreeNode<T>>){
+    
+    fun ofMutableTreeNode(nodMut: MutableTreeNode<T>): TreeNode<T> {
+	return TreeNode<T>(nodMut.value, (nodMut.children).map { t -> ofMutableTreeNode (t)})
     }
+
 }
 
 data class pairString (val first: String, val second: String)
