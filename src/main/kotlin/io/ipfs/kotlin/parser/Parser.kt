@@ -8,7 +8,6 @@ import java.lang.Character.MIN_VALUE as nullChar
 /**
  * Definition : The Parser : List of Lexemes => Tree of Domain Entities
  * Done : 25 février 2020 MutableTree => Tree
- * What to do : check the result seems to be empty ! 
  * Author : Emile Achadde 25 février 2020 at 16:31:52+01:00
  */
 

@@ -10,12 +10,9 @@ import java.util.Stack
 /**
  * What is it : some basic tools
  * Done : 25 février 2020 MutableTree => Tree
+ * Remark : need to define TrreNode as data class to get non empty results.
  * Author : Emile Achadde 25 février 2020 at 16:31:52+01:00
  */
-
-class MyLibrary
-
-// beginning of library
 
 class MutableTreeNode<T>(value:T){
     var value:T = value
@@ -46,10 +43,7 @@ class MutableTreeNode<T>(value:T){
 
 // data class LeafNode<T>(val value:T):TreeNode<T>
 
-class TreeNode<T>(value:T, children : List<TreeNode<T>>){
-    val node = value
-    val siblings = children 
-}
+data class TreeNode<T>(val value:T, val children : List<TreeNode<T>>)
 
 data class pairString (val first: String, val second: String)
 

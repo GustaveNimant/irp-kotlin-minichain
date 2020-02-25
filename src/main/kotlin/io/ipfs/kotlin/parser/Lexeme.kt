@@ -5,6 +5,12 @@ import java.io.File
 import java.util.Stack
 import java.lang.Character.MIN_VALUE as nullChar
 
+/**
+ * Definition : The Lexer : Stream of characters => List of Lexemes
+ * Done : 25 février 2020 Lexeme {}
+ * Author : Emile Achadde 25 février 2020 at 16:38:46+01:00
+ */
+
 sealed class Lexeme {
   data class KeywordWithPersonName (val name: String) : Lexeme ()
   data class KeywordWithDate (val name: String) : Lexeme ()
