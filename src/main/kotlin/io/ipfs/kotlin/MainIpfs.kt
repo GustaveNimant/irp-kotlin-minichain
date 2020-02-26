@@ -176,14 +176,15 @@ fun mainMenu (parM: Map<String, List<String>>) {
 	if (isLoop(here)) println("$here: wor_l '$wor_l'")
 	
 	when (com_3) {
-	    "end", "exi" -> {endProgram()}
-	    "hel" -> {helpOfParameterMap(parM)}
-	    "ipf" -> {wrapperIpfsExecuteOfWordList(wor_l)}
-	    "por" -> {wrapperPortExecuteOfWordList(wor_l)}
 	    "deb", "loo", "tra", "ver", "whe" -> {
 		val str = stringOfStringList(wor_ml)
 		println("$here: '$com' activated for '$str' functions")
 	    }
+	    "end", "exi" -> {endProgram()}
+	    "hel" -> {helpOfParameterMap(parM)}
+	    "hos" -> {wrapperHostExecuteOfWordList(wor_l)}
+	    "ipf" -> {wrapperIpfsExecuteOfWordList(wor_l)}
+	    "por" -> {wrapperPortExecuteOfWordList(wor_l)}
 	    else -> {
 		fatalErrorPrint ("command were one of end, exi[t], hel[p], ipf[s], run", "'"+com+"'", "re Run", here)
 	    }//catch
@@ -250,6 +251,20 @@ fun wrapperPortExecuteOfWordList (wor_l: List<String>) {
     }
     catch (e: java.net.ConnectException){
 	fatalErrorPrint ("Connection to 127.0.0.1:5122", "Connection refused", "launch Port :\n\tgo to minichain jsm; . config.sh; ipmsd.sh", here)}
+    
+    exiting(here)
+}
+
+fun wrapperHostExecuteOfWordList (wor_l: List<String>) {
+    val (here, caller) = hereAndCaller()
+    entering(here, caller)
+
+    if (false) println("$here: input wor_l '$wor_l'")
+    try {
+	hostExecuteOfWordList(wor_l)
+    }
+    catch (e: java.net.ConnectException){
+	fatalErrorPrint ("Connection to 127.0.0.1:5122", "Connection refused", "launch Host :\n\tgo to minichain jsm; . config.sh; ipmsd.sh", here)}
     
     exiting(here)
 }

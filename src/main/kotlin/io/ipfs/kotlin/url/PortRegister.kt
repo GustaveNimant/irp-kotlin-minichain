@@ -25,14 +25,14 @@ class PortRegister {
         return result
      }
 
-    fun isStored (urlTyp: PortType): Boolean {
+    fun isStored (porTyp: PortType): Boolean {
 	val (here, caller) = hereAndCaller()
 	entering(here, caller)
 	
-	if(isTrace(here)) println ("$here: input urlTyp '$urlTyp'")
+	if(isTrace(here)) println ("$here: input porTyp '$porTyp'")
 	
-	val result = if (register.containsKey(urlTyp)) {
-	    (register.get(urlTyp)!!.isEmpty())
+	val result = if (register.containsKey(porTyp)) {
+	    (register.get(porTyp)!!.isEmpty())
 	}
 	else {false}
 	
@@ -42,32 +42,32 @@ class PortRegister {
 	return result
     }
     
-    fun store (urlTyp: PortType, urlVal: PortValue) {
+    fun store (porTyp: PortType, urlVal: PortValue) {
 	val (here, caller) = hereAndCaller()
 	entering(here, caller)
 	
-	if(isTrace(here)) println ("$here: input urlTyp '$urlTyp'")
+	if(isTrace(here)) println ("$here: input porTyp '$porTyp'")
 
-	if (isStored(urlTyp)) {
-	    val value = retrieve(urlTyp)
+	if (isStored(porTyp)) {
+	    val value = retrieve(porTyp)
 	    if (value != urlVal) {
-		fatalErrorPrint("already stored Port Value '$value' for Port Type '$urlTyp' were equal to new one", urlVal.toString(), "Check", here)
+		fatalErrorPrint("already stored Port Value '$value' for Port Type '$porTyp' were equal to new one", urlVal.toString(), "Check", here)
 	    }
 	}
 	else {
-	    register.put(urlTyp, urlVal)
+	    register.put(porTyp, urlVal)
 	}
-	if(isTrace(here)) println ("$here: (urlType, urlValue) couple has been stored")
+	if(isTrace(here)) println ("$here: (porType, urlValue) couple has been stored")
     }
     
-    fun retrieve(urlTyp: PortType): PortValue? {
+    fun retrieve(porTyp: PortType): PortValue? {
          val (here, caller) = hereAndCaller()
     	 entering(here, caller)
 
-	 val result = register.get(urlTyp)
+	 val result = register.get(porTyp)
 	 
 	 if (result!!.isEmpty()) {
-	   fatalErrorPrint("an Port Value existed for Port Type '$urlTyp'", "it did not","Check", here)
+	   fatalErrorPrint("an Port Value existed for Port Type '$porTyp'", "it did not","Check", here)
          }
 	 if(isTrace(here)) println ("$here: output result '$result'")
 	 exiting(here)

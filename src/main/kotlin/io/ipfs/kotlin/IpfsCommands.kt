@@ -13,6 +13,47 @@ import kotlin.system.exitProcess
  * Author : François Colonna 22 février 2020 at 15:32:44+01:00
  */
 
+fun hostExecuteOfWordList(wor_l: List<String>) {
+    val (here, caller) = hereAndCaller()
+    entering(here, caller)
+    
+    // Ex.: -host <HostType> <Integer>
+    var done = false
+    if(isTrace(here)) println ("$here: input wor_l '$wor_l'")
+    var wor_s = wordStackOfWordList(wor_l)
+
+    val hosReg = HostRegister()
+    
+    while (!done) {
+	try {
+	    val wor = wor_s.pop()
+	    if(isLoop(here)) println("$here: wor '$wor'")
+	    
+	    val hosTyp = hostTypeOfWord (wor)
+	    when (hosTyp) {
+		is HostType.HostUserDefined,
+		is HostType.HostLocal,
+		is HostType.HostRemote -> {
+ 		    val worNex = wor_s.pop()
+		    if(isLoop(here)) println("$here: worNex '$worNex'")
+		    val hosVal = HostValue(worNex)
+		    hosReg.store(hosTyp, hosVal)
+		}		    
+	    } // when hosTyp
+	    } // try
+	catch (e: java.util.EmptyStackException) {done = true} // catch
+	    
+    } // while
+
+    if(isTrace(here)){
+    	println ("Host Register is:")
+	for ( (k, v) in hosReg.register) {
+	    println ("$k => $v")
+	}
+    }
+    exiting(here)
+}
+    
 fun ipfsExecuteOfWordList(wor_l: List<String>) {
     val (here, caller) = hereAndCaller()
     entering(here, caller)
@@ -91,13 +132,14 @@ fun portExecuteOfWordList(wor_l: List<String>) {
 		    val porVal = PortValue(int)
 		    porReg.store(porTyp, porVal)
 		}		    
+		is PortType.PortGateway -> {
+		    val porVal = PortValue(5001)
+		    porReg.store(porTyp, porVal)
+		}
 		is PortType.PortWebui -> {
 		    val porVal = PortValue(5001)
 		    porReg.store(porTyp, porVal)
 		}
-		else -> {
-		    fatalErrorPrint ("input were <PortType>","'"+wor+"'", "Check input", here)
-		} 
 	    } // when porTyp
 	    } // try
 	catch (e: java.util.EmptyStackException) {done = true} // catch

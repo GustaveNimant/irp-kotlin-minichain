@@ -5,9 +5,8 @@ import java.io.File
 import java.util.Stack
 
 /**
- * What is it : the Register storing an Url knowing its Type.
+ * What is it : the Provider providing an Url knowing its UrlType.
  * Example : (LocalIpfsApi, "127.0.0.1:5001") 
- * What to do : provide host and port by asking if stored in ParameterMap 
  * Author : Emile Achadde 25 février 2020 at 19:03:02+01:00
  */
 
@@ -15,14 +14,14 @@ class UrlProvider {
 
     val register = UrlRegister()
     
-    private fun build(host: String, porVal: PortValue): UrlValue {
+    private fun build(hosVal: HostValue, porVal: PortValue): UrlValue {
 	val (here, caller) = hereAndCaller()
 	entering(here, caller)
 	
-	if(isTrace(here)) println ("$here: input host '$host'")
+	if(isTrace(here)) println ("$here: input hosVal '$hosVal'")
 	if(isTrace(here)) println ("$here: input porVal '$porVal'")
     
-	val result = UrlValue(host, porVal)
+	val result = UrlValue(hosVal, porVal)
 	
 	if(isTrace(here)) println ("$here: output result $result")
 	
@@ -49,31 +48,32 @@ class UrlProvider {
 	return result 
     }
 
-    private fun hostNameFromParameterMap(): String {
+    private fun hostTypeFromParameterMap(): HostType {
 	val (here, caller) = hereAndCaller()
 	entering(here, caller)
 	
 	val result = 
 	    if (ParameterMap.containsKey("host")) {
-		(ParameterMap.getValue("host")).first()
+		val wor = ParameterMap.getValue("host").first() // -host <type> <hostname>
+		hostTypeOfWord(wor)
 	    }
 	else {
-	    "127.0.0.1"
+               HostType.HostLocal
 	}
 
 	if(isTrace(here)) println ("$here: output result $result")
 	return result 
     }
     
-    private fun buildAndStoreUrl(UrlTyp: UrlType, host: String, porVal: PortValue) {
+    private fun buildAndStoreUrl(UrlTyp: UrlType, hosVal: HostValue, porVal: PortValue) {
 	val (here, caller) = hereAndCaller()
 	entering(here, caller)
 
 	if(isTrace(here)) println ("$here: input UrlTyp '$UrlTyp'")
-	if(isTrace(here)) println ("$here: input host '$host'")
+	if(isTrace(here)) println ("$here: input hosVal '$hosVal'")
 	if(isTrace(here)) println ("$here: input porVal '$porVal'")
     
-	val UrlVal = build(host, porVal)
+	val UrlVal = build(hosVal, porVal)
 	register.store (UrlTyp, UrlVal)
 	
 	exiting(here)
@@ -85,11 +85,13 @@ class UrlProvider {
 	entering(here, caller)
 	
 	if (register.isEmpty()){
-	    val host = hostNameFromParameterMap()
+	    val hosPro = HostProvider ()
+	    val hosTyp = hostTypeFromParameterMap() 
+	    val hosVal = hosPro.provideHost(hosTyp)   
 	    val porPro = PortProvider ()
 	    val porTyp = portTypeFromParameterMap() 
 	    val porVal = porPro.providePort(porTyp)   
-	    buildAndStoreUrl(UrlTyp, host, porVal)
+	    buildAndStoreUrl(UrlTyp, hosVal, porVal)
 	}
 	
 	val result = register.retrieve(UrlTyp)!!
