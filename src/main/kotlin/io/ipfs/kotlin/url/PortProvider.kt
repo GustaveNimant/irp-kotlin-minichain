@@ -68,7 +68,7 @@ class PortProvider {
 	return result
     }
 
-    fun buildAndStoreUrl(PorTyp: PortType) {
+    private fun buildAndStoreUrl(PorTyp: PortType) {
 	val (here, caller) = hereAndCaller()
 	entering(here, caller)
 
@@ -81,7 +81,6 @@ class PortProvider {
 	return
     }
     
-
     fun providePort(PorTyp: PortType) : PortValue {
 	val (here, caller) = hereAndCaller()
 	entering(here, caller)

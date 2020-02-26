@@ -15,42 +15,22 @@ sealed class PortType {
   object PortUserDefined: PortType()
   object PortWebui: PortType()
   object PortGateway: PortType()
+}
 
-  fun portTypeOfWord (wor: String): PortType {
-      val (here, caller) = hereAndCaller()
-      entering(here, caller)
-      
-      if(isTrace(here)) println ("$here: input wor '$wor'")
-      
-      val result =
-	  when (wor) {
-	      "webui" -> PortWebui
-	      "gateway" -> PortGateway
-	      else -> PortUserDefined
-	  }
-      if(isTrace(here)) println ("$here: output result $result")
-      
-      exiting(here)
-      return result
-  }
-  
-    fun portTypeFromParameterMap(): PortType {
-	val (here, caller) = hereAndCaller()
-	entering(here, caller)
-	
-	val result = 
-	    if (ParameterMap.containsKey("port")) { 
-		val wor = ParameterMap.getValue("port").first() // -port <type> [<integer>] 
-		portTypeOfWord(wor)
-	    }
-	else {
-	    PortWebui
+fun portTypeOfWord (wor: String): PortType {
+    val (here, caller) = hereAndCaller()
+    entering(here, caller)
+    
+    if(isTrace(here)) println ("$here: input wor '$wor'")
+    
+    val result =
+	when (wor) {
+	    "webui" -> PortType.PortWebui
+	    "gateway" -> PortType.PortGateway
+	    else -> PortType.PortUserDefined
 	}
-	
-	if(isTrace(here)) println ("$here: output result $result")
-
-	exiting(here)
-	return result 
-    }
-
+    if(isTrace(here)) println ("$here: output result $result")
+    
+    exiting(here)
+    return result
 }

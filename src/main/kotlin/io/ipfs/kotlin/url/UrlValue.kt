@@ -9,25 +9,16 @@ import java.util.Stack
  * Author : Emile Achadde 25 février 2020 at 19:03:02+01:00
  */
 
-data class UrlValue (val host: String, val port: Int) {
+data class UrlValue (val host: String, val porVal: PortValue) {
 
     fun isEmpty (): Boolean {
-	return host.isNullOrEmpty() || (port.toString()).isNullOrEmpty()
+	return host.isNullOrEmpty() || (porVal.toString()).isNullOrEmpty()
     }
 
     override fun toString (): String {
-       return host + ":" + port.toString()
+       return host + ":" + porVal.toString()
     }
 
-    fun printOfUrlType (UrlTyp: UrlType) {
-	val (here, caller) = hereAndCaller()
-	entering(here, caller)
-	
-	val url = UrlProvider.provideUrl (UrlTyp)
-	val str = url.toString()
-	println ("UrlType $UrlTyp => $str")
-	exiting(here)
-    }
 }
 
 
