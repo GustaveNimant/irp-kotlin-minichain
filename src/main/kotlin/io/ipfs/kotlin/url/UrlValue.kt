@@ -18,6 +18,16 @@ data class UrlValue (val host: String, val port: Int) {
     override fun toString (): String {
        return host + ":" + port.toString()
     }
+
+    fun printOfUrlType (UrlTyp: UrlType) {
+	val (here, caller) = hereAndCaller()
+	entering(here, caller)
+	
+	val url = UrlProvider.provideUrl (UrlTyp)
+	val str = url.toString()
+	println ("UrlType $UrlTyp => $str")
+	exiting(here)
+    }
 }
 
 

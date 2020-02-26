@@ -5,11 +5,11 @@ import java.io.File
 import java.util.Stack
 
 /**
- * Remark : Register(UrlType, UrlValue)
+ * Remark : 
  * Author : Emile Achadde 25 février 2020 at 19:03:02+01:00
  */
 
-sealed class UrlType
+sealed class UrlType 
   sealed class UrlLocal: UrlType()
     object UrlLocalIpfsApi: UrlLocal()
     object UrlLocalServer: UrlLocal()

@@ -15,7 +15,7 @@ class UrlProvider {
 
     val register = UrlRegister()
     
-    fun build(host: String, port: Int): UrlValue {
+    private fun build(host: String, port: Int): UrlValue {
 	val (here, caller) = hereAndCaller()
 	entering(here, caller)
 	
@@ -46,42 +46,11 @@ class UrlProvider {
 	return result 
     }
     
-    fun portIntFromParameterMap(): Int {
+    private fun buildAndStoreUrl(UrlTyp: UrlType, host: String, port: Int) {
 	val (here, caller) = hereAndCaller()
 	entering(here, caller)
 
-	val result = 
-	    if (ParameterMap.containsKey("port")) { 
-              val str = ParameterMap.getValue("port").first()
-	      str.toInt()					    
-	    }
-	else {
-	    5122
-	}
-	exiting(here)
-	return result 
-    }
-
-    
-    fun portNameFromParameterMap(): String {
-	val (here, caller) = hereAndCaller()
-	entering(here, caller)
-
-	val result = 
-	    if (ParameterMap.containsKey("port")) { 
-	      ParameterMap.getValue("port").first()
-	    }
-	else {
-	    "5122"
-	}
-	exiting(here)
-	return result 
-    }
-
-    fun buildAndStoreUrl(UrlTyp: UrlType, host: String, port: Int) {
-	val (here, caller) = hereAndCaller()
-	entering(here, caller)
-
+	if(isTrace(here)) println ("$here: input UrlTyp '$UrlTyp'")
 	if(isTrace(here)) println ("$here: input host '$host'")
 	if(isTrace(here)) println ("$here: input port '$port'")
     
@@ -98,7 +67,8 @@ class UrlProvider {
 	
 	if (register.isEmpty()){
 	    val host = hostNameFromParameterMap()
-	    val port = portIntFromParameterMap()
+	    val porTyp = portTypeFromParameterMap() 
+	    val port = providePort(porTyp)   
 	    buildAndStoreUrl(UrlTyp, host, port)
 	}
 	
@@ -109,12 +79,4 @@ class UrlProvider {
 	return result
     }
     
-    fun printUrl (UrlTyp: UrlType) {
-	val (here, caller) = hereAndCaller()
-	entering(here, caller)
-	
-	val url = provideUrl (UrlTyp)
-	println ("UrlType $UrlTyp => $url")
-	exiting(here)
-    }
 }
