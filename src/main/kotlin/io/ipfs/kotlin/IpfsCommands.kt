@@ -1,6 +1,7 @@
 package io.ipfs.kotlin
 
 import io.ipfs.kotlin.defaults.*
+import io.ipfs.kotlin.url.*
 import java.util.Stack
 import kotlin.system.exitProcess
 
@@ -65,6 +66,53 @@ fun ipfsExecuteOfWordList(wor_l: List<String>) {
     exiting(here)
 }
 
+fun portExecuteOfWordList(wor_l: List<String>) {
+    val (here, caller) = hereAndCaller()
+    entering(here, caller)
+    
+    // Ex.: -port <PortType> <Integer>
+    var done = false
+    if(isTrace(here)) println ("$here: input wor_l '$wor_l'")
+    var wor_s = wordStackOfWordList(wor_l)
+
+    val porReg = PortRegister()
+    
+    while (!done) {
+	try {
+	    val wor = wor_s.pop()
+	    if(isLoop(here)) println("$here: wor '$wor'")
+	    
+	    val porTyp = portTypeOfWord (wor)
+	    when (porTyp) {
+		is PortType.PortUserDefined -> {
+ 		    val worNex = wor_s.pop()
+		    if(isLoop(here)) println("$here: worNex '$worNex'")
+		    val int: Int = worNex.toInt() 
+		    val porVal = PortValue(int)
+		    porReg.store(porTyp, porVal)
+		}		    
+		is PortType.PortWebui -> {
+		    val porVal = PortValue(5001)
+		    porReg.store(porTyp, porVal)
+		}
+		else -> {
+		    fatalErrorPrint ("input were <PortType>","'"+wor+"'", "Check input", here)
+		} 
+	    } // when porTyp
+	    } // try
+	catch (e: java.util.EmptyStackException) {done = true} // catch
+	    
+    } // while
+
+    if(isTrace(here)){
+    	println ("Port Register is:")
+	for ( (k, v) in porReg.register) {
+	    println ("$k => $v")
+	}
+    }
+    exiting(here)
+}
+    
 fun multiHashOfAddWordStack (wor_s: Stack<String>): MultiHashType {
     val (here, caller) = hereAndCaller()
     entering(here, caller)
