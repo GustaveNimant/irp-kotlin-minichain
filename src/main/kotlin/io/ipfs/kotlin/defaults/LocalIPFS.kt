@@ -1,8 +1,7 @@
 package io.ipfs.kotlin.defaults
 
 import io.ipfs.kotlin.*
-import io.ipfs.kotlin.Ipfs
-import io.ipfs.kotlin.IpfsConfiguration
+import io.ipfs.kotlin.url.*
 
 /**
  * Remark : Url is provided by IRP
