@@ -2,6 +2,7 @@ package io.ipfs.kotlin
 
 import kotlin.system.exitProcess
 import io.ipfs.kotlin.defaults.*
+import io.ipfs.kotlin.url.*
 import java.io.File
 import java.util.Stack
 import java.lang.Character.MIN_VALUE as nullChar
@@ -182,13 +183,14 @@ fun mainMenu (parM: Map<String, List<String>>) {
 	    }
 	    "end", "exi" -> {endProgram()}
 	    "hel" -> {helpOfParameterMap(parM)}
-	    "hos" -> {wrapperHostExecuteOfWordList(wor_l)}
-	    "ipf" -> {wrapperIpfsExecuteOfWordList(wor_l)}
-	    "por" -> {wrapperPortExecuteOfWordList(wor_l)}
+	    "hos" -> {wrapperExecuteHostOfWordList(wor_l)}
+	    "ipf" -> {wrapperExecuteIpfsOfWordList(wor_l)}
+	    "por" -> {wrapperExecutePortOfWordList(wor_l)}
+	    "pro" -> {wrapperExecuteProvideOfWordList(wor_l)}
 	    else -> {
 		fatalErrorPrint ("command were one of end, exi[t], hel[p], ipf[s], run", "'"+com+"'", "re Run", here)
-	    }//catch
-	}
+	    } // else
+	} // when
     } // for
     
     exiting(here)
@@ -227,13 +229,13 @@ fun parameterMapOfArguments(args: Array<String>): Map<String, List<String>> {
   return result
 }
 
-fun wrapperIpfsExecuteOfWordList (wor_l: List<String>) {
+fun wrapperExecuteIpfsOfWordList (wor_l: List<String>) {
     val (here, caller) = hereAndCaller()
     entering(here, caller)
 
     if (false) println("$here: input wor_l '$wor_l'")
     try {
-	ipfsExecuteOfWordList(wor_l)
+	executeIpfsOfWordList(wor_l)
     }
     catch (e: java.net.ConnectException){
 	fatalErrorPrint ("Connection to 127.0.0.1:5122", "Connection refused", "launch Ipfs :\n\tgo to minichain jsm; . config.sh; ipmsd.sh", here)}
@@ -241,13 +243,13 @@ fun wrapperIpfsExecuteOfWordList (wor_l: List<String>) {
     exiting(here)
 }
 
-fun wrapperPortExecuteOfWordList (wor_l: List<String>) {
+fun wrapperExecutePortOfWordList (wor_l: List<String>) {
     val (here, caller) = hereAndCaller()
     entering(here, caller)
 
     if (false) println("$here: input wor_l '$wor_l'")
     try {
-	portExecuteOfWordList(wor_l)
+	executePortOfWordList(wor_l)
     }
     catch (e: java.net.ConnectException){
 	fatalErrorPrint ("Connection to 127.0.0.1:5122", "Connection refused", "launch Port :\n\tgo to minichain jsm; . config.sh; ipmsd.sh", here)}
@@ -255,17 +257,62 @@ fun wrapperPortExecuteOfWordList (wor_l: List<String>) {
     exiting(here)
 }
 
-fun wrapperHostExecuteOfWordList (wor_l: List<String>) {
+fun wrapperExecuteProvideOfWordList (wor_l: List<String>) {
     val (here, caller) = hereAndCaller()
     entering(here, caller)
 
     if (false) println("$here: input wor_l '$wor_l'")
     try {
-	hostExecuteOfWordList(wor_l)
+	executeProvideOfWordList(wor_l)
+    }
+    catch (e: java.net.ConnectException){
+	fatalErrorPrint ("Connection to 127.0.0.1:5122", "Connection refused", "launch Port :\n\tgo to minichain jsm; . config.sh; ipmsd.sh", here)}
+    
+    exiting(here)
+}
+
+fun wrapperExecuteHostOfWordList (wor_l: List<String>) {
+    val (here, caller) = hereAndCaller()
+    entering(here, caller)
+
+    if (false) println("$here: input wor_l '$wor_l'")
+    try {
+	executeHostOfWordList(wor_l)
     }
     catch (e: java.net.ConnectException){
 	fatalErrorPrint ("Connection to 127.0.0.1:5122", "Connection refused", "launch Host :\n\tgo to minichain jsm; . config.sh; ipmsd.sh", here)}
     
+    exiting(here)
+}
+
+fun executeProvideOfWordList(wor_l: List<String>) {
+    val (here, caller) = hereAndCaller()
+    entering(here, caller)
+    
+    // Ex.: -provide peerid
+    
+    var done = false
+    if(isTrace(here)) println ("$here: input wor_l '$wor_l'")
+    var wor_s = wordStackOfWordList(wor_l)
+    
+    while (!done) {
+	try {
+	    val wor = wor_s.pop()
+	    val wor_3 = wor.substring(0,3)
+	    if(isLoop(here)) println("$here: wor '$wor'")
+	    
+	    when (wor_3) {
+		"pee" -> {
+		    notYetImplemented("peerid")
+		}
+		else -> {
+		    fatalErrorPrint ("command were 'add', 'get'","'"+wor+"'", "Check input", here)
+		} // else
+	    } // when
+	} // try
+	catch (e: java.util.EmptyStackException) {done = true} // catch
+	
+    } // while
     exiting(here)
 }
 

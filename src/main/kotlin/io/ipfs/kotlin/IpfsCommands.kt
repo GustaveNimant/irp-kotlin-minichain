@@ -13,83 +13,7 @@ import kotlin.system.exitProcess
  * Author : François Colonna 22 février 2020 at 15:32:44+01:00
  */
 
-fun hostExecuteOfWordList(wor_l: List<String>) {
-    val (here, caller) = hereAndCaller()
-    entering(here, caller)
-    
-    // Ex.: -host <HostType> <Integer>
-    var done = false
-    if(isTrace(here)) println ("$here: input wor_l '$wor_l'")
-    var wor_s = wordStackOfWordList(wor_l)
-
-    val hosReg = HostRegister()
-    
-    while (!done) {
-	try {
-	    val wor = wor_s.pop()
-	    if(isLoop(here)) println("$here: wor '$wor'")
-	    
-	    val hosTyp = hostTypeOfWord (wor)
-	    when (hosTyp) {
-		is HostType.HostUserDefined,
-		is HostType.HostLocal,
-		is HostType.HostRemote -> {
- 		    val worNex = wor_s.pop()
-		    if(isLoop(here)) println("$here: worNex '$worNex'")
-		    val hosVal = HostValue(worNex)
-		    hosReg.store(hosTyp, hosVal)
-		}		    
-	    } // when hosTyp
-	    } // try
-	catch (e: java.util.EmptyStackException) {done = true} // catch
-	    
-    } // while
-
-    if(isTrace(here)){
-    	println ("Host Register is:")
-	for ( (k, v) in hosReg.register) {
-	    println ("$k => $v")
-	}
-    }
-    exiting(here)
-}
-
-fun ipfsCommit (): String {
-    val (here, caller) = hereAndCaller()
-    entering(here, caller)
-
-    val result = LocalIpfs().info.version()!!.Commit
-    if(isTrace(here)) println ("$here: output result '$result'")
-	
-    exiting(here)
-    return result
-}
-
-fun ipfsConfigOfWordStack(wor_s: Stack<String>): String {
-    val (here, caller) = hereAndCaller()
-    entering(here, caller)
-
-    // ( ipfs [ --offline] config ) Identity.PeerID
-
-    val word = stringOfGlueOfWordStack(" ", wor_s)
-    wor_s.clear()
-    if(isTrace(here)) println ("$here: input word '$word'")
-
-    val result =
-	when(word) {
-	    "Identity.PeerID" -> {wrapperIdentityPeerID()}
-	    else -> {
-		fatalErrorPrint("Identity.PeerID", "'"+word+"'", "Check", here)
-	    }
-	} // when
-    
-    if(isTrace(here)) println ("$here: output result '$result'")
-
-    exiting(here)
-    return result
-}
-
-fun ipfsExecuteOfWordList(wor_l: List<String>) {
+fun executeIpfsOfWordList(wor_l: List<String>) {
     val (here, caller) = hereAndCaller()
     entering(here, caller)
     
@@ -146,6 +70,41 @@ fun ipfsExecuteOfWordList(wor_l: List<String>) {
     exiting(here)
 }
 
+fun ipfsCommit (): String {
+    val (here, caller) = hereAndCaller()
+    entering(here, caller)
+
+    val result = LocalIpfs().info.version()!!.Commit
+    if(isTrace(here)) println ("$here: output result '$result'")
+	
+    exiting(here)
+    return result
+}
+
+fun ipfsConfigOfWordStack(wor_s: Stack<String>): String {
+    val (here, caller) = hereAndCaller()
+    entering(here, caller)
+
+    // ( ipfs [ --offline] config ) Identity.PeerID
+
+    val word = stringOfGlueOfWordStack(" ", wor_s)
+    wor_s.clear()
+    if(isTrace(here)) println ("$here: input word '$word'")
+
+    val result =
+	when(word) {
+	    "Identity.PeerID" -> {wrapperIdentityPeerID()}
+	    else -> {
+		fatalErrorPrint("Identity.PeerID", "'"+word+"'", "Check", here)
+	    }
+	} // when
+    
+    if(isTrace(here)) println ("$here: output result '$result'")
+
+    exiting(here)
+    return result
+}
+
 fun ipfsImmutableContentOfGetWordList (wor_l: List<String>): IpfsImmutableContent {
     val (here, caller) = hereAndCaller()
     entering(here, caller)
@@ -169,78 +128,6 @@ fun ipfsImmutableContentOfGetWordList (wor_l: List<String>): IpfsImmutableConten
     
     exiting(here)
     return result
-}
-
-fun multiHashOfWordStack (wor_s: Stack<String>): MultiHashType {
-    val (here, caller) = hereAndCaller()
-    entering(here, caller)
-
-    val word = stringOfGlueOfWordStack(" ", wor_s)
-    wor_s.clear()
-    if(isTrace(here)) println ("$here: input word '$word'")
-
-    val filCon = // file path case
-	if (isFilePathOfWord(word)) {
-	    stringReadOfFilePath(word)
-	}
-    else {
-	word
-    }
-	
-    val strH = LocalIpfs().add.string(filCon).Hash
-    val result = multiHashTypeOfString(strH)
-    if(isTrace(here)) println ("$here: output result '$result'")
-
-    exiting(here)
-    return result
-}
-
-fun portExecuteOfWordList(wor_l: List<String>) {
-    val (here, caller) = hereAndCaller()
-    entering(here, caller)
-    
-    // Ex.: -port <PortType> <Integer>
-    var done = false
-    if(isTrace(here)) println ("$here: input wor_l '$wor_l'")
-    var wor_s = wordStackOfWordList(wor_l)
-
-    val porReg = PortRegister()
-    
-    while (!done) {
-	try {
-	    val wor = wor_s.pop()
-	    if(isLoop(here)) println("$here: wor '$wor'")
-	    
-	    val porTyp = portTypeOfWord (wor)
-	    when (porTyp) {
-		is PortType.PortUserDefined -> {
- 		    val worNex = wor_s.pop()
-		    if(isLoop(here)) println("$here: worNex '$worNex'")
-		    val int: Int = worNex.toInt() 
-		    val porVal = PortValue(int)
-		    porReg.store(porTyp, porVal)
-		}		    
-		is PortType.PortGateway -> {
-		    val porVal = PortValue(5001)
-		    porReg.store(porTyp, porVal)
-		}
-		is PortType.PortWebui -> {
-		    val porVal = PortValue(5001)
-		    porReg.store(porTyp, porVal)
-		}
-	    } // when porTyp
-	    } // try
-	catch (e: java.util.EmptyStackException) {done = true} // catch
-	    
-    } // while
-
-    if(isTrace(here)){
-    	println ("Port Register is:")
-	for ( (k, v) in porReg.register) {
-	    println ("$k => $v")
-	}
-    }
-    exiting(here)
 }
 
 fun wrapperIdentityPeerID(): String {
@@ -280,5 +167,4 @@ fun wrapperPeerId(): String {
     exiting(here)
     return result
 }
-
 
