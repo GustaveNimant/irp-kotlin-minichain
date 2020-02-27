@@ -25,7 +25,6 @@ sealed class PortType {
 	  }
       return result
   }
-
 }
 
 fun portTypeOfWord (wor: String): PortType {
