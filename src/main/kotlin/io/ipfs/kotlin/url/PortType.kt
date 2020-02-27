@@ -15,6 +15,17 @@ sealed class PortType {
   object PortUserDefined: PortType()
   object PortWebui: PortType()
   object PortGateway: PortType()
+
+  override fun toString (): String {
+      val result =
+	  when (this) {
+	      is PortType.PortUserDefined -> "PortUserDefined"
+	      is PortType.PortWebui -> "PortWebui"
+	      is PortType.PortGateway -> "PortGateway"
+	  }
+      return result
+  }
+
 }
 
 fun portTypeOfWord (wor: String): PortType {

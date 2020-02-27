@@ -7,8 +7,8 @@ import java.util.Stack
 /**
  * What is it : the Value of a Port
  * Example : 5001 
- * What to do : provide host and port by asking if stored in ParameterMap 
  * Author : Emile Achadde 25 février 2020 at 19:03:02+01:00
+ * Revision : isValide() by Emile Achadde 27 février 2020 at 13:41:03+01:00
  */
 
 data class PortValue (val port: Int) {
@@ -17,8 +17,15 @@ data class PortValue (val port: Int) {
 	return (port.toString()).isNullOrEmpty()
     }
 
-    override fun toString (): String {
-       return port.toString()
+    private fun isValid(): Boolean {
+	val pattern = Regex("""^\d\d\d\d$""")
+	val result = pattern.matches(port.toString())
+	return result
+    }
+
+    override fun toString(): String {
+	assert(isValid())
+	return port.toString()
     }
 }
 

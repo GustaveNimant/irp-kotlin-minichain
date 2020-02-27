@@ -14,7 +14,7 @@ val localIpfsConfig by lazy {
     entering (here, caller)
 
     val provider = UrlProvider()
-    val UrlVal = provider.provideUrl(UrlLocalIpfsApi) 
+    val UrlVal = provider.provideUrl(UrlType.UrlLocal.UrlLocalIpfsApi) 
     val urlStr = UrlVal.toString()
     println("$here : url $urlStr")
 

@@ -15,6 +15,16 @@ sealed class HostType {
   object HostUserDefined: HostType()
   object HostLocal: HostType()
   object HostRemote: HostType()
+
+  override fun toString(): String {
+      val result =
+	  when (this) {
+	      HostType.HostLocal -> "HostLocal"
+	      HostType.HostRemote -> "HostRemote"
+	      HostType.HostUserDefined -> "HostUserDefined"
+	  }
+      return result
+  }
 }
 
 fun hostTypeOfWord (wor: String): HostType {
@@ -34,3 +44,4 @@ fun hostTypeOfWord (wor: String): HostType {
     exiting(here)
     return result
 }
+
