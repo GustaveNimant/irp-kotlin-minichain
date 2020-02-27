@@ -25,7 +25,7 @@ fun executeHostOfWordList(wor_l: List<String>) {
 	    val wor = wor_s.pop()
 	    if(isLoop(here)) println("$here: wor '$wor'")
 	    
-	    val hosTyp = hostTypeOfWord (wor)
+	    val hosTyp = HostType.make (wor)
 	    when (hosTyp) {
 		is HostType.HostUserDefined,
 		is HostType.HostLocal,
@@ -90,7 +90,7 @@ fun executePortOfWordList(wor_l: List<String>) {
 	    val wor = wor_s.pop()
 	    if(isLoop(here)) println("$here: wor '$wor'")
 	    
-	    val porTyp = portTypeOfWord (wor)
+	    val porTyp = PortType.make (wor)
 	    when (porTyp) {
 		is PortType.PortUserDefined -> {
  		    val worNex = wor_s.pop()

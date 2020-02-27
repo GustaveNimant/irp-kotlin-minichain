@@ -36,7 +36,7 @@ class UrlProvider {
 	val result = 
 	    if (ParameterMap.containsKey("port")) { 
               val wor = ParameterMap.getValue("port").first() // -port <type> [<integer>] 
-	      portTypeOfWord(wor)
+	      PortType.make (wor)
 	    }
 	else {
 	    PortType.PortWebui
@@ -55,7 +55,7 @@ class UrlProvider {
 	val result = 
 	    if (ParameterMap.containsKey("host")) {
 		val wor = ParameterMap.getValue("host").first() // -host <type> <hostname>
-		hostTypeOfWord(wor)
+		HostType.make (wor)
 	    }
 	else {
                HostType.HostLocal

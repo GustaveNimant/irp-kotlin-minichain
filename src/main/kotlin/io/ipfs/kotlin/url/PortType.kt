@@ -25,22 +25,24 @@ sealed class PortType {
 	  }
       return result
   }
-}
 
-fun portTypeOfWord (wor: String): PortType {
-    val (here, caller) = hereAndCaller()
-    entering(here, caller)
-    
-    if(isTrace(here)) println ("$here: input wor '$wor'")
-    
-    val result =
-	when (wor) {
-	    "webui" -> PortType.PortWebui
-	    "gateway" -> PortType.PortGateway
-	    else -> PortType.PortUserDefined
-	}
-    if(isTrace(here)) println ("$here: output result $result")
-    
-    exiting(here)
-    return result
+  companion object {
+      fun make (wor: String): PortType {
+	  val (here, caller) = hereAndCaller()
+	  entering(here, caller)
+	  
+	  if(isTrace(here)) println ("$here: input wor '$wor'")
+	  
+	  val result =
+	      when (wor) {
+		  "webui" -> PortType.PortWebui
+		  "gateway" -> PortType.PortGateway
+		  else -> PortType.PortUserDefined
+	      }
+	  if(isTrace(here)) println ("$here: output result $result")
+	  
+	  exiting(here)
+	  return result
+      }
+  }
 }

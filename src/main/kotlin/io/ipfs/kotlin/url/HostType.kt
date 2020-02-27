@@ -25,23 +25,25 @@ sealed class HostType {
 	  }
       return result
   }
-}
 
-fun hostTypeOfWord (wor: String): HostType {
-    val (here, caller) = hereAndCaller()
-    entering(here, caller)
-    
-    if(isTrace(here)) println ("$here: input wor '$wor'")
-    
-    val result =
-	when (wor) {
-	    "local" -> HostType.HostLocal
-	    "remote" -> HostType.HostRemote
-	    else -> HostType.HostUserDefined
-	}
-    if(isTrace(here)) println ("$here: output result $result")
-    
-    exiting(here)
-    return result
+  companion object {
+      fun make (wor: String): HostType {
+	  val (here, caller) = hereAndCaller()
+	  entering(here, caller)
+	  
+	  if(isTrace(here)) println ("$here: input wor '$wor'")
+	  
+	  val result =
+	      when (wor) {
+		  "local" -> HostType.HostLocal
+		  "remote" -> HostType.HostRemote
+		  else -> HostType.HostUserDefined
+	      }
+	  if(isTrace(here)) println ("$here: output result $result")
+	  
+	  exiting(here)
+	  return result
+      }
+  }
 }
 
