@@ -23,7 +23,7 @@ class UrlProvider {
     
 	val result = UrlValue(hosVal, porVal)
 	
-	if(isTrace(here)) println ("$here: output result $result")
+	if(isTrace(here)) println ("$here: output UrlValue $result")
 	
 	exiting(here)
 	return result

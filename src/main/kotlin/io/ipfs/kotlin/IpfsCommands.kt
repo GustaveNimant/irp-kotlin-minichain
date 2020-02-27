@@ -53,7 +53,42 @@ fun hostExecuteOfWordList(wor_l: List<String>) {
     }
     exiting(here)
 }
+
+fun ipfsCommit (): String {
+    val (here, caller) = hereAndCaller()
+    entering(here, caller)
+
+    val result = LocalIpfs().info.version()!!.Commit
+    if(isTrace(here)) println ("$here: output result '$result'")
+	
+    exiting(here)
+    return result
+}
+
+fun ipfsConfigOfWordStack(wor_s: Stack<String>): String {
+    val (here, caller) = hereAndCaller()
+    entering(here, caller)
+
+    // ( ipfs [ --offline] config ) Identity.PeerID
+
+    val word = stringOfGlueOfWordStack(" ", wor_s)
+    wor_s.clear()
+    if(isTrace(here)) println ("$here: input word '$word'")
+
+    val result =
+	when(word) {
+	    "Identity.PeerID" -> {wrapperIdentityPeerID()}
+	    else -> {
+		fatalErrorPrint("Identity.PeerID", "'"+word+"'", "Check", here)
+	    }
+	} // when
     
+    if(isTrace(here)) println ("$here: output result '$result'")
+
+    exiting(here)
+    return result
+}
+
 fun ipfsExecuteOfWordList(wor_l: List<String>) {
     val (here, caller) = hereAndCaller()
     entering(here, caller)
@@ -70,14 +105,19 @@ fun ipfsExecuteOfWordList(wor_l: List<String>) {
 	    if(isLoop(here)) println("$here: wor '$wor'")
 	    
 	    when (wor_3) {
-		"add" -> {
-		    val mulH = multiHashOfAddWordStack(wor_s)
+		"add" -> { // "-ipfs add ./parser.bnf" "-ipfs add truc much" 
+		    val mulH = multiHashOfWordStack(wor_s)
 		    println ("MultiHashType: $mulH")
 		    wor_s.clear()
 		}
-		"com" -> {
+		"com" -> { // commit
 		        wor_s.clear()
                         ipfsCommit()
+    		}
+		"con" -> { // config Identity.PeerID
+                        val conStr = ipfsConfigOfWordStack(wor_s)
+			println ("Config: $conStr")
+		        wor_s.clear()
     		}
 		"get" -> {
 		        wor_s.clear()
@@ -92,10 +132,9 @@ fun ipfsExecuteOfWordList(wor_l: List<String>) {
 			printOfStringList(h_l)
     		}
 		"pee" -> {
-		        wor_s.clear()
-			val peeH = ipfsConfigIdentityPeeId()
-			println ("Peerid '$peeH'")
-    		}
+		    val peeId = wrapperPeerId() // peerid = "config Identity.PeerID"
+		    println("$here: peerid $peeId")
+		}
 		else -> {
 		    fatalErrorPrint ("command were 'add', 'get'","'"+wor+"'", "Check input", here)
 		} // else
@@ -105,6 +144,55 @@ fun ipfsExecuteOfWordList(wor_l: List<String>) {
 	
     } // while
     exiting(here)
+}
+
+fun ipfsImmutableContentOfGetWordList (wor_l: List<String>): IpfsImmutableContent {
+    val (here, caller) = hereAndCaller()
+    entering(here, caller)
+
+    println("$here: wor_l '$wor_l'")
+    val worH =
+	if (wor_l.size == 2) {
+	    wor_l[1]
+	}
+    else {
+	val str = stringOfGlueOfStringList("\n", wor_l)
+	fatalErrorPrint ("one element in get input", str, "Check input", here)
+    }
+    
+    val mulTyp = multiHashTypeOfString(worH)
+    println("$here: mulTyp '$mulTyp'")
+    val proImm = IpfsImmutableProvider()
+    val result = proImm.provide(mulTyp)
+
+    if(isTrace(here)) println ("$here: output result '$result'")
+    
+    exiting(here)
+    return result
+}
+
+fun multiHashOfWordStack (wor_s: Stack<String>): MultiHashType {
+    val (here, caller) = hereAndCaller()
+    entering(here, caller)
+
+    val word = stringOfGlueOfWordStack(" ", wor_s)
+    wor_s.clear()
+    if(isTrace(here)) println ("$here: input word '$word'")
+
+    val filCon = // file path case
+	if (isFilePathOfWord(word)) {
+	    stringReadOfFilePath(word)
+	}
+    else {
+	word
+    }
+	
+    val strH = LocalIpfs().add.string(filCon).Hash
+    val result = multiHashTypeOfString(strH)
+    if(isTrace(here)) println ("$here: output result '$result'")
+
+    exiting(here)
+    return result
 }
 
 fun portExecuteOfWordList(wor_l: List<String>) {
@@ -154,81 +242,43 @@ fun portExecuteOfWordList(wor_l: List<String>) {
     }
     exiting(here)
 }
-    
-fun multiHashOfAddWordStack (wor_s: Stack<String>): MultiHashType {
+
+fun wrapperIdentityPeerID(): String {
     val (here, caller) = hereAndCaller()
     entering(here, caller)
 
-    val word = stringOfGlueOfWordStack(" ", wor_s)
-    wor_s.clear()
-    if(isTrace(here)) println ("$here: input word '$word'")
-
-    val filCon = // file path case
-	if (isFilePathOfWord(word)) {
-	    stringReadOfFilePath(word)
+    val result =
+	try {
+	    val peeId = LocalIpfs().peerid.peerId()
+	    peeId!!.Key
 	}
-    else {
-	word
-    }
+        catch (e: java.net.UnknownHostException) {
+	    fatalErrorPrint ("Connection to 127.0.0.1:5122", "Connection refused", "launch Host :\n\tgo to minichain jsm; . config.sh; ipmsd.sh", here)
+	}
 	
-    val strH = LocalIpfs().add.string(filCon).Hash
-    val result = multiHashTypeOfString(strH)
-    if(isTrace(here)) println ("$here: output result '$result'")
-
-    exiting(here)
-    return result
-}
-    
-fun ipfsImmutableContentOfGetWordList (wor_l: List<String>): IpfsImmutableContent {
-    val (here, caller) = hereAndCaller()
-    entering(here, caller)
-
-    println("$here: wor_l '$wor_l'")
-    val worH =
-	if (wor_l.size == 2) {
-	    wor_l[1]
-	}
-    else {
-	val str = stringOfGlueOfStringList("\n", wor_l)
-	fatalErrorPrint ("one element in get input", str, "Check input", here)
-    }
-    
-    val mulTyp = multiHashTypeOfString(worH)
-    println("$here: mulTyp '$mulTyp'")
-    val proImm = IpfsImmutableProvider()
-    val result = proImm.provide(mulTyp)
-
-    if(isTrace(here)) println ("$here: output result '$result'")
-    
-    exiting(here)
-    return result
-}
-
-fun ipfsCommit (): String {
-    val (here, caller) = hereAndCaller()
-    entering(here, caller)
-
-    val result = LocalIpfs().info.version()!!.Commit
     if(isTrace(here)) println ("$here: output result '$result'")
 	
     exiting(here)
     return result
 }
 
-fun ipfsConfigIdentityPeeId (): String {
+fun wrapperPeerId(): String {
     val (here, caller) = hereAndCaller()
     entering(here, caller)
 
-    val result = LocalIpfs().info.version()!!.Commit
+    val result =
+	try {
+	    val peeId = LocalIpfs().peerid.peerId()
+	    peeId!!.Key
+	}
+        catch (e: java.net.UnknownHostException) {
+	    fatalErrorPrint ("Connection to 127.0.0.1:5122", "Connection refused", "launch Host :\n\tgo to minichain jsm; . config.sh; ipmsd.sh", here)
+	}
+	
     if(isTrace(here)) println ("$here: output result '$result'")
-
-    if (result.isNullOrEmpty()){
-	fatalErrorPrint("peerid is not empty", "it is empty", "Check Peer", here)
-    }
-    
+	
     exiting(here)
     return result
 }
-
 
 

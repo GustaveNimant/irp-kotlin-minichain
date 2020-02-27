@@ -17,6 +17,17 @@ data class HostValue (val host: String) {
 	return host.isNullOrEmpty()
     }
 
+    private fun isValid(): Boolean {
+	val pattern = Regex("""^[a-zA-Z0-9]([a-zA-Z0-9_.]+)""")
+	val result = pattern.matches(host)
+	if(isDebug("isValid")) println("HostValue.kt: host $host isValid $result")
+	return result
+    }
+
+    override fun toString(): String {
+	assert(isValid())
+	return host
+    }
 }
 
 

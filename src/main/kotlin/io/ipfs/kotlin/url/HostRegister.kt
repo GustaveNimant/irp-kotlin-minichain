@@ -41,22 +41,24 @@ class HostRegister {
 	return result
     }
     
-    fun store (hosTyp: HostType, urlVal: HostValue) {
+    fun store (hosTyp: HostType, hosVal: HostValue) {
 	val (here, caller) = hereAndCaller()
 	entering(here, caller)
 	
 	if(isTrace(here)) println ("$here: input hosTyp '$hosTyp'")
+	if(isTrace(here)) println ("$here: input hosVal '$hosVal'")
 
 	if (isStored(hosTyp)) {
 	    val value = retrieve(hosTyp)
-	    if (value != urlVal) {
-		fatalErrorPrint("already stored Host Value '$value' for Host Type '$hosTyp' were equal to new one", urlVal.toString(), "Check", here)
+	    if (value != hosVal) {
+		val v = hosVal.toString()
+		fatalErrorPrint("already stored Host Value '$value' for Host Type '$hosTyp' were equal to new one", v, "Check", here)
 	    }
 	}
 	else {
-	    register.put(hosTyp, urlVal)
+	    register.put(hosTyp, hosVal)
 	}
-	if(isTrace(here)) println ("$here: (hosType, urlValue) couple has been stored")
+	if(isTrace(here)) println ("$here: (hosType, hosValue) couple has been stored")
     }
     
     fun retrieve(hosTyp: HostType): HostValue? {

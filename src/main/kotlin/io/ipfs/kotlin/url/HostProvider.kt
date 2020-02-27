@@ -40,6 +40,7 @@ class HostProvider {
 	else {
 	    fatalErrorPrint ("host has been defined by User", "it has not", "Enter commanf : --args:\"host <int>\"", here)
 	}
+
 	exiting(here)
 	return result 
     }
