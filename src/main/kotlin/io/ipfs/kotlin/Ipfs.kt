@@ -7,6 +7,11 @@ import io.ipfs.kotlin.defaults.createOKHTTP
 import io.ipfs.kotlin.model.MessageWithCode
 import okhttp3.OkHttpClient
 
+/**
+ * Remark : peerid added as stats
+ * Author : Emile Achadde 27 février 2020 at 08:33:04+01:00
+ */
+
 data class IpfsConfiguration(val base_url: String = "http://127.0.0.1:5001/api/v0/",
                              val okHttpClient: OkHttpClient = createOKHTTP(),
                              val moshi: Moshi = createMoshi())

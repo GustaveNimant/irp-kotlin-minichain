@@ -1,15 +1,15 @@
 package io.ipfs.kotlin.commands
 
 import io.ipfs.kotlin.IpfsConnection
-import io.ipfs.kotlin.model.BandWidthInfo
+import io.ipfs.kotlin.model.PeerIdInfo
 
 class PeerId(val ipfs: IpfsConnection) {
 
-    private val peeridAdapter = ipfs.config.moshi.adapter(BandWidthInfo::class.java)
+    private val peerIdAdapter = ipfs.config.moshi.adapter(PeerIdInfo::class.java)
 
-    fun peerid(): BandWidthInfo? {
-        val response = ipfs.callCmd("config/peerid")
-        return response.use { peeridAdapter.fromJson(it.source()) }
+    fun peerId(): PeerIdInfo? {
+        val response = ipfs.callCmd("config/Identity.PeerID")
+        return response.use { peerIdAdapter.fromJson(it.source()) }
     }
 
 }

@@ -5,31 +5,28 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 
 /**
- * What is it : a copy of TestStats.kt not running yet.
+ * What is it : a test for peerId 
  * Result : QmZYVoscbWWJJZWy7Ue19iGXC5SRh3kune3gKSYHv3kzKn for EA
  * Author : Emile Achadde 25 février 2020 at 09:31:47+01:00
- * What to do : implement the correct code 
+ * Revision : Emile Achadde 27 février 2020 at 08:22:18+01:00
  */
 
 class TestPeerid : BaseIpfsWebserverTest() {
 
     @Test
-    fun testBandWidthPeerid() {
+    fun testPeerid() {
         // setup
-        server.enqueue(MockResponse().setBody("{\"TotalIn\":80461165,\"TotalOut\":70998948,\"RateIn\":1103.8830769540511,\"RateOut\":1814.6417381019044}\n"))
+        server.enqueue(MockResponse().setBody("{\"Key\":\"QmZYVoscbWWJJZWy7Ue19iGXC5SRh3kune3gKSYHv3kzKn\"}\n"))
 
         // invoke
-        val peeridBandWidth = ipfs.peerid.peerid()
+        val peerid = ipfs.peerid.peerId()
 
         // assert
-        assertThat(peeridBandWidth).isNotNull()
-        assertThat(peeridBandWidth!!.TotalIn).isEqualTo(80461165)
-        assertThat(peeridBandWidth.TotalOut).isEqualTo(70998948)
-        assertThat(peeridBandWidth.RateIn).isEqualTo(1103.8830769540511)
-        assertThat(peeridBandWidth.RateOut).isEqualTo(1814.6417381019044)
+        assertThat(peerid).isNotNull()
+        assertThat(peerid!!.Key).isEqualTo("QmZYVoscbWWJJZWy7Ue19iGXC5SRh3kune3gKSYHv3kzKn")
 
         val executedRequest = server.takeRequest()
-        assertThat(executedRequest.path).isEqualTo("/config/peerid")
+        assertThat(executedRequest.path).isEqualTo("/config/Identity.PeerID")
 
     }
 }

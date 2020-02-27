@@ -24,14 +24,14 @@ class HostRegister {
         return result
      }
 
-    fun isStored (urlTyp: HostType): Boolean {
+    fun isStored (hosTyp: HostType): Boolean {
 	val (here, caller) = hereAndCaller()
 	entering(here, caller)
 	
-	if(isTrace(here)) println ("$here: input urlTyp '$urlTyp'")
+	if(isTrace(here)) println ("$here: input hosTyp '$hosTyp'")
 	
-	val result = if (register.containsKey(urlTyp)) {
-	    (register.get(urlTyp)!!.isEmpty())
+	val result = if (register.containsKey(hosTyp)) {
+	    (register.get(hosTyp)!!.isEmpty())
 	}
 	else {false}
 	
@@ -41,32 +41,32 @@ class HostRegister {
 	return result
     }
     
-    fun store (urlTyp: HostType, urlVal: HostValue) {
+    fun store (hosTyp: HostType, urlVal: HostValue) {
 	val (here, caller) = hereAndCaller()
 	entering(here, caller)
 	
-	if(isTrace(here)) println ("$here: input urlTyp '$urlTyp'")
+	if(isTrace(here)) println ("$here: input hosTyp '$hosTyp'")
 
-	if (isStored(urlTyp)) {
-	    val value = retrieve(urlTyp)
+	if (isStored(hosTyp)) {
+	    val value = retrieve(hosTyp)
 	    if (value != urlVal) {
-		fatalErrorPrint("already stored Host Value '$value' for Host Type '$urlTyp' were equal to new one", urlVal.toString(), "Check", here)
+		fatalErrorPrint("already stored Host Value '$value' for Host Type '$hosTyp' were equal to new one", urlVal.toString(), "Check", here)
 	    }
 	}
 	else {
-	    register.put(urlTyp, urlVal)
+	    register.put(hosTyp, urlVal)
 	}
-	if(isTrace(here)) println ("$here: (urlType, urlValue) couple has been stored")
+	if(isTrace(here)) println ("$here: (hosType, urlValue) couple has been stored")
     }
     
-    fun retrieve(urlTyp: HostType): HostValue? {
+    fun retrieve(hosTyp: HostType): HostValue? {
          val (here, caller) = hereAndCaller()
     	 entering(here, caller)
 
-	 val result = register.get(urlTyp)
+	 val result = register.get(hosTyp)
 	 
 	 if (result!!.isEmpty()) {
-	   fatalErrorPrint("an Host Value existed for Host Type '$urlTyp'", "it did not","Check", here)
+	   fatalErrorPrint("an Host Value existed for Host Type '$hosTyp'", "it did not","Check", here)
          }
 	 if(isTrace(here)) println ("$here: output result '$result'")
 	 exiting(here)
