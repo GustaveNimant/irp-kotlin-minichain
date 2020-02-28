@@ -57,7 +57,7 @@ class UrlRegister {
 	else {
 	    register.put(urlTyp, urlVal)
 	}
-	if(isTrace(here)) println ("$here: (urlType, urlValue) couple has been stored")
+	if(isTrace(here)) println ("$here: ($urlTyp, $urlVal) couple has been stored")
     }
     
     fun retrieve(urlTyp: UrlType): UrlValue? {

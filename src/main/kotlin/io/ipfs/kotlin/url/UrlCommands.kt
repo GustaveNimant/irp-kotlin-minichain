@@ -67,7 +67,7 @@ fun multiHashOfWordStack (wor_s: Stack<String>): MultiHashType {
     }
 	
     val strH = LocalIpfs().add.string(filCon).Hash
-    val result = multiHashTypeOfString(strH)
+    val result = MultiHashType.make (strH)
     if(isTrace(here)) println ("$here: output result '$result'")
 
     exiting(here)
@@ -90,7 +90,7 @@ fun executePortOfWordList(wor_l: List<String>) {
 	    val wor = wor_s.pop()
 	    if(isLoop(here)) println("$here: wor '$wor'")
 	    
-	    val porTyp = portTypeOfWord (wor)
+	    val porTyp = PortType.make (wor)
 	    when (porTyp) {
 		is PortType.PortUserDefined -> {
  		    val worNex = wor_s.pop()

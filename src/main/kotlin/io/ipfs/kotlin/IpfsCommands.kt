@@ -119,7 +119,7 @@ fun ipfsImmutableContentOfGetWordList (wor_l: List<String>): IpfsImmutableConten
 	fatalErrorPrint ("one element in get input", str, "Check input", here)
     }
     
-    val mulTyp = multiHashTypeOfString(worH)
+    val mulTyp = MultiHashType.make (worH)
     println("$here: mulTyp '$mulTyp'")
     val proImm = IpfsImmutableProvider()
     val result = proImm.provide(mulTyp)

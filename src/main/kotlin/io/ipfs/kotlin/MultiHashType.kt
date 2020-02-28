@@ -19,50 +19,55 @@ package io.ipfs.kotlin
  * Author : Emile Achadde 23 février 2020 at 09:33:04+01:00
  */
 
-sealed class MultiHashType () 
-  sealed class MultiHashTypeSha () : MultiHashType ()
-     data class MultiHashTypeQm (val hashString: String) : MultiHashTypeSha()
-     data class MultiHashTypeZ2 (val hashString: String) : MultiHashTypeSha ()
-  
-  sealed class MultiHashTypeBlake () : MultiHashType ()
-     data class MultiHashType2b (val hashString: String) : MultiHashTypeBlake()
-
-
-fun multiHashTypeOfString (str: String): MultiHashType {
-    val (here, caller) = hereAndCaller()
-    entering(here, caller)
-    
-    if (isTrace(here)) println("$here: input str '$str'")
-    
-    val str_2 = str.substring(0, 2)
-    val result = when (str_2) {
-	"Qm" -> MultiHashTypeQm(str)
-	"Z2" -> MultiHashTypeZ2(str)
-	else -> {
-	    fatalErrorPrint("hash starts with 'Qm' or 'Z2'", str, "Check", here)
-	}
+sealed class MultiHashType () {
+    sealed class MultiHashTypeSha () : MultiHashType () {
+	object MultiHashTypeQm : MultiHashTypeSha()
+	object MultiHashTypeZ2 : MultiHashTypeSha()
     }
     
-    if(isTrace(here)) println ("$here: output result '$result'")
+    sealed class MultiHashTypeBlake () : MultiHashType () {
+	object MultiHashType2b : MultiHashTypeBlake()
+    }
     
-    exiting(here)
-    return result
-}
-
-fun stringOfMultiHashType (mulTyp: MultiHashType): String {
-    val (here, caller) = hereAndCaller()
-    entering(here, caller)
-    if (isTrace(here)) println("$here: input mulTyp '$mulTyp'")
-    
-    val result = when (mulTyp) {
-	is MultiHashTypeQm -> mulTyp.hashString
-	is MultiHashTypeZ2 -> mulTyp.hashString
-	is MultiHashType2b -> mulTyp.hashString
+    override fun toString(): String {
+	val (here, caller) = hereAndCaller()
+	entering(here, caller)
+	
+	val result = when (this) {
+	    is MultiHashType.MultiHashTypeSha.MultiHashTypeQm -> "MultiHashTypeQm"
+	    is MultiHashType.MultiHashTypeSha.MultiHashTypeZ2 -> "MultiHashTypeZ2"
+	    is MultiHashType.MultiHashTypeBlake.MultiHashType2b ->"MultiHashType2b"
 	}
+	
+	if(isTrace(here)) println ("$here: output result '$result'")
+	
+	exiting(here)
+	return result
+    }
     
-    if(isTrace(here)) println ("$here: output result '$result'")
-    
-    exiting(here)
-    return result
-}
+    companion object {
 
+	fun make (str: String): MultiHashType {
+	    val (here, caller) = hereAndCaller()
+	    entering(here, caller)
+	    
+	    if (isTrace(here)) println("$here: input str '$str'")
+	    
+	    val str_2 = str.substring(0, 2)
+	    val result = when (str_2) {
+		"Qm" -> MultiHashType.MultiHashTypeSha.MultiHashTypeQm
+		"Z2" -> MultiHashType.MultiHashTypeSha.MultiHashTypeZ2
+		"2b" -> MultiHashType.MultiHashTypeBlake.MultiHashType2b
+		else -> {
+		    fatalErrorPrint("hash starts with 'Qm' or 'Z2'", str, "Check", here)
+		}
+	    }
+	    
+	    if(isTrace(here)) println ("$here: output result '$result'")
+	    
+	    exiting(here)
+	    return result
+	}
+	
+    }
+}

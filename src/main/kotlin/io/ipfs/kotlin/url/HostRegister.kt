@@ -58,7 +58,7 @@ class HostRegister {
 	else {
 	    register.put(hosTyp, hosVal)
 	}
-	if(isTrace(here)) println ("$here: (hosType, hosValue) couple has been stored")
+	if(isTrace(here)) println ("$here: ($hosTyp, $hosVal) couple has been stored")
     }
     
     fun retrieve(hosTyp: HostType): HostValue? {

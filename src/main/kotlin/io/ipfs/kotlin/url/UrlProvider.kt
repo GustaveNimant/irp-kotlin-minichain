@@ -8,6 +8,7 @@ import java.util.Stack
  * What is it : the Provider providing an Url knowing its UrlType.
  * Example : (LocalIpfsApi, "127.0.0.1:5001") 
  * Author : Emile Achadde 25 février 2020 at 19:03:02+01:00
+ * Revision : make by Emile Achadde 28 février 2020 at 09:46:19+01:00
  */
 
 class UrlProvider {
@@ -36,7 +37,7 @@ class UrlProvider {
 	val result = 
 	    if (ParameterMap.containsKey("port")) { 
               val wor = ParameterMap.getValue("port").first() // -port <type> [<integer>] 
-	      portTypeOfWord(wor)
+	      PortType.make(wor)
 	    }
 	else {
 	    PortType.PortWebui

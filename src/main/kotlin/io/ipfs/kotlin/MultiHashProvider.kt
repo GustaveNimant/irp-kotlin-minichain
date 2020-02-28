@@ -21,7 +21,7 @@ class MultiHashProvider {
 	println("$here: input str '$str'")
 	
 	val strH = LocalIpfs().add.string(str).Hash
-	val result = multiHashTypeOfString(strH)
+	val result = MultiHashType.make (strH)
 	println("$here: output result $result")
 	
 	exiting(here)
