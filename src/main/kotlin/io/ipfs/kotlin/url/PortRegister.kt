@@ -42,7 +42,7 @@ class PortRegister {
 	return result
     }
     
-    fun store (porTyp: PortType, urlVal: PortValue) {
+    fun store (porTyp: PortType, porVal: PortValue) {
 	val (here, caller) = hereAndCaller()
 	entering(here, caller)
 	
@@ -50,14 +50,14 @@ class PortRegister {
 
 	if (isStored(porTyp)) {
 	    val value = retrieve(porTyp)
-	    if (value != urlVal) {
-		fatalErrorPrint("already stored Port Value '$value' for Port Type '$porTyp' were equal to new one", urlVal.toString(), "Check", here)
+	    if (value != porVal) {
+		fatalErrorPrint("already stored Port Value '$value' for Port Type '$porTyp' were equal to new one", porVal.toString(), "Check", here)
 	    }
 	}
 	else {
-	    register.put(porTyp, urlVal)
+	    register.put(porTyp, porVal)
 	}
-	if(isTrace(here)) println ("$here: (porType, urlValue) couple has been stored")
+	if(isTrace(here)) println ("$here: ($porTyp, $porVal) couple has been stored")
     }
     
     fun retrieve(porTyp: PortType): PortValue? {

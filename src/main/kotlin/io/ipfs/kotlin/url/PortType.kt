@@ -9,6 +9,7 @@ import java.util.Stack
  * Example : (LocalIpfsApi, "127.0.0.1:5001") 
  * What to do : provide PortType by asking if stored in ParameterMap 
  * Author : Emile Achadde 26 février 2020 at 13:11:05+01:00
+ * Revision : make Emile Achadde 28 février 2020 at 09:48:23+01:00
  */
 
 sealed class PortType {
@@ -39,6 +40,7 @@ sealed class PortType {
 		  "gateway" -> PortType.PortGateway
 		  else -> PortType.PortUserDefined
 	      }
+
 	  if(isTrace(here)) println ("$here: output result $result")
 	  
 	  exiting(here)

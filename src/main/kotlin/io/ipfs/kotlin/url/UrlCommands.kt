@@ -67,7 +67,7 @@ fun multiHashOfWordStack (wor_s: Stack<String>): MultiHashType {
     }
 	
     val strH = LocalIpfs().add.string(filCon).Hash
-    val result = multiHashTypeOfString(strH)
+    val result = MultiHashType.make (strH)
     if(isTrace(here)) println ("$here: output result '$result'")
 
     exiting(here)
