@@ -16,11 +16,11 @@ val localIpfsConfig by lazy {
     val provider = UrlProvider()
     val UrlVal = provider.provideUrl(UrlType.UrlLocal.UrlLocalIpfsApi) 
     val urlStr = UrlVal.toString()
-    println("$here : url $urlStr")
+    if(isDebug(here)) println("$here: url '$urlStr'")
 
     val result = IpfsConfiguration("http://$urlStr/api/v0/", createOKHTTP(), createMoshi())
-
     if(isVerbose(here)) println("$here : output result $result")
+
     exiting (here)
     result
 }

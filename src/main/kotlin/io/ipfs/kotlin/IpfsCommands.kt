@@ -105,24 +105,26 @@ fun ipfsConfigOfWordStack(wor_s: Stack<String>): String {
     return result
 }
 
-fun ipfsImmutableContentOfGetWordList (wor_l: List<String>): IpfsImmutableContent {
+fun ipfsImmutableContentOfGetWordList (wor_l: List<String>): IpfsImmutableValue {
     val (here, caller) = hereAndCaller()
     entering(here, caller)
 
-    println("$here: wor_l '$wor_l'")
-    val worH =
-	if (wor_l.size == 2) {
-	    wor_l[1]
+    if(isTrace(here)) println("$here: input wor_l '$wor_l'")
+    val (type, what) =
+	if (wor_l.size == 3) {
+	    Pair(wor_l[1], wor_l[2])
 	}
-    else {
-	val str = stringOfGlueOfStringList("\n", wor_l)
-	fatalErrorPrint ("one element in get input", str, "Check input", here)
-    }
-    
-    val mulTyp = MultiHashType.make (worH)
-    println("$here: mulTyp '$mulTyp'")
+        else {
+	    val str = stringOfGlueOfStringList("\n", wor_l)
+	    fatalErrorPrint ("two arguments (type and what) for -ipfs get command", str, "Check input", here)
+	}
+
+    if(isDebug(here)) println("$here: (type, what) = '($type, $what)'")
+	
+    val immTyp = IpfsImmutableType.make (type, what)
+    if(isDebug(here)) println("$here: immTyp '$immTyp'")
     val proImm = IpfsImmutableProvider()
-    val result = proImm.provide(mulTyp)
+    val result = proImm.provide(immTyp)
 
     if(isTrace(here)) println ("$here: output result '$result'")
     
@@ -156,6 +158,7 @@ fun wrapperPeerId(): String {
     val result =
 	try {
 	    val peeId = LocalIpfs().peerid.peerId()
+	    if(isDebug(here)) println ("$here: peeId '$peeId'")
 	    peeId!!.Key
 	}
         catch (e: java.net.UnknownHostException) {

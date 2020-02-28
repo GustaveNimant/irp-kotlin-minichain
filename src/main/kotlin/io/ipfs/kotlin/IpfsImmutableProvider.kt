@@ -1,12 +1,10 @@
 package io.ipfs.kotlin
 
 import io.ipfs.kotlin.defaults.*
-import io.ipfs.kotlin.IpfsImmutable.*
-import io.ipfs.kotlin.IpfsImmutableRegister.*
 
 /**
  * Provision : the content of an immutable file from its MultiHash
- * Done      : LocalIpfs().get.cat(mulTyp)
+ * Done      : LocalIpfs().get.cat(immTyp)
  * Needs     : MultiHash 
  * Needed by : MultiHash 
  * Command   : gradlew run --args="-ipfs get QmbEm7hDJ9zB22UPnXRGfaWrFoEbJZbHPTEa6udMZ48riz" 
@@ -17,48 +15,48 @@ class IpfsImmutableProvider {
 
     val register = IpfsImmutableRegister()
     
-    fun build (mulTyp: MultiHashType): IpfsImmutableContent {
+    fun build (immTyp: IpfsImmutableType): IpfsImmutableValue {
 	val (here, caller) = hereAndCaller()
 	entering(here, caller)
 	
-	println("$here: input mulTyp '$mulTyp'")
+	println("$here: input immTyp '$immTyp'")
 
-	val strH = mulTyp.toString()
+	val strH = immTyp.toString()
 	val str = LocalIpfs().get.cat(strH)
 
-	val result = IpfsImmutableContent(str)
+	val result = IpfsImmutableValue(str)
 	println("$here: output result $result")
 	
 	exiting(here)
 	return result 
     }
     
-    fun buildAndStore(mulTyp: MultiHashType){
+    fun buildAndStore(immTyp: IpfsImmutableType){
 	val (here, caller) = hereAndCaller()
 	entering(here, caller)
 	
-	println("$here: input mulTyp '$mulTyp'")
+	println("$here: input immTyp '$immTyp'")
 	
-	val immCon = build(mulTyp)
-	register.store(mulTyp, immCon)
+	val immCon = build(immTyp)
+	register.store(immTyp, immCon)
 	
 	exiting(here)
     }
     
-    fun provide(mulTyp: MultiHashType) : IpfsImmutableContent {
+    fun provide(immTyp: IpfsImmutableType) : IpfsImmutableValue {
 	val (here, caller) = hereAndCaller()
 	entering(here, caller)
 	
-	println("$here: input mulTyp '$mulTyp'")
+	println("$here: input immTyp '$immTyp'")
 	
-	if (register.isStored(mulTyp)){
-	    register.retrieve(mulTyp)
+	if (register.isStored(immTyp)){
+	    register.retrieve(immTyp)
 	}
 	else {
-	    buildAndStore(mulTyp)
+	    buildAndStore(immTyp)
 	}
 	
-	val result = register.retrieve(mulTyp)
+	val result = register.retrieve(immTyp)
 	if (isTrace(here)) println("$here: output result '$result'")
 	
 	exiting(here)

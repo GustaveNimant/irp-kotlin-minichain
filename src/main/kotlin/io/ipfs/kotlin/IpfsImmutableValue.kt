@@ -5,10 +5,10 @@ package io.ipfs.kotlin
  * Author : François Colonna 22 février 2020 at 10:50:52+01:00
  */
 
-class IpfsImmutableContent (val str: String) {
+class IpfsImmutableValue (val content: String) {
 
     override fun toString(): String {
-	return str
+	return content
     }
     
 }
