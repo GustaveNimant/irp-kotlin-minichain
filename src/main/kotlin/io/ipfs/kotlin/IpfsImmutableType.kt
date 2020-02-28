@@ -18,7 +18,7 @@ package io.ipfs.kotlin
 
 sealed class IpfsImmutableType () {
     data class IpfsImmutableTypeBlock (val hash: String) : IpfsImmutableType()
-    data class IpfsImmutableTypeCode (val hash: String) : IpfsImmutableType()
+    data class IpfsImmutableTypeProgram (val hash: String) : IpfsImmutableType()
     data class IpfsImmutableTypeFriends (val hash: String) : IpfsImmutableType()
     data class IpfsImmutableTypeIdentity (val hash: String) : IpfsImmutableType()
     data class IpfsImmutableTypeLabel (val hash: String) : IpfsImmutableType()
@@ -31,7 +31,7 @@ sealed class IpfsImmutableType () {
 	val result =
 	    when (this) {
 		is IpfsImmutableTypeBlock -> "IpfsImmutableTypeBlock"
-		is IpfsImmutableTypeCode -> "IpfsImmutableTypeCode"
+		is IpfsImmutableTypeProgram -> "IpfsImmutableTypeProgram"
 		is IpfsImmutableTypeFriends -> "IpfsImmutableTypeFriends"
 		is IpfsImmutableTypeIdentity -> "IpfsImmutableTypeIdentity"
 		is IpfsImmutableTypeLabel -> "IpfsImmutableTypeLabel"
@@ -54,7 +54,7 @@ sealed class IpfsImmutableType () {
 	    val result =
 		when (name) {
 		    "Block" -> IpfsImmutableTypeBlock(what)
-		    "Code" -> IpfsImmutableTypeCode(what)
+		    "Code" -> IpfsImmutableTypeProgram(what)
 		    "Friends" -> IpfsImmutableTypeFriends(what)
 		    "Identity" -> IpfsImmutableTypeIdentity(what)
 		    "Label" -> IpfsImmutableTypeLabel(what)
