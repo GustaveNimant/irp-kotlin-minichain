@@ -1,4 +1,6 @@
-package io.ipfs.kotlin
+package io.ipfs.kotlin.immutable
+
+import io.ipfs.kotlin.*
 
 /**
  * What   : the content of an Immutable as a string  

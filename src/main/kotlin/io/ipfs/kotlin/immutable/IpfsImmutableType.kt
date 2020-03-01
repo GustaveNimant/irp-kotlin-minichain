@@ -1,4 +1,7 @@
-package io.ipfs.kotlin
+package io.ipfs.kotlin.immutable
+
+import io.ipfs.kotlin.*
+import io.ipfs.kotlin.multihash.*
 
 /**
  * What is it : The different Types of Immutable files

@@ -1,4 +1,6 @@
-package io.ipfs.kotlin
+package io.ipfs.kotlin.multihash
+
+import io.ipfs.kotlin.*
 
 /**
  * What       : The different Types of MultiHash 

@@ -1,4 +1,6 @@
-package io.ipfs.kotlin
+package io.ipfs.kotlin.multihash
+
+import io.ipfs.kotlin.*
 
 /**
  * What is it : The Value of a MultiHash is a Hash string defined by a triplet 

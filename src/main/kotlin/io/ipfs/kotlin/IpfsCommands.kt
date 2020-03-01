@@ -1,6 +1,8 @@
 package io.ipfs.kotlin
 
 import io.ipfs.kotlin.defaults.*
+import io.ipfs.kotlin.multihash.*
+import io.ipfs.kotlin.immutable.*
 import io.ipfs.kotlin.url.*
 import java.util.Stack
 import kotlin.system.exitProcess

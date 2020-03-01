@@ -1,5 +1,6 @@
-package io.ipfs.kotlin
+package io.ipfs.kotlin.multihash
 
+import io.ipfs.kotlin.*
 import io.ipfs.kotlin.defaults.*
 
 /**
