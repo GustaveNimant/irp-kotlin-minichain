@@ -7,8 +7,8 @@ import io.ipfs.kotlin.defaults.*
  * Done      : LocalIpfs().get.cat(immTyp)
  * Needs     : MultiHash 
  * Needed by : MultiHash 
- * Command   : gradlew run --args="-ipfs get QmbEm7hDJ9zB22UPnXRGfaWrFoEbJZbHPTEa6udMZ48riz" 
- * Author : François Colonna 22 février 2020 at 11:02:59+01:00
+ * Command   : gradlew run --args="-ipfs get block QmbEm7hDJ9zB22UPnXRGfaWrFoEbJZbHPTEa6udMZ48riz" 
+ * Author : Emile Achadde 22 février 2020 at 11:02:59+01:00
  */
 
 class IpfsImmutableProvider {
@@ -16,16 +16,18 @@ class IpfsImmutableProvider {
     val register = IpfsImmutableRegister()
     
     fun build (immTyp: IpfsImmutableType): IpfsImmutableValue {
-	val (here, caller) = hereAndCaller()
+	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
-	println("$here: input immTyp '$immTyp'")
-
-	val strH = immTyp.toString()
+	if(isTrace(here)) println("$here: input immTyp '$immTyp'")
+	val mulH = immTyp.multiHashOf()
+	println("$here: input mulH '$mulH'")
+	val strH = mulH.hashOf()
+	println("$here: input strH '$strH'")
 	val str = LocalIpfs().get.cat(strH)
-
+	println("$here: input str '$str'")
 	val result = IpfsImmutableValue(str)
-	println("$here: output result $result")
+	if(isTrace(here)) println("$here: output result $result")
 	
 	exiting(here)
 	return result 
@@ -35,7 +37,7 @@ class IpfsImmutableProvider {
 	val (here, caller) = hereAndCaller()
 	entering(here, caller)
 	
-	println("$here: input immTyp '$immTyp'")
+	if(isTrace(here)) println("$here: input immTyp '$immTyp'")
 	
 	val immCon = build(immTyp)
 	register.store(immTyp, immCon)
@@ -47,7 +49,7 @@ class IpfsImmutableProvider {
 	val (here, caller) = hereAndCaller()
 	entering(here, caller)
 	
-	println("$here: input immTyp '$immTyp'")
+	if(isTrace(here)) println("$here: input immTyp '$immTyp'")
 	
 	if (register.isStored(immTyp)){
 	    register.retrieve(immTyp)

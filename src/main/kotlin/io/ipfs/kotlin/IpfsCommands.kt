@@ -17,7 +17,7 @@ fun executeIpfsOfWordList(wor_l: List<String>) {
     val (here, caller) = hereAndCaller()
     entering(here, caller)
     
-    // Ex.: -ipfs add truc much
+    // Ex.: (-ipfs) add truc much
     var done = false
     if(isTrace(here)) println ("$here: input wor_l '$wor_l'")
     var wor_s = wordStackOfWordList(wor_l)
@@ -34,23 +34,43 @@ fun executeIpfsOfWordList(wor_l: List<String>) {
 		    println ("MultiHashType: $mulH")
 		    wor_s.clear()
 		}
+		"cat" -> { // (-ipfs cat) QmdKAX85S5uVKWx4ds5NdznJPjgsqAATnnkA8nE2bXQSSa
+                           val immCon = ipfsImmutableValueOfCatWordList(wor_l)
+			   println ("Content:")
+			   println (immCon.toString())
+		           wor_s.clear()
+    		}
 		"com" -> { // commit
-		        wor_s.clear()
-                        ipfsCommit()
+		           wor_s.clear()
+                           ipfsCommit()
     		}
 		"con" -> { // config Identity.PeerID
-                        val conStr = ipfsConfigOfWordStack(wor_s)
-			println ("Config: $conStr")
-		        wor_s.clear()
+                           val conStr = ipfsConfigOfWordStack(wor_s)
+			   println ("Config: $conStr")
+		           wor_s.clear()
     		}
 		"get" -> {
-		        wor_s.clear()
-			val immCon = ipfsImmutableContentOfGetWordList(wor_l)
-			println ("Content:")
-			println (immCon.toString())
-    		}
+		    wor_s.clear()
+		    when (wor_l.size) {
+			2 -> {
+			    var hel_l = helpList()
+			    val get_l = hel_l.filter({h -> h.contains("get ")})
+			    printOfStringList(get_l)
+			    wor_s.clear()
+			}
+			3 -> {val immCon = ipfsImmutableValueOfGetWordList(wor_l)
+			      println ("Content:")
+			      println (immCon.toString())
+			      wor_s.clear()
+			}
+			else -> {
+			    val str = stringOfGlueOfStringList("\n", wor_l)
+			    fatalErrorPrint ("one argument (help) or two arguments (type and what) for -ipfs get command", str, "Check input", here)
+			}
+    		    } // when
+		}
 		"hel" -> {
-		        wor_s.clear()
+		    wor_s.clear()
 			val hel_l = helpList()
 			val h_l = hel_l.filter({h -> h.contains("-ipfs ")})
 			printOfStringList(h_l)
@@ -60,7 +80,7 @@ fun executeIpfsOfWordList(wor_l: List<String>) {
 		    println("$here: peerid $peeId")
 		}
 		else -> {
-		    fatalErrorPrint ("command were 'add', 'get'","'"+wor+"'", "Check input", here)
+		    fatalErrorPrint ("command were 'add' 'cat' 'com'mmit 'con'fig 'get' 'hel'p 'pee'rid","'"+wor+"'", "Check input", here)
 		} // else
 	    } // when
 	} // try
@@ -105,26 +125,47 @@ fun ipfsConfigOfWordStack(wor_s: Stack<String>): String {
     return result
 }
 
-fun ipfsImmutableContentOfGetWordList (wor_l: List<String>): IpfsImmutableValue {
+fun ipfsImmutableValueOfCatWordList (wor_l: List<String>): IpfsImmutableValue {
     val (here, caller) = hereAndCaller()
     entering(here, caller)
 
+    // Improve double the get case
+    
+    // (-ipfs cat) QmdKAX85S5uVKWx4ds5NdznJPjgsqAATnnkA8nE2bXQSSa
+    
     if(isTrace(here)) println("$here: input wor_l '$wor_l'")
-    val (type, what) =
-	if (wor_l.size == 3) {
-	    Pair(wor_l[1], wor_l[2])
-	}
-        else {
-	    val str = stringOfGlueOfStringList("\n", wor_l)
-	    fatalErrorPrint ("two arguments (type and what) for -ipfs get command", str, "Check input", here)
-	}
+    val hash = wor_l[1]
+    if(isDebug(here)) println("$here: (hash) = '($hash)'")
 
-    if(isDebug(here)) println("$here: (type, what) = '($type, $what)'")
-	
-    val immTyp = IpfsImmutableType.make (type, what)
-    if(isDebug(here)) println("$here: immTyp '$immTyp'")
+    val type = "text" // arbitrary
+    val mulTyp = MultiHashType.make (hash)
+    val immTyp = IpfsImmutableType.make (type, mulTyp)
     val proImm = IpfsImmutableProvider()
     val result = proImm.provide(immTyp)
+    if(isDebug(here)) println("$here: mulTyp '$mulTyp'")
+    if(isDebug(here)) println("$here: immTyp '$immTyp'")
+    if(isTrace(here)) println ("$here: output result '$result'")
+    
+    exiting(here)
+    return result
+}
+
+fun ipfsImmutableValueOfGetWordList (wor_l: List<String>): IpfsImmutableValue {
+    val (here, caller) = hereAndCaller()
+    entering(here, caller)
+
+    // (-ipfs get) block QmdKAX85S5uVKWx4ds5NdznJPjgsqAATnnkA8nE2bXQSSa
+    
+    if(isTrace(here)) println("$here: input wor_l '$wor_l'")
+    val (type, what) = Pair(wor_l[1], wor_l[2])
+    if(isDebug(here)) println("$here: (type, what) = '($type, $what)'")
+
+    val mulTyp = MultiHashType.make (what)
+    val immTyp = IpfsImmutableType.make (type, mulTyp)
+    val proImm = IpfsImmutableProvider()
+    val result = proImm.provide(immTyp)
+    if(isDebug(here)) println("$here: mulTyp '$mulTyp'")
+    if(isDebug(here)) println("$here: immTyp '$immTyp'")
 
     if(isTrace(here)) println ("$here: output result '$result'")
     
