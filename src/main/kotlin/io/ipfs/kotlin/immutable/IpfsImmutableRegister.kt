@@ -1,8 +1,8 @@
 package io.ipfs.kotlin.immutable
 
 import io.ipfs.kotlin.*
-
-import io.ipfs.kotlin.defaults.*
+import io.ipfs.kotlin.immutable.IpfsImmutableValue
+import io.ipfs.kotlin.immutable.IpfsImmutableType
 
 /**
  * Storage   : IpfsImmutableValue (content of an Immutable file) by its ImmutableType
