@@ -5,7 +5,7 @@ package io.ipfs.kotlin
  * Author : François Colonna 22 février 2020 at 10:50:52+01:00
  */
 
-class IpfsImmutableValue (val content: String) {
+class ImmutableValue (val content: String) {
 
     fun contentOf(): String {
 	return content

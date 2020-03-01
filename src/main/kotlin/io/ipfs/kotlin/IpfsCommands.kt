@@ -125,7 +125,7 @@ fun ipfsConfigOfWordStack(wor_s: Stack<String>): String {
     return result
 }
 
-fun ipfsImmutableValueOfCatWordList (wor_l: List<String>): IpfsImmutableValue {
+fun ipfsImmutableValueOfCatWordList (wor_l: List<String>): ImmutableValue {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
@@ -139,8 +139,8 @@ fun ipfsImmutableValueOfCatWordList (wor_l: List<String>): IpfsImmutableValue {
 
     val type = "text" // arbitrary
     val mulTyp = MultiHashType.make (hash)
-    val immTyp = IpfsImmutableType.make (type, mulTyp)
-    val proImm = IpfsImmutableProvider()
+    val immTyp = ImmutableType.make (type, mulTyp)
+    val proImm = ImmutableProvider()
     val result = proImm.provide(immTyp)
     if(isDebug(here)) println("$here: mulTyp '$mulTyp'")
     if(isDebug(here)) println("$here: immTyp '$immTyp'")
@@ -150,7 +150,7 @@ fun ipfsImmutableValueOfCatWordList (wor_l: List<String>): IpfsImmutableValue {
     return result
 }
 
-fun ipfsImmutableValueOfGetWordList (wor_l: List<String>): IpfsImmutableValue {
+fun ipfsImmutableValueOfGetWordList (wor_l: List<String>): ImmutableValue {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
@@ -161,8 +161,8 @@ fun ipfsImmutableValueOfGetWordList (wor_l: List<String>): IpfsImmutableValue {
     if(isDebug(here)) println("$here: (type, what) = '($type, $what)'")
 
     val mulTyp = MultiHashType.make (what)
-    val immTyp = IpfsImmutableType.make (type, mulTyp)
-    val proImm = IpfsImmutableProvider()
+    val immTyp = ImmutableType.make (type, mulTyp)
+    val proImm = ImmutableProvider()
     val result = proImm.provide(immTyp)
     if(isDebug(here)) println("$here: mulTyp '$mulTyp'")
     if(isDebug(here)) println("$here: immTyp '$immTyp'")

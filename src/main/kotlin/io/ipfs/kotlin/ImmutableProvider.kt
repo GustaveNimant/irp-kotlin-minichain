@@ -3,19 +3,19 @@ package io.ipfs.kotlin
 import io.ipfs.kotlin.defaults.*
 
 /**
- * Provision : IpfsImmutableValue (content of an Immutable file) from its ImmutableType
- * Needs     : IpfsImmutableType (MultiHashType (strHas)) where strHas is the hash string
+ * Provision : ImmutableValue (content of an Immutable file) from its ImmutableType
+ * Needs     : ImmutableType (MultiHashType (strHas)) where strHas is the hash string
  * Needed by : 
  * Done by   : LocalIpfs().get.cat(strHas)
  * Command   : gradlew run --args="-ipfs cat QmbEm7hDJ9zB22UPnXRGfaWrFoEbJZbHPTEa6udMZ48riz" 
  * Author : Emile Achadde 01 mars 2020 at 10:29:03+01:00
  */
 
-class IpfsImmutableProvider {
+class ImmutableProvider {
 
-    val register = IpfsImmutableRegister()
+    val register = ImmutableRegister()
     
-    fun build (immTyp: IpfsImmutableType): IpfsImmutableValue {
+    fun build (immTyp: ImmutableType): ImmutableValue {
 	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
@@ -27,7 +27,7 @@ class IpfsImmutableProvider {
 	
 	if(isDebug(here)) println("$here: input str:")
 	if(isDebug(here)) println(str)
-	val result = IpfsImmutableValue(str)
+	val result = ImmutableValue(str)
 	if(isTrace(here)) println("$here: output result:")
 	if(isTrace(here)) println(result.contentOf())
 	
@@ -35,7 +35,7 @@ class IpfsImmutableProvider {
 	return result 
     }
     
-    fun buildAndStore(immTyp: IpfsImmutableType){
+    fun buildAndStore(immTyp: ImmutableType){
 	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
@@ -47,7 +47,7 @@ class IpfsImmutableProvider {
 	exiting(here)
     }
     
-    fun provide(immTyp: IpfsImmutableType) : IpfsImmutableValue {
+    fun provide(immTyp: ImmutableType) : ImmutableValue {
 	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
