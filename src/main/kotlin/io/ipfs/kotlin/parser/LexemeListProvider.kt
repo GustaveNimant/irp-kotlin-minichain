@@ -16,7 +16,7 @@ object lexemeListRegister {
      }
      
      fun retrieve () : List<Lexeme> {
-         val (here, caller) = hereAndCaller()
+         val (here, caller) = moduleHereAndCaller()
     	 entering(here, caller)
 
 	 var lex_l = mutableListOf<Lexeme>()
@@ -28,7 +28,7 @@ object lexemeListRegister {
 }
 
 fun buildAndStoreLexemeList() {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
     val ymlFileName = provideAnyFileNameOfWhat ("Yml")
@@ -40,7 +40,7 @@ fun buildAndStoreLexemeList() {
 }
 
 fun provideLexemeList() : List<Lexeme> {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
     if (lexemeListRegister.isEmpty()){
@@ -55,7 +55,7 @@ fun provideLexemeList() : List<Lexeme> {
 }
 
 fun printLexemeList () {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
     val lex_l = provideLexemeList ()
@@ -68,7 +68,7 @@ fun printLexemeList () {
 }
 
 fun writeLexemeList () {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
     val lex_l = provideLexemeList ()

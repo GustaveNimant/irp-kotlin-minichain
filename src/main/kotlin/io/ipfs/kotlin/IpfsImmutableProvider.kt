@@ -3,12 +3,12 @@ package io.ipfs.kotlin
 import io.ipfs.kotlin.defaults.*
 
 /**
- * Provision : the content of an immutable file from its MultiHash
- * Done      : LocalIpfs().get.cat(immTyp)
- * Needs     : MultiHash 
- * Needed by : MultiHash 
- * Command   : gradlew run --args="-ipfs get QmbEm7hDJ9zB22UPnXRGfaWrFoEbJZbHPTEa6udMZ48riz" 
- * Author : François Colonna 22 février 2020 at 11:02:59+01:00
+ * Provision : IpfsImmutableValue (content of an Immutable file) from its ImmutableType
+ * Needs     : IpfsImmutableType (MultiHashType (strHas)) where strHas is the hash string
+ * Needed by : 
+ * Done by   : LocalIpfs().get.cat(strHas)
+ * Command   : gradlew run --args="-ipfs cat QmbEm7hDJ9zB22UPnXRGfaWrFoEbJZbHPTEa6udMZ48riz" 
+ * Author : Emile Achadde 01 mars 2020 at 10:29:03+01:00
  */
 
 class IpfsImmutableProvider {
@@ -16,26 +16,30 @@ class IpfsImmutableProvider {
     val register = IpfsImmutableRegister()
     
     fun build (immTyp: IpfsImmutableType): IpfsImmutableValue {
-	val (here, caller) = hereAndCaller()
+	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
-	println("$here: input immTyp '$immTyp'")
+	if(isTrace(here)) println("$here: input immTyp '$immTyp'")
+	val strHas = immTyp.hashOf()
+	if(isDebug(here)) println("$here: input strHas '$strHas'")
 
-	val strH = immTyp.toString()
-	val str = LocalIpfs().get.cat(strH)
-
+	val str = LocalIpfs().get.cat(strHas)
+	
+	if(isDebug(here)) println("$here: input str:")
+	if(isDebug(here)) println(str)
 	val result = IpfsImmutableValue(str)
-	println("$here: output result $result")
+	if(isTrace(here)) println("$here: output result:")
+	if(isTrace(here)) println(result.contentOf())
 	
 	exiting(here)
 	return result 
     }
     
     fun buildAndStore(immTyp: IpfsImmutableType){
-	val (here, caller) = hereAndCaller()
+	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
-	println("$here: input immTyp '$immTyp'")
+	if(isTrace(here)) println("$here: input immTyp '$immTyp'")
 	
 	val immCon = build(immTyp)
 	register.store(immTyp, immCon)
@@ -44,10 +48,10 @@ class IpfsImmutableProvider {
     }
     
     fun provide(immTyp: IpfsImmutableType) : IpfsImmutableValue {
-	val (here, caller) = hereAndCaller()
+	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
-	println("$here: input immTyp '$immTyp'")
+	if(isTrace(here)) println("$here: input immTyp '$immTyp'")
 	
 	if (register.isStored(immTyp)){
 	    register.retrieve(immTyp)

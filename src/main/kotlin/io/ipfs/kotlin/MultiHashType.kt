@@ -16,27 +16,40 @@ package io.ipfs.kotlin
  * -------- -------- ------------------------------------
  * 00010001 00000100 101101100 11111000 01011100 10110101
  * sha1     4 bytes  4 byte sha1 digest
+ * Example : MultiHashTypeQm(QmdKAX85S5uVKWx4ds5NdznJPjgsqAATnnkA8nE2bXQSSa)
  * Author : Emile Achadde 23 février 2020 at 09:33:04+01:00
+ * Revision : parametrized by hash string by Emile Achadde 29 février 2020 at 10:44:35+01:00
  */
 
 sealed class MultiHashType () {
-    sealed class MultiHashTypeSha () : MultiHashType () {
-	object MultiHashTypeQm : MultiHashTypeSha()
-	object MultiHashTypeZ2 : MultiHashTypeSha()
-    }
-    
-    sealed class MultiHashTypeBlake () : MultiHashType () {
-	object MultiHashType2b : MultiHashTypeBlake()
-    }
-    
-    override fun toString(): String {
-	val (here, caller) = hereAndCaller()
+    data class MultiHashTypeShaQm (val hash:String) : MultiHashType()
+    data class MultiHashTypeShaZ2 (val hash:String) : MultiHashType()
+    data class MultiHashTypeBlake2b (val hash:String) : MultiHashType()
+
+    fun hashOf(): String {
+	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
 	val result = when (this) {
-	    is MultiHashType.MultiHashTypeSha.MultiHashTypeQm -> "MultiHashTypeQm"
-	    is MultiHashType.MultiHashTypeSha.MultiHashTypeZ2 -> "MultiHashTypeZ2"
-	    is MultiHashType.MultiHashTypeBlake.MultiHashType2b ->"MultiHashType2b"
+	    is MultiHashType.MultiHashTypeShaQm -> this.hash
+	    is MultiHashType.MultiHashTypeShaZ2 -> this.hash
+	    is MultiHashType.MultiHashTypeBlake2b -> this.hash
+	}
+	
+	if(isTrace(here)) println ("$here: output result '$result'")
+	
+	exiting(here)
+	return result
+    }
+    
+    fun stringOf(): String {
+	val (here, caller) = moduleHereAndCaller()
+	entering(here, caller)
+	
+	val result = when (this) {
+	    is MultiHashType.MultiHashTypeShaQm -> "MultiHashTypeShaQm("+this.hash+")"
+	    is MultiHashType.MultiHashTypeShaZ2 -> "MultiHashTypeShaZ2("+this.hash+")"
+	    is MultiHashType.MultiHashTypeBlake2b -> "MultiHashTypeBlake2b("+this.hash+")"
 	}
 	
 	if(isTrace(here)) println ("$here: output result '$result'")
@@ -46,20 +59,19 @@ sealed class MultiHashType () {
     }
     
     companion object {
-
-	fun make (str: String): MultiHashType {
-	    val (here, caller) = hereAndCaller()
+	fun make (hash: String): MultiHashType {
+	    val (here, caller) = moduleHereAndCaller()
 	    entering(here, caller)
 	    
-	    if (isTrace(here)) println("$here: input str '$str'")
+	    if (isTrace(here)) println("$here: input hash '$hash'")
 	    
-	    val str_2 = str.substring(0, 2)
-	    val result = when (str_2) {
-		"Qm" -> MultiHashType.MultiHashTypeSha.MultiHashTypeQm
-		"Z2" -> MultiHashType.MultiHashTypeSha.MultiHashTypeZ2
-		"2b" -> MultiHashType.MultiHashTypeBlake.MultiHashType2b
+	    val hash_2 = hash.substring(0, 2)
+	    val result = when (hash_2) {
+		"Qm" -> MultiHashType.MultiHashTypeShaQm(hash)
+		"Z2" -> MultiHashType.MultiHashTypeShaZ2(hash)
+		"2b" -> MultiHashType.MultiHashTypeBlake2b(hash)
 		else -> {
-		    fatalErrorPrint("hash starts with 'Qm' or 'Z2'", str, "Check", here)
+		    fatalErrorPrint("hash started with 'Qm' 'Z2' or 2b", "'$hash'", "Check", here)
 		}
 	    }
 	    

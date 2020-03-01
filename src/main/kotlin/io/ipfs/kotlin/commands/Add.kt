@@ -49,7 +49,7 @@ class Add(val ipfs: IpfsConnection) {
     // this has to be outside the lambda because it is reentrant to handle subdirectory structures
     private fun addFile(builder: MultipartBody.Builder, file: File, name: String, filename: String) {
 	
-	val (here, caller) = hereAndCaller()
+	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
 	if(isDebug(here)) println ("name $name")

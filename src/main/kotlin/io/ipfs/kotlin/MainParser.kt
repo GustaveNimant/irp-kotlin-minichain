@@ -6,7 +6,7 @@ import java.util.Stack
 import java.lang.Character.MIN_VALUE as nullChar
 
 fun main(args: Array<String>) {
-  val (here, caller) = hereAndCaller()
+  val (here, caller) = moduleHereAndCaller()
   entering(here, caller)
 
   val ParameterMap = parameterMapOfArguments(args)

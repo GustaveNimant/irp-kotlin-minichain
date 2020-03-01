@@ -12,7 +12,7 @@ import java.lang.Character.MIN_VALUE as nullChar
  */
 
 fun blockKindOfMetaLexemeList (met_l: List<Lexeme>): String {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
     var result = "genesis"
@@ -29,7 +29,7 @@ fun blockKindOfMetaLexemeList (met_l: List<Lexeme>): String {
 
 fun leafedNodeAndStackOfLexemeMetaStack (lex_met_s: Stack<Lexeme>): Pair<TreeNode<String>, Stack<Lexeme>> {
 // Set up a Leafed Node (ex.: qm / z2....)
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
     var nodMut = MutableTreeNode<String>("")
@@ -140,7 +140,7 @@ fun leafedNodeAndStackOfLexemeMetaStack (lex_met_s: Stack<Lexeme>): Pair<TreeNod
 }
 
 fun provideBlockCurrentTreeNode () : TreeNode<String> {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
 // <BlockCurrent> ::= <TreeMeta> <TreeText>
@@ -155,7 +155,7 @@ fun provideBlockCurrentTreeNode () : TreeNode<String> {
 }
 
 fun provideBlockGenesisTreeNode () : TreeNode<String> {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
 // <BlockGenesis> ::= <TreeMeta> <TreeText>
@@ -169,7 +169,7 @@ fun provideBlockGenesisTreeNode () : TreeNode<String> {
 }
 
 fun provideBlockMetaTreeNode () : TreeNode<String> {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
 // <TreeMeta> ::= TreeMetaRecordList ::= { TreeMetaRecord }
@@ -183,7 +183,7 @@ fun provideBlockMetaTreeNode () : TreeNode<String> {
 }
 
 fun provideBlockTextTreeNode () : TreeNode<String> {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
 // <TreeText> ::= TreeTextRecordList
@@ -197,7 +197,7 @@ fun provideBlockTextTreeNode () : TreeNode<String> {
 }
 
 fun provideMetaLexemeList () : List<Lexeme> {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
     val lex_l = provideLexemeList ()
@@ -231,7 +231,7 @@ fun provideMetaLexemeList () : List<Lexeme> {
 }
 
 fun provideRecordTextList () : List<String> {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
 // A record is enclosed between two TokenEndOfLine
@@ -266,7 +266,7 @@ fun provideRecordTextList () : List<String> {
 }
 
 fun provideTextLexemeList () : List<Lexeme> {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
     val lex_l = provideLexemeList ()
@@ -301,7 +301,7 @@ fun provideTextLexemeList () : List<Lexeme> {
 }
 
 fun provideTreeMetaRecordList () : List<TreeNode<String>> {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
 // <TreeMetaRecordList> ::= { <TreeMetaRecord> }
@@ -341,7 +341,7 @@ fun provideTreeMetaRecordList () : List<TreeNode<String>> {
 }
 
 fun provideTreeTextRecordList(): List<TreeNode<String>> {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
 // <TreeTextRecordList> ::= { <TreeTextRecord> }

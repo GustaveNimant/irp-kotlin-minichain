@@ -29,7 +29,7 @@ sealed class PortType {
 
   companion object {
       fun make (wor: String): PortType {
-	  val (here, caller) = hereAndCaller()
+	  val (here, caller) = moduleHereAndCaller()
 	  entering(here, caller)
 	  
 	  if(isTrace(here)) println ("$here: input wor '$wor'")
