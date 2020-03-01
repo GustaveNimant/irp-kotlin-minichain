@@ -1,8 +1,13 @@
 package io.ipfs.kotlin
 
 /**
+<<<<<<< HEAD
  * What is it : The different Types of {{ELEMENT}} files
  * Definition : An {{ELEMENT}} is a file adressed by its content i.e. its hash or CID on Ipfs.
+=======
+ * What is it : The different Types of Immutable files
+ * Definition : An Immutable is a file adressed by its content i.e. its hash or CID on Ipfs.
+>>>>>>> 711622841ee258c69f8a30de57cf54217945111b
  * Definition : An {{ELEMENT}}Type is parametrized by the Type of its Hash (MultiHashType)
  * Definition : {{ELEMENT}}Block
  * Definition : {{ELEMENT}}Code
@@ -13,14 +18,22 @@ package io.ipfs.kotlin
  * Definition : {{ELEMENT}}Symbol
  * Definition : {{ELEMENT}}Tag
  * Definition : {{ELEMENT}}Text
+<<<<<<< HEAD
  * Abbreviation : immTyp 
+=======
+ * Abbreviation : {{ABBREVIATION}}Typ 
+>>>>>>> 711622841ee258c69f8a30de57cf54217945111b
  * Author : Emile Achadde 23 février 2020 at 09:33:04+01:00
  * Revision : companion by Emile Achadde 28 février 2020 at 15:45:40+01:00
  * Revision : hashOf() by Emile Achadde 01 mars 2020 at 13:03:06+01:00
  */
 
 sealed class {{ELEMENT}}Type () {
+<<<<<<< HEAD
     data class {{ELEMENT}}TypeBlock (val multiHash: MultiHashType) : {{ELEMENT}}Type()
+=======
+    data class {{ELEMENT}}TypeSUB01 (val multiHash: MultiHashType) : {{ELEMENT}}Type()
+>>>>>>> 711622841ee258c69f8a30de57cf54217945111b
     data class {{ELEMENT}}TypeProgram (val multiHash: MultiHashType) : {{ELEMENT}}Type()
     data class {{ELEMENT}}TypeFriends (val multiHash: MultiHashType) : {{ELEMENT}}Type()
     data class {{ELEMENT}}TypeIdentity (val multiHash: MultiHashType) : {{ELEMENT}}Type()
@@ -49,7 +62,11 @@ sealed class {{ELEMENT}}Type () {
 
 	val result =
 	    when (this) {
+<<<<<<< HEAD
 		is {{ELEMENT}}TypeBlock -> this.multiHash
+=======
+		is {{ELEMENT}}TypeSUB01 -> this.multiHash
+>>>>>>> 711622841ee258c69f8a30de57cf54217945111b
 		is {{ELEMENT}}TypeProgram -> this.multiHash
 		is {{ELEMENT}}TypeFriends -> this.multiHash
 		is {{ELEMENT}}TypeIdentity -> this.multiHash
@@ -71,7 +88,11 @@ sealed class {{ELEMENT}}Type () {
 	val mulHas = multiHashOf() 
 	val result =
 	    when (this) {
+<<<<<<< HEAD
 		is {{ELEMENT}}TypeBlock -> "{{ELEMENT}}TypeBlock"
+=======
+		is {{ELEMENT}}TypeSUB01 -> "{{ELEMENT}}TypeSUB01"
+>>>>>>> 711622841ee258c69f8a30de57cf54217945111b
 		is {{ELEMENT}}TypeProgram -> "{{ELEMENT}}TypeProgram"
 		is {{ELEMENT}}TypeFriends -> "{{ELEMENT}}TypeFriends"
 		is {{ELEMENT}}TypeIdentity -> "{{ELEMENT}}TypeIdentity"
@@ -94,7 +115,11 @@ sealed class {{ELEMENT}}Type () {
 	val hash = mulHas.hashOf()
 	val result = 
 	    when (this) {
+<<<<<<< HEAD
 		is {{ELEMENT}}TypeBlock -> "{{ELEMENT}}TypeBlock("+hash+")"
+=======
+		is {{ELEMENT}}TypeSUB01 -> "{{ELEMENT}}TypeSUB01("+hash+")"
+>>>>>>> 711622841ee258c69f8a30de57cf54217945111b
 		is {{ELEMENT}}TypeProgram -> "{{ELEMENT}}TypeProgram("+hash+")"
 		is {{ELEMENT}}TypeFriends -> "{{ELEMENT}}TypeFriends("+hash+")"
 		is {{ELEMENT}}TypeIdentity -> "{{ELEMENT}}TypeIdentity("+hash+")"
@@ -122,7 +147,11 @@ sealed class {{ELEMENT}}Type () {
 	    val typLow = typ.toLowerCase()
 	    val result =
 		when (typLow) {
+<<<<<<< HEAD
 		    "block" -> {{ELEMENT}}TypeBlock(mulHas)
+=======
+		    "block" -> {{ELEMENT}}TypeSUB01(mulHas)
+>>>>>>> 711622841ee258c69f8a30de57cf54217945111b
 		    "code" -> {{ELEMENT}}TypeProgram(mulHas)
 		    "friends" -> {{ELEMENT}}TypeFriends(mulHas)
 		    "identity" -> {{ELEMENT}}TypeIdentity(mulHas)
@@ -131,7 +160,11 @@ sealed class {{ELEMENT}}Type () {
 		    "symbol" -> {{ELEMENT}}TypeSymbol(mulHas)
 		    "tag" -> {{ELEMENT}}TypeTag(mulHas)
 		    "text" -> {{ELEMENT}}TypeText(mulHas)
+<<<<<<< HEAD
 		    else -> { fatalErrorPrint("Type is one of 'Block' 'Code' 'Friends' 'Identity' 'Label' 'SmartContract' 'Symbol' 'Tag' 'Text'", "'$typ'", "Check", here)}
+=======
+		    else -> { fatalErrorPrint("Type is one of 'SUB01' 'Code' 'Friends' 'Identity' 'Label' 'SmartContract' 'Symbol' 'Tag' 'Text'", "'$typ'", "Check", here)}
+>>>>>>> 711622841ee258c69f8a30de57cf54217945111b
 	    } // when
 	if(isTrace(here)) println ("$here: output result '$result'")
 	
