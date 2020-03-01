@@ -14,7 +14,7 @@ import kotlin.system.exitProcess
  */
 
 fun executeIpfsOfWordList(wor_l: List<String>) {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
     
     // Ex.: (-ipfs) add truc much
@@ -91,7 +91,7 @@ fun executeIpfsOfWordList(wor_l: List<String>) {
 }
 
 fun ipfsCommit (): String {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
     val result = LocalIpfs().info.version()!!.Commit
@@ -102,7 +102,7 @@ fun ipfsCommit (): String {
 }
 
 fun ipfsConfigOfWordStack(wor_s: Stack<String>): String {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
     // ( ipfs [ --offline] config ) Identity.PeerID
@@ -126,7 +126,7 @@ fun ipfsConfigOfWordStack(wor_s: Stack<String>): String {
 }
 
 fun ipfsImmutableValueOfCatWordList (wor_l: List<String>): IpfsImmutableValue {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
     // Improve double the get case
@@ -151,7 +151,7 @@ fun ipfsImmutableValueOfCatWordList (wor_l: List<String>): IpfsImmutableValue {
 }
 
 fun ipfsImmutableValueOfGetWordList (wor_l: List<String>): IpfsImmutableValue {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
     // (-ipfs get) block QmdKAX85S5uVKWx4ds5NdznJPjgsqAATnnkA8nE2bXQSSa
@@ -174,7 +174,7 @@ fun ipfsImmutableValueOfGetWordList (wor_l: List<String>): IpfsImmutableValue {
 }
 
 fun wrapperIdentityPeerID(): String {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
     val result =
@@ -193,7 +193,7 @@ fun wrapperIdentityPeerID(): String {
 }
 
 fun wrapperPeerId(): String {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
     val result =

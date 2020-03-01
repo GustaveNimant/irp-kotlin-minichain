@@ -16,7 +16,7 @@ class PortProvider {
     val register = PortRegister()
 
     private fun portIntFromParameterMap(): Int {
-	val (here, caller) = hereAndCaller()
+	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
 	val result = 
@@ -32,7 +32,7 @@ class PortProvider {
     }
 
     private fun portNameFromParameterMap(): String {
-	val (here, caller) = hereAndCaller()
+	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 
 	val result = 
@@ -47,7 +47,7 @@ class PortProvider {
     }
 
     private fun build(PorTyp: PortType): PortValue {
-	val (here, caller) = hereAndCaller()
+	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 
 	if(isTrace(here)) println ("$here: input PorTyp '$PorTyp'")
@@ -69,7 +69,7 @@ class PortProvider {
     }
 
     private fun buildAndStoreUrl(PorTyp: PortType) {
-	val (here, caller) = hereAndCaller()
+	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 
 	if(isTrace(here)) println ("$here: input PorTyp '$PorTyp'")
@@ -82,7 +82,7 @@ class PortProvider {
     }
     
     fun providePort(PorTyp: PortType) : PortValue {
-	val (here, caller) = hereAndCaller()
+	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
 	if (register.isEmpty()){

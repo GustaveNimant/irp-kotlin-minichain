@@ -15,7 +15,7 @@ class MultiHashProvider {
     val register = MultiHashRegister()
     
     fun build (str: String): MultiHashType {
-	val (here, caller) = hereAndCaller()
+	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
 	println("$here: input str '$str'")
@@ -29,7 +29,7 @@ class MultiHashProvider {
     }
     
     fun buildAndStore(str: String){
-	val (here, caller) = hereAndCaller()
+	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
 	println("$here: input str '$str'")
@@ -41,7 +41,7 @@ class MultiHashProvider {
     }
     
     fun provide(str: String) : MultiHashType {
-	val (here, caller) = hereAndCaller()
+	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
 	println("$here: input str '$str'")
@@ -61,7 +61,7 @@ class MultiHashProvider {
     }
     
     fun print (str: String) {
-	val (here, caller) = hereAndCaller()
+	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
 	val hash = provide (str)

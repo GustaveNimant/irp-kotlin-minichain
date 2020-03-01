@@ -5,7 +5,7 @@ import java.lang.Character.MIN_VALUE as nullChar
 import java.util.Base64
 
 fun isAlphabeticalOfChar(cha: Char): Boolean {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
     
     val pattern = Regex("[a-zA-Z_]")
@@ -17,7 +17,7 @@ fun isAlphabeticalOfChar(cha: Char): Boolean {
 }
 
 fun isAlphanumericalOfChar(cha: Char): Boolean {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
     
     val pattern = Regex("[a-zA-Z_0-9]")
@@ -29,7 +29,7 @@ fun isAlphanumericalOfChar(cha: Char): Boolean {
 }
 
 fun isIntegerOfString(str: String): Boolean {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
     
     val pattern = Regex("[0-9][0-9]*")
@@ -41,7 +41,7 @@ fun isIntegerOfString(str: String): Boolean {
 }
 
 fun isNumericalOfChar(cha: Char): Boolean {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
     
     val pattern = Regex("[0-9]")
@@ -59,7 +59,7 @@ fun lineStackOfLineList (str_l: List<String>) : Stack<String> {
 }
 
 fun nextStringAndStackOfEndCharOfCharacterStack(del: Char, cha_s: Stack<Char>): Pair<String, Stack<Char>> {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
     if (isTrace(here)) println("$here: input del '$del'")
@@ -90,7 +90,7 @@ fun nextStringAndStackOfEndCharOfCharacterStack(del: Char, cha_s: Stack<Char>): 
 }
 
 fun nextWordAndEndCharOfEndCharListOfString(cha_l: List<Char>, str: String): Pair<String, Char> {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
     if (isTrace(here)) println("$here: input cha_l '$cha_l'")
@@ -115,7 +115,7 @@ fun nextWordAndEndCharOfEndCharListOfString(cha_l: List<Char>, str: String): Pai
 }
 
 fun nextWordAndStackOfEndCharOfCharacterStack(del: Char, cha_s: Stack<Char>): Pair<String, Stack<Char>> {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
     if (isTrace(here)) println("$here: input del '$del'")
@@ -151,7 +151,7 @@ fun nextWordAndStackOfEndCharOfCharacterStack(del: Char, cha_s: Stack<Char>): Pa
 }
 
 fun nextWordInBracketsOfString(str: String): String {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 // {someword}
 
@@ -173,7 +173,7 @@ fun nextWordInBracketsOfString(str: String): String {
 }
 
 fun nextWordOfEndCharListOfString(cha_l: List<Char>, str: String): String {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
     if (isTrace(here)) println("$here: input cha_l '$cha_l'")
@@ -194,7 +194,7 @@ fun nextWordOfEndCharListOfString(cha_l: List<Char>, str: String): String {
 }
 
 fun nextWordOfEndCharOfString(del: Char, str: String): String {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
     if (isTrace(here)) println("$here: input del '$del'")
@@ -231,7 +231,7 @@ fun stringOfGlueOfStringList (glue: String, str_l: List<String>) : String {
 
 fun stringListListOfDelimiterOfStringList (del: String, str_l: List<String>): List<List<String>> {
 // Ex.: args=["-debug", "all", "-verbose", "all", "-trace", "all", "-loop"]
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
     if(false) println("$here: input del '$del'")

@@ -3,8 +3,10 @@ package io.ipfs.kotlin
 import io.ipfs.kotlin.defaults.*
 
 /**
- * What is it : A Map storing the content (value) of an Immutable from its Type.
- * Author  : François Colonna 22 février 2020 at 10:47:03+01:00
+ * Storage   : IpfsImmutableValue (content of an Immutable file) by its ImmutableType
+ * Needs     : IpfsImmutableType (MultiHashType (strHas)) where strHas is the hash string
+ * Needed by : 
+ * Author : Emile Achadde 01 mars 2020 at 10:30:45+01:00
  */
 
 class IpfsImmutableRegister {
@@ -12,7 +14,7 @@ class IpfsImmutableRegister {
     var register : MutableMap<IpfsImmutableType, IpfsImmutableValue> = mutableMapOf<IpfsImmutableType, IpfsImmutableValue>()
 
     fun isEmpty (): Boolean {
-	val (here, caller) = hereAndCaller()
+	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
 	val result = register.isEmpty()
@@ -23,7 +25,7 @@ class IpfsImmutableRegister {
     }
 
     fun store (immTyp: IpfsImmutableType, immVal: IpfsImmutableValue) {
-	val (here, caller) = hereAndCaller()
+	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
 	if(isTrace(here)) println ("$here: input immTyp '$immTyp'")
@@ -42,7 +44,7 @@ class IpfsImmutableRegister {
     }
     
     fun isStored (immTyp: IpfsImmutableType): Boolean {
-	val (here, caller) = hereAndCaller()
+	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
 	if(isTrace(here)) println ("$here: input immTyp '$immTyp'")
@@ -60,7 +62,7 @@ class IpfsImmutableRegister {
     }
     
     fun retrieve (immTyp: IpfsImmutableType): IpfsImmutableValue {
-	val (here, caller) = hereAndCaller()
+	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
 	val immVal = register.get(immTyp)

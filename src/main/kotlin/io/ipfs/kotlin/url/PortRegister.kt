@@ -16,7 +16,7 @@ class PortRegister {
     var register : MutableMap<PortType, PortValue> = mutableMapOf<PortType, PortValue>()
 	 
     fun isEmpty (): Boolean {
-	val (here, caller) = hereAndCaller()
+	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 
 	val result = register.isEmpty()
@@ -26,7 +26,7 @@ class PortRegister {
      }
 
     fun isStored (porTyp: PortType): Boolean {
-	val (here, caller) = hereAndCaller()
+	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
 	if(isTrace(here)) println ("$here: input porTyp '$porTyp'")
@@ -43,7 +43,7 @@ class PortRegister {
     }
     
     fun store (porTyp: PortType, porVal: PortValue) {
-	val (here, caller) = hereAndCaller()
+	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
 	if(isTrace(here)) println ("$here: input porTyp '$porTyp'")
@@ -61,7 +61,7 @@ class PortRegister {
     }
     
     fun retrieve(porTyp: PortType): PortValue? {
-         val (here, caller) = hereAndCaller()
+         val (here, caller) = moduleHereAndCaller()
     	 entering(here, caller)
 
 	 val result = register.get(porTyp)

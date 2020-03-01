@@ -13,7 +13,7 @@ class MultiHashRegister {
     var register : MutableMap<String, MultiHashType> = mutableMapOf<String, MultiHashType>()
 
 fun isEmpty (): Boolean {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
     
     val result = register.isEmpty()
@@ -24,7 +24,7 @@ fun isEmpty (): Boolean {
 }
 
 fun store (path: String, mulH: MultiHashType) {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
     
     if(isTrace(here)) println ("$here: input path '$path'")
@@ -43,7 +43,7 @@ fun store (path: String, mulH: MultiHashType) {
 }
 
 fun isStored (path: String): Boolean {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
     
     if(isTrace(here)) println ("$here: input path '$path'")
@@ -61,7 +61,7 @@ fun isStored (path: String): Boolean {
 }
 
 fun retrieve (path: String): MultiHashType {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
     
     val mulH = register.get(path)

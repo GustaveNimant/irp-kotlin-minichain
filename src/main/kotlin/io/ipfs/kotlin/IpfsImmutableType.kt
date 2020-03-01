@@ -1,8 +1,8 @@
 package io.ipfs.kotlin
 
 /**
- * What       : The different Types of Immutable
- * Definition : An Immutable is a file adressed by its content i.e. its hash or CID on Ipfs.
+ * What is it : The different Types of Immutable files
+  * Definition : An Immutable is a file adressed by its content i.e. its hash or CID on Ipfs.
  * Definition : An IpfsImmutableType is parametrized by the Type of its Hash (MultiHashType)
  * Definition : IpfsImmutableBlock
  * Definition : IpfsImmutableCode
@@ -13,7 +13,8 @@ package io.ipfs.kotlin
  * Definition : IpfsImmutableSymbol
  * Definition : IpfsImmutableTag
  * Definition : IpfsImmutableText
- * Author : Emile Achadde 23 février 2020 at 09:33:04+01:00
+ * Abbreviation : immTyp 
+* Author : Emile Achadde 23 février 2020 at 09:33:04+01:00
  * Revision : companion by Emile Achadde 28 février 2020 at 15:45:40+01:00
  */
 
@@ -28,8 +29,21 @@ sealed class IpfsImmutableType () {
     data class IpfsImmutableTypeTag (val multiHash: MultiHashType) : IpfsImmutableType()
     data class IpfsImmutableTypeText (val multiHash: MultiHashType) : IpfsImmutableType()
 
+    fun hashOf (): String {
+	val (here, caller) = moduleHereAndCaller()
+	entering(here, caller)
+
+	val mulHas = multiHashOf()
+	val result = mulHas.hashOf()
+
+	if(isTrace(here)) println ("$here: output result '$result'")
+	
+	exiting(here)
+	return result
+    }
+
     fun multiHashOf(): MultiHashType {
-	val (here, caller) = hereAndCaller()
+	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 
 	val result =
@@ -51,7 +65,7 @@ sealed class IpfsImmutableType () {
     }
 
     fun nameOf (): String {
-	val (here, caller) = hereAndCaller()
+	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	val mulHas = multiHashOf() 
 	val result =
@@ -73,7 +87,7 @@ sealed class IpfsImmutableType () {
     }
 
     fun stringOf (): String {
-	val (here, caller) = hereAndCaller()
+	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	val mulHas = multiHashOf()
 	val hash = mulHas.hashOf()
@@ -89,6 +103,7 @@ sealed class IpfsImmutableType () {
 		is IpfsImmutableTypeTag -> "IpfsImmutableTypeTag("+hash+")"
 		is IpfsImmutableTypeText -> "IpfsImmutableTypeText("+hash+")"
 	    }
+
 	if(isTrace(here)) println ("$here: output result '$result'")
 	
 	exiting(here)
@@ -96,25 +111,25 @@ sealed class IpfsImmutableType () {
     }
 
     companion object {
-	fun make(typ: String, mulH: MultiHashType): IpfsImmutableType {
-	    val (here, caller) = hereAndCaller()
+	fun make(typ: String, mulHas: MultiHashType): IpfsImmutableType {
+	    val (here, caller) = moduleHereAndCaller()
 	    entering(here, caller)
 
 	    if(isTrace(here)) println ("$here: input typ '$typ'")
-	    if(isTrace(here)) println ("$here: input mulH '$mulH'")
+	    if(isTrace(here)) println ("$here: input mulHas '$mulHas'")
 
 	    val typLow = typ.toLowerCase()
 	    val result =
 		when (typLow) {
-		    "block" -> IpfsImmutableTypeBlock(mulH)
-		    "code" -> IpfsImmutableTypeCode(mulH)
-		    "friends" -> IpfsImmutableTypeFriends(mulH)
-		    "identity" -> IpfsImmutableTypeIdentity(mulH)
-		    "mabel" -> IpfsImmutableTypeLabel(mulH)
-		    "smartContract" -> IpfsImmutableTypeSmartContract(mulH)
-		    "symbol" -> IpfsImmutableTypeSymbol(mulH)
-		    "tag" -> IpfsImmutableTypeTag(mulH)
-		    "text" -> IpfsImmutableTypeText(mulH)
+		    "block" -> IpfsImmutableTypeBlock(mulHas)
+		    "code" -> IpfsImmutableTypeCode(mulHas)
+		    "friends" -> IpfsImmutableTypeFriends(mulHas)
+		    "identity" -> IpfsImmutableTypeIdentity(mulHas)
+		    "mabel" -> IpfsImmutableTypeLabel(mulHas)
+		    "smartContract" -> IpfsImmutableTypeSmartContract(mulHas)
+		    "symbol" -> IpfsImmutableTypeSymbol(mulHas)
+		    "tag" -> IpfsImmutableTypeTag(mulHas)
+		    "text" -> IpfsImmutableTypeText(mulHas)
 		    else -> { fatalErrorPrint("Type is one of 'Block' 'Code' 'Friends' 'Identity' 'Label' 'SmartContract' 'Symbol' 'Tag' 'Text'", "'$typ'", "Check", here)}
 	    } // when
 	if(isTrace(here)) println ("$here: output result '$result'")

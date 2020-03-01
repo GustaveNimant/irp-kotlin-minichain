@@ -16,7 +16,7 @@ class UrlRegister {
     var register : MutableMap<UrlType, UrlValue> = mutableMapOf<UrlType, UrlValue>()
 	 
     fun isEmpty (): Boolean {
-	val (here, caller) = hereAndCaller()
+	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 
 	val result = register.isEmpty()
@@ -26,7 +26,7 @@ class UrlRegister {
      }
 
     fun isStored (urlTyp: UrlType): Boolean {
-	val (here, caller) = hereAndCaller()
+	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
 	if(isTrace(here)) println ("$here: input urlTyp '$urlTyp'")
@@ -43,7 +43,7 @@ class UrlRegister {
     }
     
     fun store (urlTyp: UrlType, urlVal: UrlValue) {
-	val (here, caller) = hereAndCaller()
+	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
 	if(isTrace(here)) println ("$here: input urlTyp '$urlTyp'")
@@ -61,7 +61,7 @@ class UrlRegister {
     }
     
     fun retrieve(urlTyp: UrlType): UrlValue? {
-         val (here, caller) = hereAndCaller()
+         val (here, caller) = moduleHereAndCaller()
     	 entering(here, caller)
 
 	 val result = register.get(urlTyp)

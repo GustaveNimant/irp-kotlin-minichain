@@ -16,7 +16,7 @@ class UrlProvider {
     val register = UrlRegister()
     
     private fun build(hosVal: HostValue, porVal: PortValue): UrlValue {
-	val (here, caller) = hereAndCaller()
+	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
 	if(isTrace(here)) println ("$here: input hosVal '$hosVal'")
@@ -31,7 +31,7 @@ class UrlProvider {
     }
 
     fun portTypeFromParameterMap(): PortType {
-	val (here, caller) = hereAndCaller()
+	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
 	val result = 
@@ -50,7 +50,7 @@ class UrlProvider {
     }
 
     private fun hostTypeFromParameterMap(): HostType {
-	val (here, caller) = hereAndCaller()
+	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
 	val result = 
@@ -67,7 +67,7 @@ class UrlProvider {
     }
     
     private fun buildAndStoreUrl(UrlTyp: UrlType, hosVal: HostValue, porVal: PortValue) {
-	val (here, caller) = hereAndCaller()
+	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 
 	if(isTrace(here)) println ("$here: input UrlTyp '$UrlTyp'")
@@ -82,7 +82,7 @@ class UrlProvider {
     }
     
     public fun provideUrl(UrlTyp: UrlType) : UrlValue {
-	val (here, caller) = hereAndCaller()
+	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
 	if (register.isEmpty()){
@@ -103,7 +103,7 @@ class UrlProvider {
     }
 
     public fun printOfUrlType (UrlTyp: UrlType) {
-	val (here, caller) = hereAndCaller()
+	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
 	val url = provideUrl (UrlTyp)

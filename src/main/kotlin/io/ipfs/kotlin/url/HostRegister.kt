@@ -15,7 +15,7 @@ class HostRegister {
     var register : MutableMap<HostType, HostValue> = mutableMapOf<HostType, HostValue>()
 	 
     fun isEmpty (): Boolean {
-	val (here, caller) = hereAndCaller()
+	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 
 	val result = register.isEmpty()
@@ -25,7 +25,7 @@ class HostRegister {
      }
 
     fun isStored (hosTyp: HostType): Boolean {
-	val (here, caller) = hereAndCaller()
+	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
 	if(isTrace(here)) println ("$here: input hosTyp '$hosTyp'")
@@ -42,7 +42,7 @@ class HostRegister {
     }
     
     fun store (hosTyp: HostType, hosVal: HostValue) {
-	val (here, caller) = hereAndCaller()
+	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
 	if(isTrace(here)) println ("$here: input hosTyp '$hosTyp'")
@@ -62,7 +62,7 @@ class HostRegister {
     }
     
     fun retrieve(hosTyp: HostType): HostValue? {
-         val (here, caller) = hereAndCaller()
+         val (here, caller) = moduleHereAndCaller()
     	 entering(here, caller)
 
 	 val result = register.get(hosTyp)

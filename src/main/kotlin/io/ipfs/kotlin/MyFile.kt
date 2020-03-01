@@ -8,7 +8,7 @@ import java.io.InputStream
  */
 
 fun byteArrayOfFilePath(filPat: String): ByteArray {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
     val file = File(filPat)
@@ -25,7 +25,7 @@ fun fileExtensionOfFilePath (filPat:String): String {
 }
 
 fun inputStreamOfFilePath(filPat: String): InputStream {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
     val file = File(filPat)
@@ -36,7 +36,7 @@ fun inputStreamOfFilePath(filPat: String): InputStream {
 }
 
 fun isFilePathOfWord(wor: String): Boolean {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
     if (isTrace(here)) println("$here: input wor '$wor'")
@@ -51,7 +51,7 @@ fun isFilePathOfWord(wor: String): Boolean {
 }
 
 fun lineListOfFileName (filPat: String) : List<String> {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
     if (isTrace(here)) println("$here: input filPat '$filPat'")
@@ -69,7 +69,7 @@ fun lineListOfFileName (filPat: String) : List<String> {
 }
 
 fun outputWriteOfFilePath(filPat: String, content: String) {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 	
     File(filPat).bufferedWriter().use { out -> out.write(content)}
@@ -78,7 +78,7 @@ fun outputWriteOfFilePath(filPat: String, content: String) {
 }
 
 fun provideAnyFileNameOfWhat(what: String): String {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
     if (isTrace(here)) println("$here: input what '$what'")
@@ -103,7 +103,7 @@ fun provideAnyFileNameOfWhat(what: String): String {
 }
 
 fun standardInputReadLine(): String {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 	
     val str = readLine().toString()
@@ -113,7 +113,7 @@ fun standardInputReadLine(): String {
 }
 
 fun stringListOfFilePath(filPat: String): List<String> {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
     val file = File(filPat)
@@ -131,7 +131,7 @@ fun stringListOfFilePath(filPat: String): List<String> {
 }
 
 fun stringReadOfFilePath(filPat: String): String {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
     val file = File(filPat)

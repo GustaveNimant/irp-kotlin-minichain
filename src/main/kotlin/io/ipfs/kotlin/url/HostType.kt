@@ -28,7 +28,7 @@ sealed class HostType {
 
   companion object {
       fun make (wor: String): HostType {
-	  val (here, caller) = hereAndCaller()
+	  val (here, caller) = moduleHereAndCaller()
 	  entering(here, caller)
 	  
 	  if(isTrace(here)) println ("$here: input wor '$wor'")

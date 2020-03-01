@@ -8,7 +8,7 @@ import java.util.Stack
 import java.lang.Character.MIN_VALUE as nullChar
 
 fun commandAndParametersOfStringList(str_l: List<String>): Pair<String, List<String>> {
-  val (here, caller) = hereAndCaller()
+  val (here, caller) = moduleHereAndCaller()
   entering(here, caller)
 
   if(false) println("$here: input str_l $str_l")
@@ -34,7 +34,7 @@ fun commandAndParametersOfStringList(str_l: List<String>): Pair<String, List<Str
 }
 
 fun commandSetOfParameterMap (parM: Map<String, List<String>>): Set<String> {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
     if(false) println ("$here: input parM $parM")
@@ -46,7 +46,7 @@ fun commandSetOfParameterMap (parM: Map<String, List<String>>): Set<String> {
     }
 
 fun endProgram () {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
     println("\nnormal termination")
@@ -76,7 +76,7 @@ fun helpList(): List<String> {
 }
 
 fun helpListOfStringList(str_l: List<String>): List<String> {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
     if(true) println ("$here: input str_l $str_l")
@@ -111,7 +111,7 @@ fun helpListOfStringList(str_l: List<String>): List<String> {
 }
 
 fun helpOfParameterMap(parM: Map<String, List<String>>) {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
     if(true) println ("$here: input parM $parM")
@@ -129,7 +129,7 @@ fun helpOfParameterMap(parM: Map<String, List<String>>) {
 }
 
 fun main(args: Array<String>) {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
     val parM = parameterMapOfArguments(args)
@@ -160,7 +160,7 @@ fun main(args: Array<String>) {
 }
 
 fun mainMenu (parM: Map<String, List<String>>) {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
     if(false) println ("$here: input parM $parM")
@@ -198,7 +198,7 @@ fun mainMenu (parM: Map<String, List<String>>) {
 }
 
 fun parameterMapOfArguments(args: Array<String>): Map<String, List<String>> {
-  val (here, caller) = hereAndCaller()
+  val (here, caller) = moduleHereAndCaller()
   entering(here, caller)
 
   if(false) println("$here: input args $args")
@@ -231,7 +231,7 @@ fun parameterMapOfArguments(args: Array<String>): Map<String, List<String>> {
 }
 
 fun wrapperExecuteIpfsOfWordList (wor_l: List<String>) {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
     if (false) println("$here: input wor_l '$wor_l'")
@@ -245,7 +245,7 @@ fun wrapperExecuteIpfsOfWordList (wor_l: List<String>) {
 }
 
 fun wrapperExecutePortOfWordList (wor_l: List<String>) {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
     if (false) println("$here: input wor_l '$wor_l'")
@@ -259,7 +259,7 @@ fun wrapperExecutePortOfWordList (wor_l: List<String>) {
 }
 
 fun wrapperExecuteProvideOfWordList (wor_l: List<String>) {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
     if (false) println("$here: input wor_l '$wor_l'")
@@ -273,7 +273,7 @@ fun wrapperExecuteProvideOfWordList (wor_l: List<String>) {
 }
 
 fun wrapperExecuteHostOfWordList (wor_l: List<String>) {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
     if (false) println("$here: input wor_l '$wor_l'")
@@ -287,7 +287,7 @@ fun wrapperExecuteHostOfWordList (wor_l: List<String>) {
 }
 
 fun executeProvideOfWordList(wor_l: List<String>) {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
     
     // Ex.: -provide peerid

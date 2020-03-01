@@ -17,7 +17,7 @@ open class IpfsConnection(val config: IpfsConfiguration) {
     }
 
     fun callCmd(cmd: String): ResponseBody {
-	val (here, caller) = hereAndCaller()
+	val (here, caller) = moduleHereAndCaller()
 	entering (here, caller)
 	
         val request = Request.Builder()

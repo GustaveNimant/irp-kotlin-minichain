@@ -14,7 +14,7 @@ class HostProvider {
     val register = HostRegister()
 
     private fun hostIntFromParameterMap(): Int {
-	val (here, caller) = hereAndCaller()
+	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
 	val result = 
@@ -30,7 +30,7 @@ class HostProvider {
     }
 
     private fun hostNameFromParameterMap(): String {
-	val (here, caller) = hereAndCaller()
+	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 
 	val result = 
@@ -46,7 +46,7 @@ class HostProvider {
     }
 
     private fun build(HosTyp: HostType): HostValue {
-	val (here, caller) = hereAndCaller()
+	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 
 	if(isTrace(here)) println ("$here: input HosTyp '$HosTyp'")
@@ -68,7 +68,7 @@ class HostProvider {
     }
 
     private fun buildAndStoreUrl(HosTyp: HostType) {
-	val (here, caller) = hereAndCaller()
+	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 
 	if(isTrace(here)) println ("$here: input HosTyp '$HosTyp'")
@@ -81,7 +81,7 @@ class HostProvider {
     }
     
     fun provideHost(HosTyp: HostType) : HostValue {
-	val (here, caller) = hereAndCaller()
+	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
 	if (register.isEmpty()){

@@ -27,7 +27,7 @@ sealed class MultiHashType () {
     data class MultiHashTypeBlake2b (val hash:String) : MultiHashType()
 
     fun hashOf(): String {
-	val (here, caller) = hereAndCaller()
+	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
 	val result = when (this) {
@@ -43,7 +43,7 @@ sealed class MultiHashType () {
     }
     
     fun stringOf(): String {
-	val (here, caller) = hereAndCaller()
+	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
 	val result = when (this) {
@@ -60,7 +60,7 @@ sealed class MultiHashType () {
     
     companion object {
 	fun make (hash: String): MultiHashType {
-	    val (here, caller) = hereAndCaller()
+	    val (here, caller) = moduleHereAndCaller()
 	    entering(here, caller)
 	    
 	    if (isTrace(here)) println("$here: input hash '$hash'")

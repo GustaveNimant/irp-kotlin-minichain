@@ -10,7 +10,7 @@ import kotlin.system.exitProcess
  */
 
 fun executeHostOfWordList(wor_l: List<String>) {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
     
     // Ex.: -host <HostType> <Integer>
@@ -51,7 +51,7 @@ fun executeHostOfWordList(wor_l: List<String>) {
 }
 
 fun multiHashOfWordStack (wor_s: Stack<String>): MultiHashType {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
     val word = stringOfGlueOfWordStack(" ", wor_s)
@@ -75,7 +75,7 @@ fun multiHashOfWordStack (wor_s: Stack<String>): MultiHashType {
 }
 
 fun executePortOfWordList(wor_l: List<String>) {
-    val (here, caller) = hereAndCaller()
+    val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
     
     // Ex.: -port <PortType> <Integer>
