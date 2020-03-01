@@ -1,0 +1,14 @@
+package io.ipfs.kotlin
+
+/**
+ * What   : the content of an {{ELEMENT}} as a string  
+ * Author : François Colonna 22 février 2020 at 10:50:52+01:00
+ */
+
+class {{ELEMENT}}Value (val content: String) {
+
+    fun contentOf(): String {
+	return content
+    }
+    
+}
