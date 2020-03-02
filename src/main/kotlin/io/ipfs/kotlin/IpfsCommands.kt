@@ -6,7 +6,7 @@ import java.util.Stack
 import kotlin.system.exitProcess
 
 /**
- * Execution : gradlew run --args="-ipfs get QmTzX91dhqHRunjCtrt4LdTErREUA5Gg1wFMiJz1bEiQxp"
+ * Execution : gradlew run --args="-ipfs get QmTzX91dhqHRunjCtr4LdTErREUA5Gg1wFMiJz1bEiQxp"
  * val multihash = LocalIpfs().add.string("test-string").Hash
  * val content = LocalIpfs().get.cat(multihash)
  * val commit = LocalIpfs().info.version()!!.Commit
@@ -180,7 +180,7 @@ fun wrapperIdentityPeerID(): String {
     val result =
 	try {
 	    val peeId = LocalIpfs().peerid.peerId()
-	    peeId!!.Key
+	    peeId!!.Value
 	}
         catch (e: java.net.UnknownHostException) {
 	    fatalErrorPrint ("Connection to 127.0.0.1:5122", "Connection refused", "launch Host :\n\tgo to minichain jsm; . config.sh; ipmsd.sh", here)
@@ -200,7 +200,7 @@ fun wrapperPeerId(): String {
 	try {
 	    val peeId = LocalIpfs().peerid.peerId()
 	    if(isDebug(here)) println ("$here: peeId '$peeId'")
-	    peeId!!.Key
+	    peeId!!.Value
 	}
         catch (e: java.net.UnknownHostException) {
 	    fatalErrorPrint ("Connection to 127.0.0.1:5122", "Connection refused", "launch Host :\n\tgo to minichain jsm; . config.sh; ipmsd.sh", here)

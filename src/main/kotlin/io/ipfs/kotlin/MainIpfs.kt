@@ -12,15 +12,15 @@ fun commandAndParametersOfStringList(str_l: List<String>): Pair<String, List<Str
   val (here, caller) = moduleHereAndCaller()
   entering(here, caller)
 
-  if(false) println("$here: input str_l $str_l")
+  if(isTrace(here)) println("$here: input str_l $str_l")
 
   val str = str_l.first()
-  if(false) println("$here: for str $str")
+  if(isVerbose(here)) println("$here: for str $str")
 
   val result = 
       if (str.startsWith('-')) {
 	  val command = str.substring(1).toLowerCase()
-	  if(false) println("$here: command set as '$command'")
+	  if(isVerbose(here)) println("$here: command set as '$command'")
 	  val arg_l = str_l.drop(1)
 	  Pair (command, arg_l)
       }
@@ -28,7 +28,7 @@ fun commandAndParametersOfStringList(str_l: List<String>): Pair<String, List<Str
 	  fatalErrorPrint("command starts with '-'",str, "Check", here) 
       }
 
-  if(false) println("$here: output result $result")
+  if(isTrace(here)) println("$here: output result $result")
 
   exiting(here)
   return result
@@ -38,10 +38,10 @@ fun commandSetOfParameterMap (parMap: Map<String, List<String>>): Set<String> {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
-    if(false) println ("$here: input parMap $parMap")
+    if(isTrace(here)) println ("$here: input parMap $parMap")
     val result = parMap.keys
 
-    if(false) println ("$here: output result $result")
+    if(isTrace(here)) println ("$here: output result $result")
     exiting(here)
     return result 
     }
@@ -52,84 +52,6 @@ fun endProgram () {
 
     println("\nnormal termination")
     exiting(here)
-}
-
-fun helpList(): List<String> {
-    var hel_l = listOf(
-	"gradlew [-q] build [--info]",
-	"gradlew run --args=\"-help ''|all|compile|host|port|run|url",
-	"gradlew run --args=\"-debug <function name>|all\"",
-	"gradlew run --args=\"-gen pro(vider)|reg(ister)|typ()e|val(ue) <module-name> <abbreviation>",
-	"gradlew run --args=\"-gen generates one of the four kind of modules above",
-	"example : gradlew run --args=\"-gen pro immutable imm\"",
-	"gradlew run --args=\"-ipfs add [Options] <path> : add a file or a directory to Ipfs https://docs.ipfs.io/reference/api/cli/#ipfs-add",
-	"gradlew run --args=\"-ipfs add <path> : add a file or a directory to Ipfs",
-	"gradlew run --args=\"-ipfs add <string> : add a string to Ipfs",
-	"gradlew run --args=\"-ipfs get <type> <MultiHash>",
-	"gradlew run --args=\"-ipfs get help",
-	"gradlew run --args=\"-ipfs peerid (ipfs --offline config Identity.PeerID)",
-	"gradlew run --args=\"-trace <function name>|all\" print input and output data",
-	"gradlew run --args=\"-verbose<function name>|all\"",
-	"gradlew run --args=\"-loop<function name>|all\" print message inside a loop",
-	"gradlew run --args=\"-when<function name>|all\" print message inside a when",
-	"gradlew run --args=\"-port 5122\" defines port with host default (127.0.0.1)",
-	"gradlew run --args=\"-host 127.0.0.1|<host name>\" defines host with port default (5001)",
-	"gradlew run --args=\"-url 127.0.0.1|<host name>:5001<port>\" defines an url"
-	)
-    return hel_l
-}
-
-fun helpListOfStringList(str_l: List<String>): List<String> {
-    val (here, caller) = moduleHereAndCaller()
-    entering(here, caller)
-
-    if(true) println ("$here: input str_l $str_l")
-    var hel_l = helpList()
-    
-    val result = 
-	if (str_l.isNullOrEmpty()) { // just -help
-	   hel_l
-	}
-        else {
-	    var mut_l = mutableListOf<String>()
-	    
-	    for (str in str_l) {
-		val helps =
-		    when (str) {
-			"all" -> hel_l
-			"ipfs" -> hel_l.filter({h -> h.contains("-ipfs ")})
-			"run" -> hel_l.filter({h -> h.contains(" run ")})
-			"compile" -> listOf("gradlew -q build --info")
-			"host" -> listOf("gradlew run --args=\"-host 127.0.0.1|<host name>\" defines host with port default (5001)")
-			"port" -> listOf("gradlew run --args=\"-port 5122\" defines port with host default (127.0.0.1)")
-			"url" -> listOf("gradlew run --args=\"-url 127.0.0.1|<host name>:5001<port>\" defines an url")
-			else -> hel_l
-	    } // when
-		mut_l.addAll(helps)
-	    } // for
-	    mut_l.toList()
-	} // else
-	
-	if(isTrace(here)) println ("$here: output result '$result'")
-	return result 
-}
-
-fun helpOfParameterMap(parMap: Map<String, List<String>>) {
-    val (here, caller) = moduleHereAndCaller()
-    entering(here, caller)
-
-    if(true) println ("$here: input parMap $parMap")
-    
-    if (parMap.containsKey("help"))
-    { 
-      val str_l = parMap.getValue("help")
-      if(true) println ("$here: str_l $str_l")
-      val hel_l = helpListOfStringList(str_l)
-      printOfStringList(hel_l)
-
-      exiting(here)
-      exitProcess(0)
-    }
 }
 
 fun main(args: Array<String>) {
@@ -148,7 +70,7 @@ fun main(args: Array<String>) {
 	exitProcess(0)
     }
 
-    if(false) {
+    if(isVerbose(here)) {
 	if (parMap.size > 0) {
 	    println ("Commands with their parameter list:")
 	    for ( (k, v) in parMap) {
@@ -167,9 +89,9 @@ fun mainMenu (parMap: Map<String, List<String>>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
-    if(false) println ("$here: input parMap $parMap")
+    if(isTrace(here)) println ("$here: input parMap $parMap")
     val com_s = commandSetOfParameterMap (parMap)
-    if(false) println ("$here: com_s $com_s")
+    if(isTrace(here)) println ("$here: com_s $com_s")
 
     var step = 0
     for (com in com_s) { 
@@ -206,30 +128,30 @@ fun parameterMapOfArguments(args: Array<String>): Map<String, List<String>> {
   val (here, caller) = moduleHereAndCaller()
   entering(here, caller)
 
-  if(false) println("$here: input args $args")
+  if(isTrace(here)) println("$here: input args $args")
 
   var parMap = mutableMapOf<String, List<String>>()
 
   val arg_l = args.toList()
   val str_ll = stringListListOfDelimiterOfStringList ("-", arg_l)
-  if(false) println("$here: str_ll $str_ll")
+  if(isVerbose(here)) println("$here: str_ll $str_ll")
   
   for (str_l in str_ll) {
-      if(false) println("$here: for str_l $str_l")
+      if(isVerbose(here)) println("$here: for str_l $str_l")
       var (command, par_l) = commandAndParametersOfStringList(str_l)
       if(parMap.contains(command)) {
 	  val str_ = command.substring(3)
-	  if(false) println("$here: Warning: command '$command' is repeated")
-	  if(false) println("$here: Warning: to avoid this, modify the end command name '$command' from its 4th character (i.e. modify '$str_')")
+	  if(isVerbose(here)) println("$here: Warning: command '$command' is repeated")
+	  if(isVerbose(here)) println("$here: Warning: to avoid this, modify the end command name '$command' from its 4th character (i.e. modify '$str_')")
 	  command = command + "_"
-	  if(false) println("$here: Warning: command has been currently modified to '$command'") 
+	  if(isVerbose(here)) println("$here: Warning: command has been currently modified to '$command'") 
       }
       parMap.put (command, par_l)
-      if(false) println("$here: command '$command' added with par_l $par_l") 
+      if(isVerbose(here)) println("$here: command '$command' added with par_l $par_l") 
   } // for arg_l
 
   val result = parMap.toMap()
-  if(false) println("$here: output result $result")
+  if(isTrace(here)) println("$here: output result $result")
 
   exiting(here)
   return result
@@ -250,7 +172,7 @@ fun wrapperExecuteIpfsOfWordList (wor_l: List<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
-    if (false) println("$here: input wor_l '$wor_l'")
+    if (isTrace(here)) println("$here: input wor_l '$wor_l'")
     try {
 	executeIpfsOfWordList(wor_l)
     }
@@ -264,7 +186,7 @@ fun wrapperExecutePortOfWordList (wor_l: List<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
-    if (false) println("$here: input wor_l '$wor_l'")
+    if (isTrace(here)) println("$here: input wor_l '$wor_l'")
     try {
 	executePortOfWordList(wor_l)
     }
@@ -278,7 +200,7 @@ fun wrapperExecuteProvideOfWordList (wor_l: List<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
-    if (false) println("$here: input wor_l '$wor_l'")
+    if (isTrace(here)) println("$here: input wor_l '$wor_l'")
     try {
 	executeProvideOfWordList(wor_l)
     }
@@ -292,7 +214,7 @@ fun wrapperExecuteHostOfWordList (wor_l: List<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
-    if (false) println("$here: input wor_l '$wor_l'")
+    if (isTrace(here)) println("$here: input wor_l '$wor_l'")
     try {
 	executeHostOfWordList(wor_l)
     }
