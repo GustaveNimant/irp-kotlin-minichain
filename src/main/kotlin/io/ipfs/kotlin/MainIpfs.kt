@@ -3,6 +3,7 @@ package io.ipfs.kotlin
 import kotlin.system.exitProcess
 import io.ipfs.kotlin.defaults.*
 import io.ipfs.kotlin.url.*
+
 import java.io.File
 import java.util.Stack
 import java.lang.Character.MIN_VALUE as nullChar
@@ -58,6 +59,9 @@ fun helpList(): List<String> {
 	"gradlew [-q] build [--info]",
 	"gradlew run --args=\"-help ''|all|compile|host|port|run|url",
 	"gradlew run --args=\"-debug <function name>|all\"",
+	"gradlew run --args=\"-gen pro(vider)|reg(ister)|typ()e|val(ue) <module-name> <abbreviation>",
+	"gradlew run --args=\"-gen generates one of the four kind of modules above",
+	"example : gradlew run --args=\"-gen pro immutable imm\"",
 	"gradlew run --args=\"-ipfs add [Options] <path> : add a file or a directory to Ipfs https://docs.ipfs.io/reference/api/cli/#ipfs-add",
 	"gradlew run --args=\"-ipfs add <path> : add a file or a directory to Ipfs",
 	"gradlew run --args=\"-ipfs add <string> : add a string to Ipfs",
@@ -184,6 +188,7 @@ fun mainMenu (parM: Map<String, List<String>>) {
 	    }
 	    "end", "exi" -> {endProgram()}
 	    "hel" -> {helpOfParameterMap(parM)}
+	    "gen" -> {wrapperExecuteGenerateOfWordList(wor_l)}
 	    "hos" -> {wrapperExecuteHostOfWordList(wor_l)}
 	    "ipf" -> {wrapperExecuteIpfsOfWordList(wor_l)}
 	    "por" -> {wrapperExecutePortOfWordList(wor_l)}
@@ -228,6 +233,17 @@ fun parameterMapOfArguments(args: Array<String>): Map<String, List<String>> {
 
   exiting(here)
   return result
+}
+
+fun wrapperExecuteGenerateOfWordList (wor_l: List<String>) {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    if (isTrace(here)) println("$here: input wor_l '$wor_l'")
+
+    executeGenerateOfWordList(wor_l)
+    
+    exiting(here)
 }
 
 fun wrapperExecuteIpfsOfWordList (wor_l: List<String>) {

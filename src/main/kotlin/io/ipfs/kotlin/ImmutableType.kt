@@ -68,7 +68,6 @@ sealed class ImmutableType () {
     fun nameOf (): String {
 	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
-	val mulHas = multiHashOf() 
 	val result =
 	    when (this) {
 		is ImmutableTypeBlock -> "ImmutableTypeBlock"

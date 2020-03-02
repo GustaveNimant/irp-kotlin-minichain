@@ -3,15 +3,15 @@ package io.ipfs.kotlin
 import io.ipfs.kotlin.defaults.*
 
 /**
- * Storage   : IpfsImmutableValue (content of an Immutable file) by its ImmutableType
- * Needs     : IpfsImmutableType (MultiHashType (strHas)) where strHas is the hash string
+ * Storage   : immutableValue (content of an Immutable file) by its ImmutableType
+ * Needs     : immutableType (MultiHashType (strHas)) where strHas is the hash string
  * Needed by : 
  * Author : Emile Achadde 01 mars 2020 at 10:30:45+01:00
  */
 
-class IpfsImmutableRegister {
+class immutableRegister {
     
-    var register : MutableMap<IpfsImmutableType, IpfsImmutableValue> = mutableMapOf<IpfsImmutableType, IpfsImmutableValue>()
+    var register : MutableMap<immutableType, immutableValue> = mutableMapOf<immutableType, immutableValue>()
 
     fun isEmpty (): Boolean {
 	val (here, caller) = moduleHereAndCaller()
@@ -24,7 +24,7 @@ class IpfsImmutableRegister {
 	return result
     }
 
-    fun store (immTyp: IpfsImmutableType, immVal: IpfsImmutableValue) {
+    fun store (immTyp: immutableType, immVal: immutableValue) {
 	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
@@ -34,7 +34,7 @@ class IpfsImmutableRegister {
 	if (isStored(immTyp)) {
 	    val con = retrieve(immTyp)
 	    if (con != immVal) {
-		fatalErrorPrint("IpfsImmutableValue already stored for immTyp '$immTyp' were equal to new one", immVal.toString(), "Check", here)
+		fatalErrorPrint("immutableValue already stored for immTyp '$immTyp' were equal to new one", immVal.toString(), "Check", here)
 	    }
 	}
 	else {
@@ -43,7 +43,7 @@ class IpfsImmutableRegister {
 	if(isTrace(here)) println ("$here: immVal couple has been stored")
     }
     
-    fun isStored (immTyp: IpfsImmutableType): Boolean {
+    fun isStored (immTyp: immutableType): Boolean {
 	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
@@ -51,7 +51,7 @@ class IpfsImmutableRegister {
 	
 	val immVal = register.get(immTyp)
 	val result = when (immVal) {
-	    is IpfsImmutableValue -> register.contains(immTyp) 
+	    is immutableValue -> register.contains(immTyp) 
 	    else -> false
 	}
 	
@@ -61,13 +61,13 @@ class IpfsImmutableRegister {
 	return result
     }
     
-    fun retrieve (immTyp: IpfsImmutableType): IpfsImmutableValue {
+    fun retrieve (immTyp: immutableType): immutableValue {
 	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
 	val immVal = register.get(immTyp)
 	val result = when (immVal) {
-	    is IpfsImmutableValue -> immVal 
+	    is immutableValue -> immVal 
 	    else -> {fatalErrorPrint ("", "", "", here)}
 	}
 	if(isTrace(here)) println ("$here: output result '$result'")

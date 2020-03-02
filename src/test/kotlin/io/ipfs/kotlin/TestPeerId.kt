@@ -14,7 +14,7 @@ import org.junit.Test
 class TestPeerid : BaseIpfsWebserverTest() {
 
     @Test
-    fun testPeerid() {
+    fun testPeerId() {
         // setup
         server.enqueue(MockResponse().setBody("{\"Key\":\"QmZYVoscbWWJJZWy7Ue19iGXC5SRh3kune3gKSYHv3kzKn\"}\n"))
 

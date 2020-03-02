@@ -1,13 +1,8 @@
 package io.ipfs.kotlin
 
 /**
-<<<<<<< HEAD
- * What   : the content of an {{ELEMENT}} as a string  
- * Author : François Colonna 22 février 2020 at 10:50:52+01:00
-=======
  * What   : the content of an Immutable as a string  
  * Author : Emile Achadde 01 mars 2020 at 14:59:37+01:00
->>>>>>> 711622841ee258c69f8a30de57cf54217945111b
  */
 
 class {{ELEMENT}}Value (val content: String) {

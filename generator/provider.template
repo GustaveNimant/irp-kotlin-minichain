@@ -3,11 +3,7 @@ package io.ipfs.kotlin
 import io.ipfs.kotlin.defaults.*
 
 /**
-<<<<<<< HEAD
- * Provision : {{ELEMENT}}Value (content of an {{ELEMENT}} file) from its {{ELEMENT}}Type
-=======
  * Provision : {{ELEMENT}}Value (content of an Immutable file) from its ImmutableType
->>>>>>> 711622841ee258c69f8a30de57cf54217945111b
  * Needs     : {{ELEMENT}}Type (MultiHashType (strHas)) where strHas is the hash string
  * Needed by : 
  * Done by   : LocalIpfs().get.cat(strHas)
@@ -45,13 +41,8 @@ class {{ELEMENT}}Provider {
 	
 	if(isTrace(here)) println("$here: input {{ABBREVIATION}}Typ '${{ABBREVIATION}}Typ'")
 	
-<<<<<<< HEAD
-	val immCon = build({{ABBREVIATION}}Typ)
-	register.store({{ABBREVIATION}}Typ, immCon)
-=======
 	val {{ABBREVIATION}}Con = build({{ABBREVIATION}}Typ)
 	register.store({{ABBREVIATION}}Typ, {{ABBREVIATION}}Con)
->>>>>>> 711622841ee258c69f8a30de57cf54217945111b
 	
 	exiting(here)
     }

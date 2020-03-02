@@ -3,11 +3,7 @@ package io.ipfs.kotlin
 import io.ipfs.kotlin.defaults.*
 
 /**
-<<<<<<< HEAD
- * Storage   : {{ELEMENT}}Value (content of an {{ELEMENT}} file) by its {{ELEMENT}}Type
-=======
  * Storage   : {{ELEMENT}}Value (content of an Immutable file) by its ImmutableType
->>>>>>> 711622841ee258c69f8a30de57cf54217945111b
  * Needs     : {{ELEMENT}}Type (MultiHashType (strHas)) where strHas is the hash string
  * Needed by : 
  * Author : Emile Achadde 01 mars 2020 at 10:30:45+01:00

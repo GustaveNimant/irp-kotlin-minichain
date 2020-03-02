@@ -71,9 +71,13 @@ fun lineListOfFileName (filPat: String) : List<String> {
 fun outputWriteOfFilePath(filPat: String, content: String) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
-	
-    File(filPat).bufferedWriter().use { out -> out.write(content)}
+
+    if (isTrace(here)) println("$here: input filPat '$filPat'")
     
+    File(filPat).bufferedWriter().use { out -> out.write(content)}
+
+    val lenStr = content.length
+    println ("$here: $lenStr Bytes written to file '$filPat'")	
     exiting(here)
 }
 

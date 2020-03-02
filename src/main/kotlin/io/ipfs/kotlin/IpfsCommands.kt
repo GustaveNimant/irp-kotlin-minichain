@@ -35,7 +35,7 @@ fun executeIpfsOfWordList(wor_l: List<String>) {
 		    wor_s.clear()
 		}
 		"cat" -> { // (-ipfs cat) QmdKAX85S5uVKWx4ds5NdznJPjgsqAATnnkA8nE2bXQSSa
-                           val immCon = ipfsImmutableValueOfCatWordList(wor_l)
+                           val immCon = immutableValueOfCatWordList(wor_l)
 			   println ("Content:")
 			   println (immCon.toString())
 		           wor_s.clear()
@@ -58,7 +58,7 @@ fun executeIpfsOfWordList(wor_l: List<String>) {
 			    printOfStringList(get_l)
 			    wor_s.clear()
 			}
-			3 -> {val immCon = ipfsImmutableValueOfGetWordList(wor_l)
+			3 -> {val immCon = immutableValueOfGetWordList(wor_l)
 			      println ("Content:")
 			      println (immCon.toString())
 			      wor_s.clear()
@@ -125,7 +125,7 @@ fun ipfsConfigOfWordStack(wor_s: Stack<String>): String {
     return result
 }
 
-fun ipfsImmutableValueOfCatWordList (wor_l: List<String>): ImmutableValue {
+fun immutableValueOfCatWordList (wor_l: List<String>): ImmutableValue {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
@@ -150,7 +150,7 @@ fun ipfsImmutableValueOfCatWordList (wor_l: List<String>): ImmutableValue {
     return result
 }
 
-fun ipfsImmutableValueOfGetWordList (wor_l: List<String>): ImmutableValue {
+fun immutableValueOfGetWordList (wor_l: List<String>): ImmutableValue {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
