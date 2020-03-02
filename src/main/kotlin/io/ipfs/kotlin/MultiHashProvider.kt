@@ -5,9 +5,7 @@ import io.ipfs.kotlin.defaults.*
 /**
  * Provide : the MultiHashValue for a 
  * Done    : LocalIpfs().add.string(str).MultiHash
- * Command : gradlew run --args="-ipfs add truc much" 
- * Command : gradlew run --args="-ipfs add /home/achadde/profile_achadde"
- * Author  : François Colonna 22 février 2020 at 10:32:18+01:00;
+ * Author  : Emile Achadde 22 février 2020 at 10:32:18+01:00;
  */
 
 class MultiHashProvider {
@@ -20,8 +18,8 @@ class MultiHashProvider {
 	
 	println("$here: input str '$str'")
 	
-	val strH = LocalIpfs().add.string(str).Hash
-	val result = MultiHashType.make (strH)
+	val strHas = LocalIpfs().add.string(str).Hash
+	val result = MultiHashType.make (strHas)
 	println("$here: output result $result")
 	
 	exiting(here)
@@ -69,4 +67,4 @@ class MultiHashProvider {
 	exiting(here)
     }
 
-    }
+}

@@ -6,7 +6,12 @@ import io.ipfs.kotlin.url.*
 
 import java.io.File
 import java.util.Stack
-import java.lang.Character.MIN_VALUE as nullChar
+
+/**
+ * What is it : the Main Menu to manage Ipfs commands
+ * Author : Emile Achadde 02 mars 2020 at 10:29:34+01:00
+ * Revision : Help.kt extracted by Emile Achadde 02 mars 2020 at 10:30:26+01:00
+ */
 
 fun commandAndParametersOfStringList(str_l: List<String>): Pair<String, List<String>> {
   val (here, caller) = moduleHereAndCaller()

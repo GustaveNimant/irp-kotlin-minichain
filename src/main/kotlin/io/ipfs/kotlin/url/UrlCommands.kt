@@ -51,30 +51,6 @@ fun executeHostOfWordList(wor_l: List<String>) {
     exiting(here)
 }
 
-fun multiHashOfWordStack (wor_s: Stack<String>): MultiHashType {
-    val (here, caller) = moduleHereAndCaller()
-    entering(here, caller)
-
-    val word = stringOfGlueOfWordStack(" ", wor_s)
-    wor_s.clear()
-    if(isTrace(here)) println ("$here: input word '$word'")
-
-    val filCon = // file path case
-	if (isFilePathOfWord(word)) {
-	    stringReadOfFilePath(word)
-	}
-    else {
-	word
-    }
-	
-    val strH = LocalIpfs().add.string(filCon).Hash
-    val result = MultiHashType.make (strH)
-    if(isTrace(here)) println ("$here: output result '$result'")
-
-    exiting(here)
-    return result
-}
-
 fun executePortOfWordList(wor_l: List<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)

@@ -8,7 +8,7 @@ import kotlin.system.exitProcess
  * val multihash = LocalIpfs().add.string("test-string").Hash
  * val content = LocalIpfs().get.cat(multihash)
  * val commit = LocalIpfs().info.version()!!.Commit
- * Author : François Colonna 22 février 2020 at 15:32:44+01:00
+ * Author : Emile Achadde 22 février 2020 at 15:32:44+01:00
  */
 
 fun executeGenerateOfWordList(wor_l: List<String>) {

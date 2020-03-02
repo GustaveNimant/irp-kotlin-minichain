@@ -11,13 +11,13 @@ package io.ipfs.kotlin
 
 data class MultiHashValue (val functionCode: Int, val lengthCode: Int, val digestHash: String)
 
-    fun isQmMultiHash (strH: String): Boolean {
-	val result = strH.substring(0,2) == "Qm"
+    fun isQmMultiHash (strHas: String): Boolean {
+	val result = strHas.substring(0,2) == "Qm"
 	return result
 	}
 
-    fun isZ2MultiHash (strH: String): Boolean {
-	val result = strH.substring(0,2) == "z2"
+    fun isZ2MultiHash (strHas: String): Boolean {
+	val result = strHas.substring(0,2) == "z2"
 	return result
     }
     

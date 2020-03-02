@@ -2,16 +2,73 @@ package io.ipfs.kotlin
 
 import io.ipfs.kotlin.defaults.*
 import io.ipfs.kotlin.url.*
-import java.util.Stack
 import kotlin.system.exitProcess
+
+import java.util.Stack
+import java.io.File
 
 /**
  * Execution : gradlew run --args="-ipfs get QmTzX91dhqHRunjCtr4LdTErREUA5Gg1wFMiJz1bEiQxp"
  * val multihash = LocalIpfs().add.string("test-string").Hash
  * val content = LocalIpfs().get.cat(multihash)
  * val commit = LocalIpfs().info.version()!!.Commit
- * Author : François Colonna 22 février 2020 at 15:32:44+01:00
+ * Author : Emile Achadde 22 février 2020 at 15:32:44+01:00
+ * Revision : Emile Achadde 02 mars 2020 at 10:24:15+01:00
  */
+
+fun multiHashOfIpfsAddWordStack(wor_s: Stack<String>) {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+    // "-ipfs add dir(ectory)|fil(e)|str(ing) 
+    //  ./parser.bnf" "-ipfs add truc much" 
+    // Ex.: (-ipfs) add truc much
+    var done = false
+
+    if(isTrace(here)) println ("$here: input wor_s '$wor_s'")
+
+    while (!done) {
+	try {
+	    val wor = wor_s.pop()
+	    val wor_3 = wor.substring(0,3)
+	    if(isLoop(here)) println("$here: wor '$wor'")
+	    
+	    when (wor_3) {
+		"dir" -> { // (-ipfs add) dir(ectory) /directory-path
+	              val dirPat = wor_s.pop()    
+		      wor_s.clear()
+		      val mulHas_l = multiHashListOfDirectoryPath(dirPat)
+		      val str_l = mulHas_l.map{h -> h.toString()}
+		      val result = stringOfStringList(str_l)
+		      println ("MultiHash: $result")
+		}
+		"fil" -> { // (-ipfs add) fil(e) /file-path
+	              val filPat = wor_s.pop()    
+		      val mulHas = multiHashOfFilePath(filPat)
+		      wor_s.clear()
+		      println ("MultiHash: $mulHas")
+    		}
+		"str" -> { // (-ipfs add) str(ing) <file_path>|<string>
+		       val str = stringOfGlueOfWordStack(" ", wor_s)
+                       val mulHas = multiHashOfString (str)
+		       wor_s.clear()
+		       println ("MultiHash: $mulHas")
+    		}
+		"hel" -> {
+		    wor_s.clear()
+			val hel_l = helpList()
+			val h_l = hel_l.filter({h -> h.contains("-ipfs ")})
+			printOfStringList(h_l)
+    		}
+		else -> {
+		    fatalErrorPrint ("token were 'dir'ectory 'fil'e 'hel'p 'str'ing","'"+wor+"'", "Check input", here)
+		} // else
+	    } // when
+	} // try
+	catch (e: java.util.EmptyStackException) {done = true} // catch
+	
+    } // while
+    exiting(here)
+}
 
 fun executeIpfsOfWordList(wor_l: List<String>) {
     val (here, caller) = moduleHereAndCaller()
@@ -29,8 +86,8 @@ fun executeIpfsOfWordList(wor_l: List<String>) {
 	    if(isLoop(here)) println("$here: wor '$wor'")
 	    
 	    when (wor_3) {
-		"add" -> { // "-ipfs add ./parser.bnf" "-ipfs add truc much" 
-		    val mulH = multiHashOfWordStack(wor_s)
+		"add" -> { // "-ipfs add dir(ectory)|fil(e)|str(ing) ./parser.bnf" "-ipfs add truc much"
+		    val mulH = multiHashOfIpfsAddWordStack(wor_s)
 		    println ("MultiHashType: $mulH")
 		    wor_s.clear()
 		}
@@ -169,6 +226,58 @@ fun immutableValueOfGetWordList (wor_l: List<String>): ImmutableValue {
 
     if(isTrace(here)) println ("$here: output result '$result'")
     
+    exiting(here)
+    return result
+}
+
+fun multiHashListOfDirectoryPath (dirPat: String): List<MultiHashType> {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    if(isTrace(here)) println ("$here: input dirPat '$dirPat'")
+
+    val filTyp = File(dirPat)
+    val namHas_l = LocalIpfs().add.directory(filTyp)
+    val result = namHas_l.map {h -> MultiHashType.make(h.Hash)}
+    if(isTrace(here)) println ("$here: output result '$result'")
+
+    exiting(here)
+    return result
+}
+
+fun multiHashOfFilePath (filPat: String): MultiHashType {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    if(isTrace(here)) println ("$here: input filPat '$filPat'")
+
+    val filTyp = File(filPat)
+    val strH = LocalIpfs().add.file(filTyp).Hash
+    val result = MultiHashType.make (strH)
+    if(isTrace(here)) println ("$here: output result '$result'")
+
+    exiting(here)
+    return result
+}
+
+fun multiHashOfString (str: String): MultiHashType {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    if(isTrace(here)) println ("$here: input str '$str'")
+
+    val filCon = // file path case
+	if (isFilePathOfWord(str)) {
+	    stringReadOfFilePath(str)
+	}
+    else {
+	str
+    }
+	
+    val strH = LocalIpfs().add.string(filCon).Hash
+    val result = MultiHashType.make (strH)
+    if(isTrace(here)) println ("$here: output result '$result'")
+
     exiting(here)
     return result
 }
