@@ -34,7 +34,7 @@ sealed class ImmutableType () {
 	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 
-	val mulHas = multiHashOf()
+	val mulHas = multiHashTypeOf()
 	val result = mulHas.hashOf()
 
 	if(isTrace(here)) println ("$here: output result '$result'")
@@ -43,7 +43,7 @@ sealed class ImmutableType () {
 	return result
     }
 
-    fun multiHashOf(): MultiHashType {
+    fun multiHashTypeOf(): MultiHashType {
 	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 
@@ -89,7 +89,7 @@ sealed class ImmutableType () {
     fun stringOf (): String {
 	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
-	val mulHas = multiHashOf()
+	val mulHas = multiHashTypeOf()
 	val hash = mulHas.hashOf()
 	val result = 
 	    when (this) {

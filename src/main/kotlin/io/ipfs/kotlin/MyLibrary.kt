@@ -142,21 +142,6 @@ fun functionName(): String {
     return str	
 }
 
-fun moduleName(): String {
-    val sta = Thread.currentThread().stackTrace[2]
-    val str = sta.getFileName()
-    val result = str.replace(".kt", "")  
-    return result
-}
-
-fun moduleAndfunctionName(): Pair<String, String> {
-    val sta = Thread.currentThread().stackTrace[2]
-    val strFun = sta.getMethodName()
-    val strFil = sta.getFileName()
-    val strMod = strFil.replace(".kt", "")  
-    return Pair(strMod, strFun)
-}
-
 fun hereAndCaller(): Pair<String, String> {
     val sta = Thread.currentThread().stackTrace
     val here = (sta[2]).getMethodName()
@@ -168,38 +153,6 @@ fun hereAndCaller(): Pair<String, String> {
 	"None"}
     
     val result = Pair(here, caller) 
-    return result
-}
-
-fun moduleAndHereAndCaller(): Triple<String, String, String> {
-    val sta = Thread.currentThread().stackTrace
-    val strFil = (sta[2]).getFileName()
-    val module = strFil.replace(".kt", "")  
-    val here = (sta[2]).getMethodName()
-    val caller = 
-	try {
-	    (sta[3]).getMethodName()
-	}
-    catch (e: ArrayIndexOutOfBoundsException) {
-	"None"}
-    
-    val result = Triple(module, here, caller) 
-    return result
-}
-
-fun moduleHereAndCaller(): Pair<String, String> {
-    val sta = Thread.currentThread().stackTrace
-    val strFil = (sta[2]).getFileName()
-    val module = strFil.replace(".kt", "")  
-    val here = (sta[2]).getMethodName()
-    val caller = 
-	try {
-	    (sta[3]).getMethodName()
-	}
-    catch (e: ArrayIndexOutOfBoundsException) {
-	"None"}
-    
-    val result = Pair(module+"."+here, caller) 
     return result
 }
 
@@ -246,6 +199,53 @@ fun isWhen(here:String): Boolean {
     return result
   }
   else {return false}
+}
+
+fun moduleName(): String {
+    val sta = Thread.currentThread().stackTrace[2]
+    val str = sta.getFileName()
+    val result = str.replace(".kt", "")  
+    return result
+}
+
+fun moduleAndfunctionName(): Pair<String, String> {
+    val sta = Thread.currentThread().stackTrace[2]
+    val strFun = sta.getMethodName()
+    val strFil = sta.getFileName()
+    val strMod = strFil.replace(".kt", "")  
+    return Pair(strMod, strFun)
+}
+
+fun moduleAndHereAndCaller(): Triple<String, String, String> {
+    val sta = Thread.currentThread().stackTrace
+    val strFil = (sta[2]).getFileName()
+    val module = strFil.replace(".kt", "")  
+    val here = (sta[2]).getMethodName()
+    val caller = 
+	try {
+	    (sta[3]).getMethodName()
+	}
+    catch (e: ArrayIndexOutOfBoundsException) {
+	"None"}
+    
+    val result = Triple(module, here, caller) 
+    return result
+}
+
+fun moduleHereAndCaller(): Pair<String, String> {
+    val sta = Thread.currentThread().stackTrace
+    val strFil = (sta[2]).getFileName()
+    val module = strFil.replace(".kt", "")  
+    val here = (sta[2]).getMethodName()
+    val caller = 
+	try {
+	    (sta[3]).getMethodName()
+	}
+    catch (e: ArrayIndexOutOfBoundsException) {
+	"None"}
+    
+    val result = Pair(module+"."+here, caller) 
+    return result
 }
 
 fun notYetImplemented(fun_nam: String){

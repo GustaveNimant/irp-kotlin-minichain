@@ -16,7 +16,7 @@ import java.io.File
  * Revision : Emile Achadde 02 mars 2020 at 10:24:15+01:00
  */
 
-fun multiHashOfIpfsAddWordStack(wor_s: Stack<String>) {
+fun multiHashTypeListOfIpfsAddWordStack(wor_s: Stack<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
     // "-ipfs add dir(ectory)|fil(e)|str(ing) 
@@ -36,20 +36,20 @@ fun multiHashOfIpfsAddWordStack(wor_s: Stack<String>) {
 		"dir" -> { // (-ipfs add) dir(ectory) /directory-path
 	              val dirPat = wor_s.pop()    
 		      wor_s.clear()
-		      val mulHas_l = multiHashListOfDirectoryPath(dirPat)
+		      val mulHas_l = multiHashTypeListOfDirectoryPath(dirPat)
 		      val str_l = mulHas_l.map{h -> h.toString()}
 		      val result = stringOfStringList(str_l)
 		      println ("MultiHash: $result")
 		}
 		"fil" -> { // (-ipfs add) fil(e) /file-path
 	              val filPat = wor_s.pop()    
-		      val mulHas = multiHashOfFilePath(filPat)
+		      val mulHas = multiHashTypeOfFilePath(filPat)
 		      wor_s.clear()
 		      println ("MultiHash: $mulHas")
     		}
 		"str" -> { // (-ipfs add) str(ing) <file_path>|<string>
 		       val str = stringOfGlueOfWordStack(" ", wor_s)
-                       val mulHas = multiHashOfString (str)
+                       val mulHas = multiHashTypeOfString (str)
 		       wor_s.clear()
 		       println ("MultiHash: $mulHas")
     		}
@@ -87,7 +87,7 @@ fun executeIpfsOfWordList(wor_l: List<String>) {
 	    
 	    when (wor_3) {
 		"add" -> { // "-ipfs add dir(ectory)|fil(e)|str(ing) ./parser.bnf" "-ipfs add truc much"
-		    val mulH = multiHashOfIpfsAddWordStack(wor_s)
+		    val mulH = multiHashTypeListOfIpfsAddWordStack(wor_s)
 		    println ("MultiHashType: $mulH")
 		    wor_s.clear()
 		}
@@ -230,7 +230,7 @@ fun immutableValueOfGetWordList (wor_l: List<String>): ImmutableValue {
     return result
 }
 
-fun multiHashListOfDirectoryPath (dirPat: String): List<MultiHashType> {
+fun multiHashTypeListOfDirectoryPath (dirPat: String): List<MultiHashType> {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
@@ -245,7 +245,7 @@ fun multiHashListOfDirectoryPath (dirPat: String): List<MultiHashType> {
     return result
 }
 
-fun multiHashOfFilePath (filPat: String): MultiHashType {
+fun multiHashTypeOfFilePath (filPat: String): MultiHashType {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
@@ -260,7 +260,7 @@ fun multiHashOfFilePath (filPat: String): MultiHashType {
     return result
 }
 
-fun multiHashOfString (str: String): MultiHashType {
+fun multiHashTypeOfString (str: String): MultiHashType {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
