@@ -34,12 +34,12 @@ fun commandAndParametersOfStringList(str_l: List<String>): Pair<String, List<Str
   return result
 }
 
-fun commandSetOfParameterMap (parM: Map<String, List<String>>): Set<String> {
+fun commandSetOfParameterMap (parMap: Map<String, List<String>>): Set<String> {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
-    if(false) println ("$here: input parM $parM")
-    val result = parM.keys
+    if(false) println ("$here: input parMap $parMap")
+    val result = parMap.keys
 
     if(false) println ("$here: output result $result")
     exiting(here)
@@ -114,15 +114,15 @@ fun helpListOfStringList(str_l: List<String>): List<String> {
 	return result 
 }
 
-fun helpOfParameterMap(parM: Map<String, List<String>>) {
+fun helpOfParameterMap(parMap: Map<String, List<String>>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
-    if(true) println ("$here: input parM $parM")
+    if(true) println ("$here: input parMap $parMap")
     
-    if (parM.containsKey("help"))
+    if (parMap.containsKey("help"))
     { 
-      val str_l = parM.getValue("help")
+      val str_l = parMap.getValue("help")
       if(true) println ("$here: str_l $str_l")
       val hel_l = helpListOfStringList(str_l)
       printOfStringList(hel_l)
@@ -136,10 +136,10 @@ fun main(args: Array<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
-    val parM = parameterMapOfArguments(args)
-    ParameterMap = parM.toMap() // Globalization for Trace ...
+    val parMap = parameterMapOfArguments(args)
+    ParameterMap = parMap.toMap() // Globalization for Trace ...
     
-    if (parM.size == 0) {
+    if (parMap.size == 0) {
 	println ("Commands are:")
 	val hel_l = helpList()
 	for (hel in hel_l) {
@@ -149,26 +149,26 @@ fun main(args: Array<String>) {
     }
 
     if(false) {
-	if (parM.size > 0) {
+	if (parMap.size > 0) {
 	    println ("Commands with their parameter list:")
-	    for ( (k, v) in parM) {
+	    for ( (k, v) in parMap) {
 		println ("$k => $v")
 	    }
 	}
     }
     
-    mainMenu(parM)
+    mainMenu(parMap)
     
     println("\nnormal termination")
     exiting(here)
 }
 
-fun mainMenu (parM: Map<String, List<String>>) {
+fun mainMenu (parMap: Map<String, List<String>>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
-    if(false) println ("$here: input parM $parM")
-    val com_s = commandSetOfParameterMap (parM)
+    if(false) println ("$here: input parMap $parMap")
+    val com_s = commandSetOfParameterMap (parMap)
     if(false) println ("$here: com_s $com_s")
 
     var step = 0
@@ -177,7 +177,7 @@ fun mainMenu (parM: Map<String, List<String>>) {
 	println("$here: ----- command # $step '$com' -----")
 	val com_3 = com.substring(0,3)
 	
-	val wor_ml = parM.get(com)
+	val wor_ml = parMap.get(com)
 	val wor_l = wor_ml!!.map({w -> w.toString()}) 
 	if (isLoop(here)) println("$here: wor_l '$wor_l'")
 	
@@ -187,7 +187,7 @@ fun mainMenu (parM: Map<String, List<String>>) {
 		println("$here: '$com' activated for '$str' functions")
 	    }
 	    "end", "exi" -> {endProgram()}
-	    "hel" -> {helpOfParameterMap(parM)}
+	    "hel" -> {helpOfParameterMap(parMap)}
 	    "gen" -> {wrapperExecuteGenerateOfWordList(wor_l)}
 	    "hos" -> {wrapperExecuteHostOfWordList(wor_l)}
 	    "ipf" -> {wrapperExecuteIpfsOfWordList(wor_l)}
@@ -208,7 +208,7 @@ fun parameterMapOfArguments(args: Array<String>): Map<String, List<String>> {
 
   if(false) println("$here: input args $args")
 
-  var parM = mutableMapOf<String, List<String>>()
+  var parMap = mutableMapOf<String, List<String>>()
 
   val arg_l = args.toList()
   val str_ll = stringListListOfDelimiterOfStringList ("-", arg_l)
@@ -217,18 +217,18 @@ fun parameterMapOfArguments(args: Array<String>): Map<String, List<String>> {
   for (str_l in str_ll) {
       if(false) println("$here: for str_l $str_l")
       var (command, par_l) = commandAndParametersOfStringList(str_l)
-      if(parM.contains(command)) {
+      if(parMap.contains(command)) {
 	  val str_ = command.substring(3)
 	  if(false) println("$here: Warning: command '$command' is repeated")
 	  if(false) println("$here: Warning: to avoid this, modify the end command name '$command' from its 4th character (i.e. modify '$str_')")
 	  command = command + "_"
 	  if(false) println("$here: Warning: command has been currently modified to '$command'") 
       }
-      parM.put (command, par_l)
+      parMap.put (command, par_l)
       if(false) println("$here: command '$command' added with par_l $par_l") 
   } // for arg_l
 
-  val result = parM.toMap()
+  val result = parMap.toMap()
   if(false) println("$here: output result $result")
 
   exiting(here)
