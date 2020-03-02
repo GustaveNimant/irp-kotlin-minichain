@@ -230,58 +230,6 @@ fun immutableValueOfGetWordList (wor_l: List<String>): ImmutableValue {
     return result
 }
 
-fun multiHashTypeListOfDirectoryPath (dirPat: String): List<MultiHashType> {
-    val (here, caller) = moduleHereAndCaller()
-    entering(here, caller)
-
-    if(isTrace(here)) println ("$here: input dirPat '$dirPat'")
-
-    val filTyp = File(dirPat)
-    val namHas_l = LocalIpfs().add.directory(filTyp)
-    val result = namHas_l.map {h -> MultiHashType.make(h.Hash)}
-    if(isTrace(here)) println ("$here: output result '$result'")
-
-    exiting(here)
-    return result
-}
-
-fun multiHashTypeOfFilePath (filPat: String): MultiHashType {
-    val (here, caller) = moduleHereAndCaller()
-    entering(here, caller)
-
-    if(isTrace(here)) println ("$here: input filPat '$filPat'")
-
-    val filTyp = File(filPat)
-    val strH = LocalIpfs().add.file(filTyp).Hash
-    val result = MultiHashType.make (strH)
-    if(isTrace(here)) println ("$here: output result '$result'")
-
-    exiting(here)
-    return result
-}
-
-fun multiHashTypeOfString (str: String): MultiHashType {
-    val (here, caller) = moduleHereAndCaller()
-    entering(here, caller)
-
-    if(isTrace(here)) println ("$here: input str '$str'")
-
-    val filCon = // file path case
-	if (isFilePathOfWord(str)) {
-	    stringReadOfFilePath(str)
-	}
-    else {
-	str
-    }
-	
-    val strH = LocalIpfs().add.string(filCon).Hash
-    val result = MultiHashType.make (strH)
-    if(isTrace(here)) println ("$here: output result '$result'")
-
-    exiting(here)
-    return result
-}
-
 fun wrapperIdentityPeerID(): String {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
