@@ -61,6 +61,28 @@ sealed class MultiHashType () {
 	return result
     }
     
+    fun printHashOf(): String {
+	val (here, caller) = moduleHereAndCaller()
+	entering(here, caller)
+	
+	val result = hashOf()
+	println (result)
+	
+	exiting(here)
+	return result
+    }
+    
+    fun printOf(): String {
+	val (here, caller) = moduleHereAndCaller()
+	entering(here, caller)
+	
+	val result = stringOf()
+	println (result)
+	
+	exiting(here)
+	return result
+    }
+    
     companion object {
 	fun make (hash: String): MultiHashType {
 	    val (here, caller) = moduleHereAndCaller()
@@ -85,7 +107,7 @@ sealed class MultiHashType () {
 	}
     } // companion
 
-}
+} // class
 
 fun multiHashTypeListOfDirectoryPath (dirPat: String): List<MultiHashType> {
     val (here, caller) = moduleHereAndCaller()

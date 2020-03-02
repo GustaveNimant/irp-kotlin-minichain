@@ -16,60 +16,6 @@ import java.io.File
  * Revision : Emile Achadde 02 mars 2020 at 10:24:15+01:00
  */
 
-fun multiHashTypeListOfIpfsAddWordStack(wor_s: Stack<String>) {
-    val (here, caller) = moduleHereAndCaller()
-    entering(here, caller)
-    // "-ipfs add dir(ectory)|fil(e)|str(ing) 
-    //  ./parser.bnf" "-ipfs add truc much" 
-    // Ex.: (-ipfs) add truc much
-    var done = false
-
-    if(isTrace(here)) println ("$here: input wor_s '$wor_s'")
-
-    while (!done) {
-	try {
-	    val wor = wor_s.pop()
-	    val wor_3 = wor.substring(0,3)
-	    if(isLoop(here)) println("$here: wor '$wor'")
-	    
-	    when (wor_3) {
-		"dir" -> { // (-ipfs add) dir(ectory) /directory-path
-	              val dirPat = wor_s.pop()    
-		      wor_s.clear()
-		      val mulHas_l = multiHashTypeListOfDirectoryPath(dirPat)
-		      val str_l = mulHas_l.map{h -> h.toString()}
-		      val result = stringOfStringList(str_l)
-		      println ("MultiHash: $result")
-		}
-		"fil" -> { // (-ipfs add) fil(e) /file-path
-	              val filPat = wor_s.pop()    
-		      val mulHas = multiHashTypeOfFilePath(filPat)
-		      wor_s.clear()
-		      println ("MultiHash: $mulHas")
-    		}
-		"str" -> { // (-ipfs add) str(ing) <file_path>|<string>
-		       val str = stringOfGlueOfWordStack(" ", wor_s)
-                       val mulHas = multiHashTypeOfString (str)
-		       wor_s.clear()
-		       println ("MultiHash: $mulHas")
-    		}
-		"hel" -> {
-		    wor_s.clear()
-			val hel_l = helpList()
-			val h_l = hel_l.filter({h -> h.contains("-ipfs ")})
-			printOfStringList(h_l)
-    		}
-		else -> {
-		    fatalErrorPrint ("token were 'dir'ectory 'fil'e 'hel'p 'str'ing","'"+wor+"'", "Check input", here)
-		} // else
-	    } // when
-	} // try
-	catch (e: java.util.EmptyStackException) {done = true} // catch
-	
-    } // while
-    exiting(here)
-}
-
 fun executeIpfsOfWordList(wor_l: List<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
@@ -87,9 +33,7 @@ fun executeIpfsOfWordList(wor_l: List<String>) {
 	    
 	    when (wor_3) {
 		"add" -> { // "-ipfs add dir(ectory)|fil(e)|str(ing) ./parser.bnf" "-ipfs add truc much"
-		    val mulH = multiHashTypeListOfIpfsAddWordStack(wor_s)
-		    println ("MultiHashType: $mulH")
-		    wor_s.clear()
+		    val mulH = ipfsAddOfWordStack(wor_s)
 		}
 		"cat" -> { // (-ipfs cat) QmdKAX85S5uVKWx4ds5NdznJPjgsqAATnnkA8nE2bXQSSa
                            val immCon = immutableValueOfCatWordList(wor_l)
@@ -138,6 +82,63 @@ fun executeIpfsOfWordList(wor_l: List<String>) {
 		}
 		else -> {
 		    fatalErrorPrint ("command were 'add' 'cat' 'com'mmit 'con'fig 'get' 'hel'p 'pee'rid","'"+wor+"'", "Check input", here)
+		} // else
+	    } // when
+	} // try
+	catch (e: java.util.EmptyStackException) {done = true} // catch
+	
+    } // while
+    exiting(here)
+}
+
+fun ipfsAddOfWordStack(wor_s: Stack<String>) {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+    // "-ipfs add dir(ectory)|fil(e)|str(ing) 
+    //  ./parser.bnf" "-ipfs add truc much" 
+    // Ex.: (-ipfs) add truc much
+    var done = false
+
+    if(isTrace(here)) println ("$here: input wor_s '$wor_s'")
+
+    while (!done) {
+	try {
+	    val wor = wor_s.pop()
+	    val wor_3 = wor.substring(0,3)
+	    if(isLoop(here)) println("$here: wor '$wor'")
+	    
+	    when (wor_3) {
+		"dir" -> { // (-ipfs add) dir(ectory) /directory-path
+	              val dirPat = wor_s.pop()    
+		      wor_s.clear()
+		      val mulHas_l = multiHashTypeListOfDirectoryPath(dirPat)
+		      println ("$here: MultiHashTypeList for directory '$dirPat'")
+				      
+		      mulHas_l.forEach{h -> h.printHashOf()}
+
+		}
+		"fil" -> { // (-ipfs add) fil(e) /file-path
+	              val filPat = wor_s.pop()    
+		      val mulHas = multiHashTypeOfFilePath(filPat)
+		      wor_s.clear()
+		      val strHas = mulHas.hashOf()
+		      println ("$here: file '$filPat' MultiHashType '$strHas'")
+    		}
+		"str" -> { // (-ipfs add) str(ing) <file_path>|<string>
+		       val str = stringOfGlueOfWordStack(" ", wor_s)
+                       val mulHas = multiHashTypeOfString (str)
+		       wor_s.clear()
+		       val strHas = mulHas.hashOf()
+		       println ("$here: string '$str' MultiHashType '$strHas'")
+    		}
+		"hel" -> {
+		    wor_s.clear()
+			val hel_l = helpList()
+			val h_l = hel_l.filter({h -> h.contains("-ipfs ")})
+			printOfStringList(h_l)
+    		}
+		else -> {
+		    fatalErrorPrint ("token were 'dir'ectory 'fil'e 'hel'p 'str'ing","'"+wor+"'", "Check input", here)
 		} // else
 	    } // when
 	} // try
