@@ -224,6 +224,16 @@ fun printOfStringList (str_l: List<String>) {
     println (content)
 }
 
+fun reductionOfString(str: String, len: Int): String {
+    val sizStr = str.length
+    val result =
+	if (sizStr > 3 * len) {
+	    str.substring(0, len) + " ... " + str.substring(sizStr-len)
+	}
+        else {str}
+    return result
+}
+
 fun stringOfGlueOfStringList (glue: String, str_l: List<String>) : String {
  val str = str_l.fold("", {acc, s -> acc + s + glue })
  return str.trim() 

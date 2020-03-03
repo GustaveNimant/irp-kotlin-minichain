@@ -110,40 +110,6 @@ sealed class MultiHashType () {
 
 } // class
 
-fun namedHashListOfDirectoryPath (dirPat: String): List<NamedHash>{
-    val (here, caller) = moduleHereAndCaller()
-    entering(here, caller)
-
-    if(isTrace(here)) println ("$here: input dirPat '$dirPat'")
-    
-    val filJav = File(dirPat)
-    val result = LocalIpfs().add.directory(filJav)
-
-    result.forEach {h -> h.print()}
-    if(isTrace(here)) println ("$here: output result '$result'")
- 
-    exiting(here)
-    return result
-}
-
-fun namedHashMapOfDirectoryPath (dirPat: String): Map<String, String>{
-    val (here, caller) = moduleHereAndCaller()
-    entering(here, caller)
-
-    // file/immutable.provider.kt => QmXVgjJ3se2PJ36ymuu6amcJrHGB5Ytkummu2rKBdyavqt
-
-    if(isTrace(here)) println ("$here: input dirPat '$dirPat'")
-
-    val namHas_l = namedHashListOfDirectoryPath (dirPat)
-    
-    val result = namHas_l.map {h -> h.Name to h.Hash}.toMap()
-    
-    if(isTrace(here)) println ("$here: output result '$result'")
- 
-    exiting(here)
-    return result
-}
-
 fun multiHashTypeListOfDirectoryPath (dirPat: String): List<MultiHashType> {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
@@ -195,3 +161,96 @@ fun multiHashTypeOfString (str: String): MultiHashType {
     exiting(here)
     return result
 }
+
+fun namedHashListOfDirectoryPath (dirPat: String): List<NamedHash>{
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    if(isTrace(here)) println ("$here: input dirPat '$dirPat'")
+    
+    val filJav = File(dirPat)
+    val result = LocalIpfs().add.directory(filJav)
+
+    result.forEach {h -> h.print()}
+    if(isTrace(here)) println ("$here: output result '$result'")
+ 
+    exiting(here)
+    return result
+}
+
+fun namedHashMapOfDirectoryPath (dirPat: String): Map<String, String>{
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    // file/immutable.provider.kt => QmXVgjJ3se2PJ36ymuu6amcJrHGB5Ytkummu2rKBdyavqt
+
+    if(isTrace(here)) println ("$here: input dirPat '$dirPat'")
+
+    val namHas_l = namedHashListOfDirectoryPath (dirPat)
+    val result = namHas_l.map {h -> (h.Name).replace("file", dirPat) to h.Hash}.toMap()
+    
+    if(isTrace(here)) println ("$here: output result '$result'")
+ 
+    exiting(here)
+    return result
+}
+
+fun namedHashMapOfFilePath (filPat: String): Map<String, String>{
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    if(isTrace(here)) println ("$here: input filPat '$filPat'")
+    
+    val namHas = namedHashOfFilePath (filPat)
+    val result = mapOf((namHas.Name).replace("file", filPat) to namHas.Hash)
+    if(isTrace(here)) println ("$here: output result '$result'")
+
+    exiting(here)
+    return result
+}
+
+fun namedHashMapOfString (str: String): Map<String, String>{
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    if(isTrace(here)) println ("$here: input str '$str'")
+    
+    val namHas = namedHashOfString(str)
+    val redStr = reductionOfString(str, 5)
+    val result = mapOf(namHas.Name.replace("string", redStr) to namHas.Hash)
+    
+    if(isTrace(here)) println ("$here: output result '$result'")
+
+    exiting(here)
+    return result
+}
+
+fun namedHashOfFilePath (filPat: String): NamedHash{
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    if(isTrace(here)) println ("$here: input filPat '$filPat'")
+    
+    val filJav = File(filPat)
+    val result = LocalIpfs().add.file(filJav)
+
+    if(isTrace(here)) println ("$here: output result '$result'")
+ 
+    exiting(here)
+    return result
+}
+
+fun namedHashOfString (str: String): NamedHash{
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    if(isTrace(here)) println ("$here: input str '$str'")
+    
+    val result = LocalIpfs().add.string(str)
+
+    if(isTrace(here)) println ("$here: output result '$result'")
+ 
+    exiting(here)
+    return result
+}
+

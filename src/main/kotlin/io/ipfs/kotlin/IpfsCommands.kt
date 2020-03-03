@@ -111,9 +111,6 @@ fun ipfsAddOfWordStack(wor_s: Stack<String>) {
 		"dir" -> { // (-ipfs add) dir(ectory) /directory-path
 	              val dirPat = wor_s.pop()    
 		      wor_s.clear()
-		      val mulHas_l = multiHashTypeListOfDirectoryPath(dirPat)
-		      println ("$here: MultiHashTypeList for directory '$dirPat'")
-
 		      val namHasMap = namedHashMapOfDirectoryPath(dirPat)
 		      println ("$here: namedHashMap for directory '$dirPat'")
 
@@ -127,6 +124,11 @@ fun ipfsAddOfWordStack(wor_s: Stack<String>) {
 		      wor_s.clear()
 		      val strHas = mulHas.hashOf()
 		      println ("$here: file '$filPat' MultiHashType '$strHas'")
+		      val namHasMap = namedHashMapOfFilePath(filPat)
+		      println ("$here: namedHashMap for file '$filPat'")
+		      for ( (k, v) in namHasMap) {
+			  println ("$k => $v")
+		      }
     		}
 		"str" -> { // (-ipfs add) str(ing) <file_path>|<string>
 		       val str = stringOfGlueOfWordStack(" ", wor_s)
@@ -134,6 +136,11 @@ fun ipfsAddOfWordStack(wor_s: Stack<String>) {
 		       wor_s.clear()
 		       val strHas = mulHas.hashOf()
 		       println ("$here: string '$str' MultiHashType '$strHas'")
+		       val namHasMap = namedHashMapOfString(str)
+		       println ("$here: namedHashMap for string '$str'")
+		       for ( (k, v) in namHasMap) {
+			  println ("$k => $v")
+		      }
     		}
 		"hel" -> {
 		    wor_s.clear()
