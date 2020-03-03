@@ -2,6 +2,7 @@ package io.ipfs.kotlin
 
 import java.io.File
 import io.ipfs.kotlin.defaults.*
+import io.ipfs.kotlin.model.*
 
 /**
  * What       : The different Types of MultiHash 
@@ -109,14 +110,48 @@ sealed class MultiHashType () {
 
 } // class
 
+fun namedHashListOfDirectoryPath (dirPat: String): List<NamedHash>{
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    if(isTrace(here)) println ("$here: input dirPat '$dirPat'")
+    
+    val filJav = File(dirPat)
+    val result = LocalIpfs().add.directory(filJav)
+
+    result.forEach {h -> h.print()}
+    if(isTrace(here)) println ("$here: output result '$result'")
+ 
+    exiting(here)
+    return result
+}
+
+fun namedHashMapOfDirectoryPath (dirPat: String): Map<String, String>{
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    // file/immutable.provider.kt => QmXVgjJ3se2PJ36ymuu6amcJrHGB5Ytkummu2rKBdyavqt
+
+    if(isTrace(here)) println ("$here: input dirPat '$dirPat'")
+
+    val namHas_l = namedHashListOfDirectoryPath (dirPat)
+    
+    val result = namHas_l.map {h -> h.Name to h.Hash}.toMap()
+    
+    if(isTrace(here)) println ("$here: output result '$result'")
+ 
+    exiting(here)
+    return result
+}
+
 fun multiHashTypeListOfDirectoryPath (dirPat: String): List<MultiHashType> {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
-    
+
     if(isTrace(here)) println ("$here: input dirPat '$dirPat'")
     
-    val filTyp = File(dirPat)
-    val namHas_l = LocalIpfs().add.directory(filTyp)
+    val namHas_l = namedHashListOfDirectoryPath (dirPat)
+
     val result = namHas_l.map {h -> MultiHashType.make(h.Hash)}
     if(isTrace(here)) println ("$here: output result '$result'")
 
@@ -130,8 +165,8 @@ fun multiHashTypeOfFilePath (filPat: String): MultiHashType {
 
     if(isTrace(here)) println ("$here: input filPat '$filPat'")
 
-    val filTyp = File(filPat)
-    val strH = LocalIpfs().add.file(filTyp).Hash
+    val filJav = File(filPat)
+    val strH = LocalIpfs().add.file(filJav).Hash
     val result = MultiHashType.make (strH)
     if(isTrace(here)) println ("$here: output result '$result'")
 

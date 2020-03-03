@@ -113,9 +113,13 @@ fun ipfsAddOfWordStack(wor_s: Stack<String>) {
 		      wor_s.clear()
 		      val mulHas_l = multiHashTypeListOfDirectoryPath(dirPat)
 		      println ("$here: MultiHashTypeList for directory '$dirPat'")
-				      
-		      mulHas_l.forEach{h -> h.printHashOf()}
 
+		      val namHasMap = namedHashMapOfDirectoryPath(dirPat)
+		      println ("$here: namedHashMap for directory '$dirPat'")
+
+		      for ( (k, v) in namHasMap) {
+			  println ("$k => $v")
+		      }
 		}
 		"fil" -> { // (-ipfs add) fil(e) /file-path
 	              val filPat = wor_s.pop()    
@@ -241,7 +245,7 @@ fun wrapperIdentityPeerID(): String {
 	    peeId!!.Value
 	}
         catch (e: java.net.UnknownHostException) {
-	    fatalErrorPrint ("Connection to 127.0.0.1:5122", "Connection refused", "launch Host :\n\tgo to minichain jsm; . config.sh; ipmsd.sh", here)
+	    fatalErrorPrint ("Connection to 127.0.0.1:5001", "Connection refused", "launch Host :\n\tgo to minichain jsm; . config.sh; ipmsd.sh", here)
 	}
 	
     if(isTrace(here)) println ("$here: output result '$result'")
@@ -261,7 +265,7 @@ fun wrapperPeerId(): String {
 	    peeId!!.Value
 	}
         catch (e: java.net.UnknownHostException) {
-	    fatalErrorPrint ("Connection to 127.0.0.1:5122", "Connection refused", "launch Host :\n\tgo to minichain jsm; . config.sh; ipmsd.sh", here)
+	    fatalErrorPrint ("Connection to 127.0.0.1:5001", "Connection refused", "launch Host :\n\tgo to minichain jsm; . config.sh; ipmsd.sh", here)
 	}
 	
     if(isTrace(here)) println ("$here: output result '$result'")

@@ -8,9 +8,11 @@ import io.ipfs.kotlin.model.NamedHash
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.Request
+
 // The extension functions are in companion objects.
 // https://square.github.io/okhttp/upgrading_to_okhttp_4/#extension-functions
 import okhttp3.Headers.Companion.toHeaders
+
 //import okhttp3.ByteArray.Companion.toRequestBody
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -19,8 +21,10 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import java.net.URLEncoder
 
-// EA : 19 Feb 2020 : Headers.of(Map) =>  Map.toHeaders()
-// EA : 19 Feb 2020 : MediaType.parse(String) => String.toMediaType()
+/**
+ * Revision : Emile Achadde 19 Feb 2020 : Headers.of(Map) => Map.toHeaders()
+ * Revision : Emile Achadde 19 Feb 2020 : MediaType.parse(String) => String.toMediaType()
+ */
 
 class Add(val ipfs: IpfsConnection) {
 
@@ -71,6 +75,7 @@ class Add(val ipfs: IpfsConnection) {
 	    val mediaType = ("application/x-directory").toMediaType()
   	    val request = "".toRequestBody(mediaType)
             builder.addPart(headers, request)
+
             // add files and subdirectories
             for (f: File in file.listFiles()) {
 		addFile(builder, f, f.name, filename + "/" + f.name)
@@ -82,7 +87,8 @@ class Add(val ipfs: IpfsConnection) {
         }
 	
 	exiting(here)
-    }
+	
+    } // addFile
     
     fun string(text: String, name: String = "string", filename: String = name): NamedHash {
 	
@@ -96,7 +102,6 @@ class Add(val ipfs: IpfsConnection) {
     }
     
     private fun addGeneric(withBuilder: (MultipartBody.Builder) -> Any): List<NamedHash> {
-	
         val builder = MultipartBody.Builder().setType(MultipartBody.FORM)
         withBuilder(builder)
         val requestBody = builder.build()

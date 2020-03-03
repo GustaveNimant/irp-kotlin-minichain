@@ -182,7 +182,7 @@ fun wrapperExecuteIpfsOfWordList (wor_l: List<String>) {
 	executeIpfsOfWordList(wor_l)
     }
     catch (e: java.net.ConnectException){
-	fatalErrorPrint ("Connection to 127.0.0.1:5122", "Connection refused", "launch Ipfs :\n\tgo to minichain jsm; . config.sh; ipmsd.sh", here)}
+	fatalErrorPrint ("Connection to 127.0.0.1:5001", "Connection refused", "launch Ipfs :\n\tgo to minichain jsm; . config.sh; ipmsd.sh", here)}
     
     exiting(here)
 }
@@ -196,7 +196,7 @@ fun wrapperExecutePortOfWordList (wor_l: List<String>) {
 	executePortOfWordList(wor_l)
     }
     catch (e: java.net.ConnectException){
-	fatalErrorPrint ("Connection to 127.0.0.1:5122", "Connection refused", "launch Port :\n\tgo to minichain jsm; . config.sh; ipmsd.sh", here)}
+	fatalErrorPrint ("Connection to 127.0.0.1:5001", "Connection refused", "launch Port :\n\tgo to minichain jsm; . config.sh; ipmsd.sh", here)}
     
     exiting(here)
 }
@@ -210,7 +210,7 @@ fun wrapperExecuteProvideOfWordList (wor_l: List<String>) {
 	executeProvideOfWordList(wor_l)
     }
     catch (e: java.net.ConnectException){
-	fatalErrorPrint ("Connection to 127.0.0.1:5122", "Connection refused", "launch Port :\n\tgo to minichain jsm; . config.sh; ipmsd.sh", here)}
+	fatalErrorPrint ("Connection to 127.0.0.1:5001", "Connection refused", "launch Port :\n\tgo to minichain jsm; . config.sh; ipmsd.sh", here)}
     
     exiting(here)
 }
@@ -224,7 +224,7 @@ fun wrapperExecuteHostOfWordList (wor_l: List<String>) {
 	executeHostOfWordList(wor_l)
     }
     catch (e: java.net.ConnectException){
-	fatalErrorPrint ("Connection to 127.0.0.1:5122", "Connection refused", "launch Host :\n\tgo to minichain jsm; . config.sh; ipmsd.sh", here)}
+	fatalErrorPrint ("Connection to 127.0.0.1:5001", "Connection refused", "launch Host :\n\tgo to minichain jsm; . config.sh; ipmsd.sh", here)}
     
     exiting(here)
 }

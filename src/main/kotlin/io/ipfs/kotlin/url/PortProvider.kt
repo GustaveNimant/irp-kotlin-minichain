@@ -25,7 +25,7 @@ class PortProvider {
 	      str.toInt()					    
 	    }
 	else {
-	    5122
+	    5001
 	}
 	exiting(here)
 	return result 
@@ -58,7 +58,7 @@ class PortProvider {
 		    val int = portIntFromParameterMap()
 		    PortValue(int)
 		}
-		is PortType.PortWebui -> PortValue(5122)
+		is PortType.PortWebui -> PortValue(5001)
 		is PortType.PortGateway -> PortValue(5001)
 	    }
 	
