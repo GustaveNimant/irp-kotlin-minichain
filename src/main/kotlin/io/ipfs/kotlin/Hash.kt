@@ -23,7 +23,7 @@ fun hashStringOfTypeOfInput(typ: String, inp: String): String {
         .digest(inp.toByteArray())
     }
     catch (e: java.security.NoSuchAlgorithmException) {
-	fatalErrorPrint("the hash function type '$typ' existed", "it did not","modify type with -hashfunction sha 256", here)}
+	fatalErrorPrint("the hash function type '$typ' existed", "it did not","modify type with for example -hashfunction sha 256", here)}
     
     val strBui = StringBuilder(bytes.size * 2)
     
@@ -40,15 +40,20 @@ fun hashStringOfTypeOfInput(typ: String, inp: String): String {
     exiting(here)
 }
 
-fun hashFunctionTypeOfKindOfLength (kin:String, len: Int): String {
+fun hashFunctionTypeOfTypeOfLength (typ:String, len: Int): String {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
     // Ex.: (-has)h sha 256
 
-    if(isTrace(here)) println("$here: kin '$kin'")
+    if(isTrace(here)) println("$here: typ '$typ'")
     if(isTrace(here)) println("$here: len '$len'")
 
-    val result = kin + "-" + len.toString()
+    val result = when (typ.toLowerCase()) {
+	"sha" -> typ + "-" + len.toString()
+        "md" -> typ + len.toString()
+	else -> {
+	    fatalErrorPrint("the hash function type '$typ' were 'sha' or 'md'", "'$typ'","modify type with for example -hashfunction sha 256", here)}
+    }
     
     if(isDebug(here)) println ("$here: result '$result'")
     return result
@@ -62,13 +67,16 @@ fun hashFunctionType(): String {
     val parMap = ParameterMap
     if(isTrace(here)) println("$here: input parMap '$parMap'") 
 
-    val wor_l = ParameterMap.getValue("hashfunction")
-    val hasKin = wor_l.component1()
+    val wor_l = try {ParameterMap.getValue("hashfunction")}
+                catch(e: java.util.NoSuchElementException) {
+		    fatalErrorPrint("the hash function type were defined in the input", "it is not","enter for example -hashfunction sha 256", here)}
+    
+    val hasTyp = wor_l.component1()
     val hasLen = wor_l.component2().toInt()
-    if (isDebug(here)) println("$here: hasKin '$hasKin'")
+    if (isDebug(here)) println("$here: hasTyp '$hasTyp'")
     if (isDebug(here)) println("$here: hasLen '$hasLen'")
 
-    val result = hashFunctionTypeOfKindOfLength (hasKin, hasLen)
+    val result = hashFunctionTypeOfTypeOfLength (hasTyp, hasLen)
 
     // Ex.: (-has)h sha 256
 
@@ -85,7 +93,10 @@ fun hashInputString(): String {
     val parMap = ParameterMap
     if(isTrace(here)) println("$here: input parMap '$parMap'") 
 
-    val wor_l = ParameterMap.getValue("hashinput")
+    val wor_l = try {ParameterMap.getValue("hashinput")}
+                catch(e: java.util.NoSuchElementException) {
+		    fatalErrorPrint("and input string were defined in the input", "it is not","enter for example -hashinput some string", here)}
+    
     
     val str = stringOfGlueOfStringList(" ", wor_l)
     val result = // file path case

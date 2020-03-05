@@ -59,6 +59,66 @@ fun endProgram () {
     exiting(here)
 }
 
+fun executeProvideOfWordList(wor_l: List<String>) {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+    
+    // Ex.: -provide peerid
+    
+    var done = false
+    if(isTrace(here)) println ("$here: input wor_l '$wor_l'")
+    var wor_s = wordStackOfWordList(wor_l)
+    
+    while (!done) {
+	try {
+	    val wor = wor_s.pop()
+	    val wor_3 = wor.substring(0,3)
+	    if(isLoop(here)) println("$here: while wor '$wor'")
+	    
+	    when (wor_3) {
+		"hel" -> {
+		    wor_s.clear()
+			val hel_l = helpList()
+			val h_l = hel_l.filter({h -> h.contains("-provide ")})
+			printOfStringList(h_l)
+    		}
+		"has" -> {
+		    when (wor) {
+			"hashtype" -> {
+			    val hasFunTyp = hashFunctionType()
+			    println ("$here: hashFunctionType $hasFunTyp")
+			}
+			"hashinput" -> {
+			    val hasInpStr = hashInputString()
+			    println ("$here: hashInputString $hasInpStr")
+			}
+			"hashvalue" -> {
+			    val hasFunTyp = hashFunctionType()
+			    val hasInpStr = hashInputString()
+			    val hasValue = hashStringOfTypeOfInput(hasFunTyp, hasInpStr)
+			    println ("$here: hashFunctionType '$hasFunTyp'")
+			    println ("$here: hashInputString '$hasInpStr'")
+			    println ("$here: hash Value '$hasValue'")
+			}
+			else -> {
+			    fatalErrorPrint ("$here: command were '-provide hashtype' or '-provide hashinput' '-provide hashvalue","'-provide $wor'", "Check input", here)
+			}
+		    }
+		}// when (wor)
+		"pee" -> {
+		    notYetImplemented("peerid")
+		}
+		else -> {
+		    fatalErrorPrint ("command were 'add', 'get'","'"+wor+"'", "Check input", here)
+		} // else
+	    } // when (wor_3)
+	} // try
+	catch (e: java.util.EmptyStackException) {done = true} // catch
+	
+    } // while
+    exiting(here)
+}
+
 fun main(args: Array<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
@@ -115,7 +175,7 @@ fun mainMenu (parMap: Map<String, List<String>>) {
 	    }
 	    "end", "exi" -> {endProgram()}
 	    "gen" -> {wrapperExecuteGenerateOfWordList(wor_l)}
-	    "has" -> {wrapperExecuteHash()}
+	    "has" -> {wrapperExecuteHashOfWord(com)}
 	    "hel" -> {helpOfParameterMap(parMap)}
 	    "hos" -> {wrapperExecuteHostOfWordList(wor_l)}
 	    "inp" -> {// -input <file-path>
@@ -178,18 +238,18 @@ fun wrapperExecuteGenerateOfWordList (wor_l: List<String>) {
     exiting(here)
 }
 
-fun wrapperExecuteHash() {
+fun wrapperExecuteHashOfWord(wor: String) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
-    val hasFunTyp = hashFunctionType()
-    println ("$here: hashFunctionType $hasFunTyp")
-    val hasInpStr = hashInputString()
-    println ("$here: hashInputString $hasInpStr")
-
-    val hash =  hashStringOfTypeOfInput(hasFunTyp, hasInpStr)
-    println ("$here: hasFunTyp '$hasFunTyp' hasInpStr '$hasInpStr' => '$hash'")
-    
+    val result = 
+	when (wor) {
+	    "hashfunction" -> hashFunctionType()
+	    "hashinput" -> hashInputString()
+	    else -> {
+	    }
+	}
+    println ("$here: result $result")
     exiting(here)
 }
 
@@ -246,58 +306,6 @@ fun wrapperExecuteHostOfWordList (wor_l: List<String>) {
     catch (e: java.net.ConnectException){
 	fatalErrorPrint ("Connection to 127.0.0.1:5001", "Connection refused", "launch Host :\n\tgo to minichain jsm; . config.sh; ipmsd.sh", here)}
     
-    exiting(here)
-}
-
-fun executeProvideOfWordList(wor_l: List<String>) {
-    val (here, caller) = moduleHereAndCaller()
-    entering(here, caller)
-    
-    // Ex.: -provide peerid
-    
-    var done = false
-    if(isTrace(here)) println ("$here: input wor_l '$wor_l'")
-    var wor_s = wordStackOfWordList(wor_l)
-    
-    while (!done) {
-	try {
-	    val wor = wor_s.pop()
-	    val wor_3 = wor.substring(0,3)
-	    if(isLoop(here)) println("$here: wor '$wor'")
-	    
-	    when (wor_3) {
-		"hel" -> {
-		    wor_s.clear()
-			val hel_l = helpList()
-			val h_l = hel_l.filter({h -> h.contains("-provide ")})
-			printOfStringList(h_l)
-    		}
-		"has" -> {
-		    when (wor) {
-			"hashtype" -> {
-			    val hasFunTyp = hashFunctionType()
-			    println ("$here: hashFunctionType $hasFunTyp")
-			}
-			"hashinput" -> {
-			    val hasInpStr = hashInputString()
-			    println ("$here: hashInputString $hasInpStr")
-			}
-			else -> {
-			    fatalErrorPrint ("command were 'hashtype'or 'hashinput'","'"+wor+"'", "Check input", here)
-			}
-		    }
-		}// when (wor)
-		"pee" -> {
-		    notYetImplemented("peerid")
-		}
-		else -> {
-		    fatalErrorPrint ("command were 'add', 'get'","'"+wor+"'", "Check input", here)
-		} // else
-	    } // when (wor_3)
-	} // try
-	catch (e: java.util.EmptyStackException) {done = true} // catch
-	
-    } // while
     exiting(here)
 }
 
