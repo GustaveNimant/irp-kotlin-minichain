@@ -3,14 +3,15 @@ package io.ipfs.kotlin
 import io.ipfs.kotlin.defaults.*
 
 /**
+ * What is it : it stores any MultiHashValue (information such as directory, file, string) indexed by its MultiHashType  
+ *
  * 
- *
- *
+ * Author : Emile Achadde 03 mars 2020 at 19:15:48+01:00
  */
 
 class MultiHashRegister {
     
-    var register : MutableMap<String, MultiHashType> = mutableMapOf<String, MultiHashType>()
+    var register : MutableMap<MultiHashType, MultiHashValue> = mutableMapOf<MultiHashType, MultiHashValue>()
 
 fun isEmpty (): Boolean {
     val (here, caller) = moduleHereAndCaller()
@@ -23,36 +24,32 @@ fun isEmpty (): Boolean {
     return result
 }
 
-fun store (path: String, mulH: MultiHashType) {
+fun store (mulTyp: MultiHashType, mulVal: MultiHashValue) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
     
-    if(isTrace(here)) println ("$here: input path '$path'")
-    if(isTrace(here)) println ("$here: input mulH '$mulH'")
+    if(isTrace(here)) println ("$here: input mulTyp '$mulTyp'")
+    if(isTrace(here)) println ("$here: input mulVal '$mulVal'")
     
-    if (isStored(path)) {
-	val value = retrieve(path)
-	if (value != mulH) {
-	    fatalErrorPrint("MultiHashType already stored for path '$path' were equal to new one", mulH.toString(), "Check", here)
+    if (isStored(mulTyp)) {
+	val value = retrieve(mulTyp)
+	if (value != mulVal) {
+	    fatalErrorPrint("MultiHashType already stored with value '$mulVal'", "stored value "+value.toString(), "Check", here)
 		}
     }
     else {
-	register.put(path, mulH)
+	register.put(mulTyp, mulVal)
     }
-    if(isTrace(here)) println ("$here: mulH couple has been stored")
+    if(isTrace(here)) println ("$here: couple has been stored")
 }
 
-fun isStored (path: String): Boolean {
+fun isStored (mulTyp: MultiHashType): Boolean {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
     
-    if(isTrace(here)) println ("$here: input path '$path'")
+    if(isTrace(here)) println ("$here: input mulTyp '$mulTyp'")
 
-    val mulH = register.get(path)
-    val result = when (mulH) {
-	is MultiHashType -> register.contains(path) 
-	else -> false
-    }
+    val result = register.contains(mulTyp)
 
     if(isTrace(here)) println ("$here: output result '$result'")
 
@@ -60,15 +57,11 @@ fun isStored (path: String): Boolean {
     return result
 }
 
-fun retrieve (path: String): MultiHashType {
+fun retrieve (mulTyp: MultiHashType): MultiHashValue {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
     
-    val mulH = register.get(path)
-    val result = when (mulH) {
-	is MultiHashType -> mulH 
-	else -> {fatalErrorPrint ("", "", "", here)}
-    }
+    val result = register.get(mulTyp)!! // Improve
     if(isTrace(here)) println ("$here: output result '$result'")
     
     exiting(here)

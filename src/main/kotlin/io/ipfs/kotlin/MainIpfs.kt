@@ -109,14 +109,19 @@ fun mainMenu (parMap: Map<String, List<String>>) {
 	if (isLoop(here)) println("$here: wor_l '$wor_l'")
 	
 	when (com_3) {
-	    "deb", "loo", "tra", "ver", "whe" -> {
+	    "deb", "ent", "loo", "tra", "ver", "whe" -> {
 		val str = stringOfStringList(wor_ml)
 		println("$here: '$com' activated for '$str' functions")
 	    }
 	    "end", "exi" -> {endProgram()}
-	    "hel" -> {helpOfParameterMap(parMap)}
 	    "gen" -> {wrapperExecuteGenerateOfWordList(wor_l)}
+	    "has" -> {wrapperExecuteHash()}
+	    "hel" -> {helpOfParameterMap(parMap)}
 	    "hos" -> {wrapperExecuteHostOfWordList(wor_l)}
+	    "inp" -> {// -input <file-path>
+		      val inpFilPat = (ParameterMap.getValue("input")).first()
+		      println("$here: input file path '$inpFilPat'")
+	    }
 	    "ipf" -> {wrapperExecuteIpfsOfWordList(wor_l)}
 	    "por" -> {wrapperExecutePortOfWordList(wor_l)}
 	    "pro" -> {wrapperExecuteProvideOfWordList(wor_l)}
@@ -169,6 +174,21 @@ fun wrapperExecuteGenerateOfWordList (wor_l: List<String>) {
     if (isTrace(here)) println("$here: input wor_l '$wor_l'")
 
     executeGenerateOfWordList(wor_l)
+    
+    exiting(here)
+}
+
+fun wrapperExecuteHash() {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    val hasFunTyp = hashFunctionType()
+    println ("$here: hashFunctionType $hasFunTyp")
+    val hasInpStr = hashInputString()
+    println ("$here: hashInputString $hasInpStr")
+
+    val hash =  hashStringOfTypeOfInput(hasFunTyp, hasInpStr)
+    println ("$here: hasFunTyp '$hasFunTyp' hasInpStr '$hasInpStr' => '$hash'")
     
     exiting(here)
 }
@@ -246,13 +266,34 @@ fun executeProvideOfWordList(wor_l: List<String>) {
 	    if(isLoop(here)) println("$here: wor '$wor'")
 	    
 	    when (wor_3) {
+		"hel" -> {
+		    wor_s.clear()
+			val hel_l = helpList()
+			val h_l = hel_l.filter({h -> h.contains("-provide ")})
+			printOfStringList(h_l)
+    		}
+		"has" -> {
+		    when (wor) {
+			"hashtype" -> {
+			    val hasFunTyp = hashFunctionType()
+			    println ("$here: hashFunctionType $hasFunTyp")
+			}
+			"hashinput" -> {
+			    val hasInpStr = hashInputString()
+			    println ("$here: hashInputString $hasInpStr")
+			}
+			else -> {
+			    fatalErrorPrint ("command were 'hashtype'or 'hashinput'","'"+wor+"'", "Check input", here)
+			}
+		    }
+		}// when (wor)
 		"pee" -> {
 		    notYetImplemented("peerid")
 		}
 		else -> {
 		    fatalErrorPrint ("command were 'add', 'get'","'"+wor+"'", "Check input", here)
 		} // else
-	    } // when
+	    } // when (wor_3)
 	} // try
 	catch (e: java.util.EmptyStackException) {done = true} // catch
 	

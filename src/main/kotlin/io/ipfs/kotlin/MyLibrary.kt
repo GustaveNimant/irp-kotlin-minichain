@@ -115,19 +115,23 @@ fun countOfCharOfString (cha: Char, str: String) : Int {
 }
 
 fun entering(here: String, caller: String):Unit {
-    level = level + 1
-    if (level > 70) {
-       println ("Error maximum number of nesting levels reached")
-    } else {
-        var points = dots.substring(0, level)
-        println("$points Entering  in $here called by $caller")
+    if(isEnterExit(here)) {
+	level = level + 1
+	if (level > 70) {
+	    println ("Error maximum number of nesting levels reached")
+	} else {
+            var points = dots.substring(0, level)
+            println("$points Entering  in $here called by $caller")
+	}
     }
 }
 
 fun exiting(here: String):Unit {
-    var points = dots.substring(0, level)
-    println("$points Exiting from $here")
-    level = level - 1	
+    if(isEnterExit(here)) {
+	var points = dots.substring(0, level)
+	println("$points Exiting from $here")
+	level = level - 1	
+    }
 }
 
 fun fatalErrorPrint (expecting: String, found: String, cure: String, where: String): Nothing {
@@ -161,6 +165,15 @@ fun isDebug(here:String): Boolean {
     val debug_l = ParameterMap.getValue("debug")
     val result = debug_l.contains("all") || debug_l.contains(here)
     return result 
+  }
+  else {return false}
+}
+
+fun isEnterExit(here:String): Boolean {
+  if (ParameterMap.containsKey("enterexit")) { 
+    val entexi_l = ParameterMap.getValue("enterexit")
+    val result = entexi_l.contains("all") || entexi_l.contains(here)
+    return result
   }
   else {return false}
 }
