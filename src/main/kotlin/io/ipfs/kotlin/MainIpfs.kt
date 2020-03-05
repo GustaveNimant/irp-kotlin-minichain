@@ -178,10 +178,7 @@ fun mainMenu (parMap: Map<String, List<String>>) {
 	    "has" -> {wrapperExecuteHashOfWord(com)}
 	    "hel" -> {helpOfParameterMap(parMap)}
 	    "hos" -> {wrapperExecuteHostOfWordList(wor_l)}
-	    "inp" -> {// -input <file-path>
-		      val inpFilPat = (ParameterMap.getValue("input")).first()
-		      println("$here: input file path '$inpFilPat'")
-	    }
+	    "inp" -> {wrapperExecuteInputOfWordList(wor_l)}
 	    "ipf" -> {wrapperExecuteIpfsOfWordList(wor_l)}
 	    "por" -> {wrapperExecutePortOfWordList(wor_l)}
 	    "pro" -> {wrapperExecuteProvideOfWordList(wor_l)}
@@ -250,6 +247,18 @@ fun wrapperExecuteHashOfWord(wor: String) {
 	    }
 	}
     println ("$here: result $result")
+    exiting(here)
+}
+
+fun wrapperExecuteInputOfWordList (wor_l: List<String>) {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    val inpFilPat = try {(ParameterMap.getValue("input")).first()}
+    catch(e:java.util.NoSuchElementException){
+	fatalErrorPrint ("command one argument after command -input", "none", "enter -input <file-path>", here)
+		      }
+    println("$here: input file path '$inpFilPat'")
     exiting(here)
 }
 
