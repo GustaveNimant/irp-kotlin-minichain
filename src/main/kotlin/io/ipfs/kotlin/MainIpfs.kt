@@ -250,15 +250,28 @@ fun wrapperExecuteHashOfWord(wor: String) {
     exiting(here)
 }
 
+fun wrapperExecuteHostOfWordList (wor_l: List<String>) {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    if (isTrace(here)) println("$here: input wor_l '$wor_l'")
+    try {
+	executeHostOfWordList(wor_l)
+    }
+    catch (e: java.net.ConnectException){
+	fatalErrorPrint ("Connection to 127.0.0.1:5001", "Connection refused", "launch Host :\n\tgo to minichain jsm; . config.sh; ipmsd.sh", here)}
+    
+    exiting(here)
+}
+
 fun wrapperExecuteInputOfWordList (wor_l: List<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
     val inpFilPat = try {(ParameterMap.getValue("input")).first()}
-    catch(e:java.util.NoSuchElementException){
-	fatalErrorPrint ("command one argument after command -input", "none", "enter -input <file-path>", here)
-		      }
-    println("$here: input file path '$inpFilPat'")
+                    catch(e:java.util.NoSuchElementException){
+			fatalErrorPrint ("command one argument after command -input", "none", "enter -input <file-path>", here)}
+		    println("$here: input file path '$inpFilPat'")
     exiting(here)
 }
 
@@ -300,20 +313,6 @@ fun wrapperExecuteProvideOfWordList (wor_l: List<String>) {
     }
     catch (e: java.net.ConnectException){
 	fatalErrorPrint ("Connection to 127.0.0.1:5001", "Connection refused", "launch Port :\n\tgo to minichain jsm; . config.sh; ipmsd.sh", here)}
-    
-    exiting(here)
-}
-
-fun wrapperExecuteHostOfWordList (wor_l: List<String>) {
-    val (here, caller) = moduleHereAndCaller()
-    entering(here, caller)
-
-    if (isTrace(here)) println("$here: input wor_l '$wor_l'")
-    try {
-	executeHostOfWordList(wor_l)
-    }
-    catch (e: java.net.ConnectException){
-	fatalErrorPrint ("Connection to 127.0.0.1:5001", "Connection refused", "launch Host :\n\tgo to minichain jsm; . config.sh; ipmsd.sh", here)}
     
     exiting(here)
 }
