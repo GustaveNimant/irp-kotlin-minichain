@@ -190,6 +190,7 @@ fun mainMenu (parMap: Map<String, List<String>>) {
 	    "kwe" -> {wrapperExecuteKeywordOfWordList(wor_l)}
 	    "por" -> {wrapperExecutePortOfWordList(wor_l)}
 	    "pro" -> {wrapperExecuteProvideOfWordList(wor_l)}
+	    "ser" -> {wrapperExecuteServerOfWordList(wor_l)}
 	    else -> {
 		fatalErrorPrint ("command were one of end, exi[t], hel[p], ipf[s], run", "'"+com+"'", "re Run", here)
 	    } // else
@@ -366,6 +367,92 @@ fun wrapperExecuteProvideOfWordList (wor_l: List<String>) {
     catch (e: java.net.ConnectException){
 	fatalErrorPrint ("Connection to 127.0.0.1:5001", "Connection refused", "launch Port :\n\tgo to minichain jsm; . config.sh; ipmsd.sh", here)}
     
+    exiting(here)
+}
+
+fun wrapperExecuteServerOfWordList (wor_l: List<String>) {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    if (isTrace(here)) println("$here: input wor_l '$wor_l'")
+    try {
+	executeServerOfWordList(wor_l)
+    }
+    catch (e: java.net.ConnectException){
+	fatalErrorPrint ("Connection to 127.0.0.1:5001", "Connection refused", "launch Port :\n\tgo to minichain jsm; . config.sh; ipmsd.sh", here)}
+    
+    exiting(here)
+}
+
+fun executeServerOfWordList(wor_l: List<String>) {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+    
+    // Ex.: -server jetty start
+    // Ex.: -server jetty stop	
+
+    var done = false
+    if(isTrace(here)) println ("$here: input wor_l '$wor_l'")
+    var wor_s = wordStackOfWordList(wor_l)
+    
+    while (!done) {
+	try {
+	    val wor = wor_s.pop()
+	    val wor_3 = wor.substring(0,3)
+	    if(isLoop(here)) println("$here: while wor '$wor'")
+	    
+	    when (wor_3) {
+		"jet" -> {executeServerJettyOfWordStack(wor_s)}// when (wor)
+		else -> {
+		    fatalErrorPrint ("command were 'jet'ty","'$wor'", "Check input", here)
+		} // else
+	    } // when (wor_3)
+	} // try
+	catch (e: java.util.EmptyStackException) {done = true} // catch
+	
+    } // while
+    exiting(here)
+}
+
+fun executeServerJettyOfWordStack(wor_s: Stack<String>) {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+    
+    // Ex.: -server jetty start
+    // Ex.: -server jetty stop	
+
+    var done = false
+    if(isTrace(here)) println ("$here: input wor_s '$wor_s'")
+    
+    while (!done) {
+	try {
+	    val wor = wor_s.pop()
+	    val wor_3 = wor.substring(0,3)
+	    if(isLoop(here)) println("$here: while wor '$wor'")
+	    
+	    when (wor_3) {
+		"sta" -> {
+		    jettyServer.start()
+		    println ("$here: jettyServer started on port 9000")
+		    val request = Request(Method.GET, "http://localhost:9000").query("name", "John Doe")
+		    println ("$here: request $request")
+    
+		    val client = ApacheClient()
+		    println ("$here: client $client")
+    
+		    println(client(request))
+    		}
+		"sto" -> {
+		    jettyServer.stop()
+		    println ("$here: jettyServer has been stopped")
+		}
+		else -> {
+		    fatalErrorPrint ("$here: command were 'jetty start|stop","'-server $wor'", "Check input", here)
+		}
+	    }// when (wor)
+	} // try
+	catch (e: java.util.EmptyStackException) {done = true} // catch
+    } // while
     exiting(here)
 }
 
