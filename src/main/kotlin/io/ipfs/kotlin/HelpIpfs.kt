@@ -20,6 +20,7 @@ fun helpList(): List<String> {
 	"gradlew run --args=\"-ipfs get <type> <MultiHash>",
 	"gradlew run --args=\"-ipfs get help",
 	"gradlew run --args=\"-ipfs peerid (ipfs --offline config Identity.PeerID)",
+	"gradlew run --args=\"-htt(p4k) (a test)",
 	"gradlew run --args=\"-kwe(xtract) -input <file-path> (extract keyword value couple",
 	"gradlew run --args=\"-trace <function name>|all\" print input and output data",
 	"gradlew run --args=\"-verbose<function name>|all\"",
