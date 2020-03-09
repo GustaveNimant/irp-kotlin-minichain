@@ -180,6 +180,7 @@ fun mainMenu (parMap: Map<String, List<String>>) {
 	    "hos" -> {wrapperExecuteHostOfWordList(wor_l)}
 	    "inp" -> {wrapperExecuteInputOfWordList(wor_l)}
 	    "ipf" -> {wrapperExecuteIpfsOfWordList(wor_l)}
+	    "kwe" -> {wrapperExecuteKeywordOfWordList(wor_l)}
 	    "por" -> {wrapperExecutePortOfWordList(wor_l)}
 	    "pro" -> {wrapperExecuteProvideOfWordList(wor_l)}
 	    else -> {
@@ -285,6 +286,26 @@ fun wrapperExecuteIpfsOfWordList (wor_l: List<String>) {
     }
     catch (e: java.net.ConnectException){
 	fatalErrorPrint ("Connection to 127.0.0.1:5001", "Connection refused", "launch Ipfs :\n\tgo to minichain jsm; . config.sh; ipmsd.sh", here)}
+    
+    exiting(here)
+}
+
+fun wrapperExecuteKeywordOfWordList (wor_l: List<String>) {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    if (isTrace(here)) println("$here: input wor_l '$wor_l'")
+
+    val inpFilPat = try { (ParameterMap.getValue("input")).first()}
+                    catch(e:java.util.NoSuchElementException){
+			fatalErrorPrint("an input file path were given","there are none","add '-input <file-name>' to command line",here)
+		    }
+
+     val keyValMap = kwextract(inpFilPat)
+     println ("Extracted (key, value) from input")
+     for ( (k, v) in keyValMap) {
+	 println ("$k => $v")
+     }
     
     exiting(here)
 }
