@@ -148,6 +148,30 @@ fun executeExampleOfWordList(wor_l: List<String>) {
     exiting(here)
 }
 
+fun executeHttp4kOfWordList(wor_l: List<String>) {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    // https://www.http4k.org/quickstart/
+    val app = { request: Request -> Response(OK).body("Hello, ${request.query("name")}!") }
+    println ("$here: app $app")
+    
+    jettyServer.start()
+    println ("$here: jettyServer started on Port 9000")
+    
+    val request = Request(Method.GET, "http://localhost:9000").query("name", "John Doe")
+    println ("$here: request $request")
+    
+    val client = ApacheClient()
+    println ("$here: client $client")
+    
+    println(client(request))
+    
+    jettyServer.stop()
+
+    exiting(here)
+}
+
 fun executeProvideOfWordList(wor_l: List<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
@@ -372,22 +396,12 @@ fun wrapperExecuteHttp4kOfWordList (wor_l: List<String>) {
     entering(here, caller)
 
     if (isTrace(here)) println("$here: input wor_l '$wor_l'")
-    // https://www.http4k.org/quickstart/
-    val app = { request: Request -> Response(OK).body("Hello, ${request.query("name")}!") }
-    
-    println ("$here: app $app")
-    
-    val jettyServer = app.asServer(Jetty(9000)).start()
-    
-    val request = Request(Method.GET, "http://localhost:9000").query("name", "John Doe")
-    println ("$here: request $request")
-    
-    val client = ApacheClient()
-    println ("$here: client $client")
-    
-    println(client(request))
-    
-    jettyServer.stop()
+    try {
+	executeHttp4kOfWordList(wor_l)
+    }
+    catch (e: java.net.ConnectException){
+	fatalErrorPrint ("Connection to 127.0.0.1:9000", "Connection refused", "Check", here)}
+    if (isTrace(here)) println("$here: input wor_l '$wor_l'")
     exiting(here)
 }
 
