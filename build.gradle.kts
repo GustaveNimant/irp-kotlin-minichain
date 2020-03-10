@@ -48,9 +48,10 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib:${extra["kotlinVersion"]}")
     implementation("com.squareup.moshi:moshi:${extra["moshiVersion"]}")
     implementation("com.squareup.okio:okio:${extra["okioVersion"]}")
-    implementation("com.squareup.okhttp3:okhttp:${extra["okhttpVersion"]}")
+    //implementation("com.squareup.okhttp3:okhttp:${extra["okhttpVersion"]}")
     implementation("org.http4k:http4k-core:${extra["http4kVersion"]}")
     implementation("org.http4k:http4k-server-jetty:${extra["http4kVersion"]}")
+    implementation("org.http4k:http4k-client-okhttp:${extra["http4kVersion"]}")
     implementation("org.http4k:http4k-client-apache:${extra["http4kVersion"]}")
     
     testImplementation("junit:junit:${extra["junitVersion"]}")
