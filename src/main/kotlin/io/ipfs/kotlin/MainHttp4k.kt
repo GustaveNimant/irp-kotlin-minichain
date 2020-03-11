@@ -148,10 +148,54 @@ fun executeExampleOfWordList(wor_l: List<String>) {
     exiting(here)
 }
 
-fun executeHttp4kOfWordList(wor_l: List<String>) {
+fun executeGetOfWordList(wor_l: List<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
+    
+    // Ex.: -get path <path>
+    // Port and Host are defined in a previous command
 
+       // HTTP clients are also HttpHandlers!
+    val client: HttpHandler = OkHttp()
+    println("$here: client OkHttp started")
+    println("client")
+    
+    val networkResponse: Response = client(Request(GET, "http://localhost:9000/greet/Bob"))
+
+    println("$here: networkResponse")
+    println(networkResponse)
+
+ 
+    var done = false
+    if(isTrace(here)) println ("$here: input wor_l '$wor_l'")
+    var wor_s = wordStackOfWordList(wor_l)
+    
+    while (!done) {
+	try {
+ 	    val wor = wor_s.pop()
+	    val wor_3 = wor.substring(0,3)
+	    if(isLoop(here)) println("$here: while wor '$wor'")
+	    
+	    when (wor_3) {
+		"pat" -> {
+		    val path = wor_s.pop()
+		    println("$here: when path '$path'")
+		}
+		else -> {
+		    fatalErrorPrint ("command were 'pat'h ","'$wor'", "Check input", here)
+		} // else
+	    } // when (wor_3)
+	} // try
+	catch (e: java.util.EmptyStackException) {done = true} // catch
+	
+    } // while
+    exiting(here)
+}
+
+fun executeQuickStartOfWordList(wor_l: List<String>) {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+    
     // https://www.http4k.org/quickstart/
     val app = { request: Request -> Response(OK).body("Hello, ${request.query("name")}!") }
     println ("$here: app $app")
@@ -256,6 +300,7 @@ fun main(args: Array<String>) {
 	    }
 	}
     }
+
     mainMenu(parMap)
     
     println("\nnormal termination")
@@ -288,10 +333,11 @@ fun mainMenu (parMap: Map<String, List<String>>) {
 	    "end", "exi" -> {endProgram()}
 	    "exa" -> {wrapperExecuteExampleOfWordList(wor_l)}
 	    "gen" -> {wrapperExecuteGenerateOfWordList(wor_l)}
+	    "get" -> {wrapperExecuteGetOfWordList(wor_l)}
 	    "has" -> {wrapperExecuteHashOfWord(com)}
 	    "hel" -> {helpOfParameterMap(parMap)}
 	    "hos" -> {wrapperExecuteHostOfWordList(wor_l)}
-            "htt" -> {wrapperExecuteHttp4kOfWordList(wor_l)}
+            "qui" -> {wrapperExecuteQuickStartOfWordList(wor_l)}
 	    "inp" -> {wrapperExecuteInputOfWordList(wor_l)}
 	    "ipf" -> {wrapperExecuteIpfsOfWordList(wor_l)}
 	    "kwe" -> {wrapperExecuteKeywordOfWordList(wor_l)}
@@ -362,6 +408,20 @@ fun wrapperExecuteGenerateOfWordList (wor_l: List<String>) {
     exiting(here)
 }
 
+fun wrapperExecuteGetOfWordList (wor_l: List<String>) {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    if (isTrace(here)) println("$here: input wor_l '$wor_l'")
+    try {
+	executeGetOfWordList(wor_l)
+    }
+    catch (e: java.net.ConnectException){
+	fatalErrorPrint ("Connection to Host:Port", "Connection refused", "Check", here)}
+    
+    exiting(here)
+}
+
 fun wrapperExecuteHashOfWord(wor: String) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
@@ -391,13 +451,13 @@ fun wrapperExecuteHostOfWordList (wor_l: List<String>) {
     exiting(here)
 }
 
-fun wrapperExecuteHttp4kOfWordList (wor_l: List<String>) {
+fun wrapperExecuteQuickStartOfWordList (wor_l: List<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
     if (isTrace(here)) println("$here: input wor_l '$wor_l'")
     try {
-	executeHttp4kOfWordList(wor_l)
+	executeQuickStartOfWordList(wor_l)
     }
     catch (e: java.net.ConnectException){
 	fatalErrorPrint ("Connection to 127.0.0.1:9000", "Connection refused", "Check", here)}
