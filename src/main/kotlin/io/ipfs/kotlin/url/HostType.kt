@@ -7,7 +7,7 @@ import java.util.Stack
 /**
  * What is it : the Types of an Host.
  * Example : (LocalIpfsApi, "127.0.0.1:5001") 
- * What to do : provide HostType by asking if stored in ParameterMap 
+ * Improve : provide HostType by asking if stored in ParameterMap 
  * Author : Emile Achadde 26 février 2020 at 17:24:40+01:00
  */
 

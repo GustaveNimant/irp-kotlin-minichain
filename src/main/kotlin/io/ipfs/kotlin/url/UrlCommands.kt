@@ -17,33 +17,39 @@ fun executeHostOfWordList(wor_l: List<String>) {
     entering(here, caller)
     
     // Ex.: -host <HostType> <domain-name>
-    var done = false
+
     if(isTrace(here)) println ("$here: input wor_l '$wor_l'")
     var wor_s = wordStackOfWordList(wor_l)
 
     val hosReg = HostRegister
     
-    while (!done) {
-	try {
-	    val wor = wor_s.pop()
-	    if(isLoop(here)) println("$here: wor '$wor'")
-	    
-	    val hosTyp = HostType.make (wor)
-	    when (hosTyp) {
-		is HostType.HostUserDefined,
-		is HostType.HostLocal,
-		is HostType.HostRemote -> {
- 		    val worNex = wor_s.pop()
-		    if(isLoop(here)) println("$here: worNex '$worNex'")
-		    val hosVal = HostValue(worNex)
-		    hosReg.store(hosTyp, hosVal)
-		}		    
-	    } // when hosTyp
-	    } // try
-	catch (e: java.util.EmptyStackException) {done = true} // catch
-	    
-    } // while
-
+    try {
+	val wor = wor_s.pop()
+	if(isLoop(here)) println("$here: wor '$wor'")
+	val hosTyp = HostType.make (wor)
+ 		try {val worNex = wor_s.pop()
+		if(isLoop(here)) println("$here: worNex '$worNex'")
+		val hosVal = HostValue(worNex)
+		hosReg.store(hosTyp, hosVal)
+		} // try
+		catch (e: java.util.EmptyStackException) {
+		val worNex =
+		    when (hosTyp) {
+			is HostType.HostLocal -> {"localhost"}
+			is HostType.HostUserDefined,
+			is HostType.HostRemote -> {
+			    fatalErrorPrint("<host-value> were defined","none","enter -host type value",here)
+			}		    
+		    } // when hosTyp
+		if(isDebug(here)) println("$here: Host Value set to default '$worNex'")
+		val hosVal = HostValue(worNex)
+		hosReg.store(hosTyp, hosVal)
+		} // catch no value
+    } // try
+    catch (e: java.util.EmptyStackException) {
+	fatalErrorPrint("command were <host-type> <host-value>","none","enter -host type value",here)
+    } 
+    
     if(isTrace(here)){
     	println ("Host Register is:")
 	hosReg.print() 
