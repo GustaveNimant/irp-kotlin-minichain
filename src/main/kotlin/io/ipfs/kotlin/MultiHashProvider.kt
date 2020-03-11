@@ -9,11 +9,12 @@ import io.ipfs.kotlin.defaults.*
  * Done    : LocalIpfs().add.string(str).MultiHash
  * Author  : Emile Achadde 22 février 2020 at 10:32:18+01:00;
  * Improve : Implement Hash Stuff
+ * Revision : Register as singleton by Emile Achadde 11 mars 2020 at 17:48:32+01:00
  */
 
 class MultiHashProvider {
 
-    val register = MultiHashRegister()
+    val register = MultiHashRegister
     
     fun build (funNam: String, hasInf: String): MultiHashValue {
 	val (here, caller) = moduleHereAndCaller()

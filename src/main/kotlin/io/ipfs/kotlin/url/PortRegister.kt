@@ -9,17 +9,18 @@ import java.util.Stack
  * Example : (PortWebui, "5001") 
  * What to do : provide host and port by asking if stored in ParameterMap 
  * Author : Emile Achadde 25 février 2020 at 19:03:02+01:00
+ * Revision : class => object Emile Achadde 11 mars 2020 at 17:28:52+01:00
  */
 
 object PortRegister {
 
-    var portRegisterMap : MutableMap<PortType, PortValue> = mutableMapOf<PortType, PortValue>()
+    var register : MutableMap<PortType, PortValue> = mutableMapOf<PortType, PortValue>()
 
     fun isEmpty (): Boolean {
 	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 
-	val result = portRegisterMap.isEmpty()
+	val result = register.isEmpty()
 
 	if(isTrace(here)) println ("$here: output result $result")
         return result
@@ -31,7 +32,7 @@ object PortRegister {
 	
 	if(isTrace(here)) println ("$here: input porTyp '$porTyp'")
 	
-	val result = (portRegisterMap.containsKey(porTyp)) 
+	val result = (register.containsKey(porTyp)) 
 		
 	if(isTrace(here)) println ("$here: output result '$result'")
 	
@@ -55,7 +56,7 @@ object PortRegister {
 	    }
 	}
 	else {
-	    portRegisterMap.put(porTyp, porVal)
+	    register.put(porTyp, porVal)
 	}
 	if(isTrace(here)) println ("$here: ($porTyp, $porVal) couple has been stored")
     }
@@ -64,7 +65,7 @@ object PortRegister {
          val (here, caller) = moduleHereAndCaller()
     	 entering(here, caller)
 
-	 val result = portRegisterMap.get(porTyp)
+	 val result = register.get(porTyp)
 	 
 	 if (result!!.isEmpty()) {
 	   fatalErrorPrint("an Port Value existed for Port Type '$porTyp'", "it did not","Check", here)
@@ -76,7 +77,7 @@ object PortRegister {
 
     fun print() {
 	val module = moduleName() 
-	for ( (k, v) in portRegisterMap) {
+	for ( (k, v) in register) {
 	    println ("$module: $k => $v")
 	}
     }

@@ -7,11 +7,12 @@ import java.util.Stack
 /**
  * What is it : the Provider storing an Host knowing its Type.
  * Author : Emile Achadde 26 février 2020 at 17:39:09+01:00
+ * Revision : Register singleton Emile Achadde 11 mars 2020 at 17:33:01+01:00
  */
 
 class HostProvider {
 
-    val register = HostRegister()
+    val register = HostRegister
 
     private fun hostIntFromParameterMap(): Int {
 	val (here, caller) = moduleHereAndCaller()

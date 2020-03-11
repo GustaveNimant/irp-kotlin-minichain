@@ -4,6 +4,11 @@ import io.ipfs.kotlin.*
 import java.io.File
 import java.util.Stack
 
+/**
+ * Author : Emile Achadde 11 mars 2020 at 17:50:37+01:00
+ * Improve : to be done like others
+ */
+
 object lexemeListRegister {
      var list = mutableListOf<Lexeme>()
 

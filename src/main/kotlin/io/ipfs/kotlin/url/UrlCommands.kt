@@ -8,19 +8,20 @@ import kotlin.system.exitProcess
 
 /**
  * Author : Emile Achadde 27 février 2020 at 14:04:42+01:00
- * Revision : Emile Achadde 11 mars 2020 at 17:17:18+01:00
+ * Revision : Registers are singletons by Emile Achadde 11 mars 2020 at 17:17:18+01:00
+ * Improve : set Host defaults as Port are
  */
 
 fun executeHostOfWordList(wor_l: List<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
     
-    // Ex.: -host <HostType> <Integer>
+    // Ex.: -host <HostType> <domain-name>
     var done = false
     if(isTrace(here)) println ("$here: input wor_l '$wor_l'")
     var wor_s = wordStackOfWordList(wor_l)
 
-    val hosReg = HostRegister()
+    val hosReg = HostRegister
     
     while (!done) {
 	try {
@@ -56,7 +57,6 @@ fun executePortOfWordList(wor_l: List<String>) {
     
     // Ex.: -port <PortType> <Integer>
     
-    var done = false
     if(isTrace(here)) println ("$here: input wor_l '$wor_l'")
     var wor_s = wordStackOfWordList(wor_l)
 
@@ -98,10 +98,9 @@ fun executePortOfWordList(wor_l: List<String>) {
     
     if(isTrace(here)){
     	println ("Port Register is:")
-	for ( (k, v) in PortRegister.portRegisterMap) {
-	    println ("$k => $v")
-	}
+	PortRegister.print() 
     }
+
     exiting(here)
 }
 

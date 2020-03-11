@@ -9,17 +9,18 @@ import java.util.Stack
  * Example : (LocalIpfsApi, "127.0.0.1:5001") 
  * Remark : Register(UrlType, UrlValue)
  * Author : Emile Achadde 25 février 2020 at 19:03:02+01:00
+ * Revision : class => object by Emile Achadde 11 mars 2020 at 17:42:49+01:00
  */
 
 object UrlRegister {
 
-    var urlRegisterMap : MutableMap<UrlType, UrlValue> = mutableMapOf<UrlType, UrlValue>()
+    var register : MutableMap<UrlType, UrlValue> = mutableMapOf<UrlType, UrlValue>()
 
     fun isEmpty (): Boolean {
 	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 
-	val result = urlRegisterMap.isEmpty()
+	val result = register.isEmpty()
 
 	if(isTrace(here)) println ("$here: output result $result")
         return result
@@ -31,11 +32,7 @@ object UrlRegister {
 	
 	if(isTrace(here)) println ("$here: input urlTyp '$urlTyp'")
 	
-	val result = if (urlRegisterMap.containsKey(urlTyp)) {
-	    (urlRegisterMap.get(urlTyp)!!.isEmpty())
-	}
-	else {false}
-	
+	val result = (register.containsKey(urlTyp))
 	if(isTrace(here)) println ("$here: output result '$result'")
 	
 	exiting(here)
@@ -55,7 +52,7 @@ object UrlRegister {
 	    }
 	}
 	else {
-	    urlRegisterMap.put(urlTyp, urlVal)
+	    register.put(urlTyp, urlVal)
 	}
 	if(isTrace(here)) println ("$here: ($urlTyp, $urlVal) couple has been stored")
     }
@@ -64,7 +61,7 @@ object UrlRegister {
          val (here, caller) = moduleHereAndCaller()
     	 entering(here, caller)
 
-	 val result = urlRegisterMap.get(urlTyp)
+	 val result = register.get(urlTyp)
 	 
 	 if (result!!.isEmpty()) {
 	   fatalErrorPrint("an Url Value existed for Url Type '$urlTyp'", "it did not","Check", here)
@@ -76,7 +73,7 @@ object UrlRegister {
     
     fun print() {
 	val module = moduleName() 
-	for ( (k, v) in urlRegisterMap) {
+	for ( (k, v) in register) {
 	    println ("$module: $k => $v")
 	}
     }
