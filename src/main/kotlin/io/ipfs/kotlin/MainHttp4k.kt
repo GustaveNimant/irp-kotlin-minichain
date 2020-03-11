@@ -232,10 +232,17 @@ fun executePrintOfWordList(wor_l: List<String>) {
 	   	      if(isLoop(here)) println("$here: while subWor '$subWor'")
 		      
 		      when (subWor) {
-		      	"port" -> {
-			    val porReg = PortRegister
-			    println ("$here: Port Register:")
-			    porReg.print()
+ 		      	"host" -> {
+			    println ("\nHost Register:")
+			    HostRegister.print()
+			}
+ 		      	"port" -> {
+			    println ("\nPort Register:")
+			    PortRegister.print()
+			}
+ 		      	"url" -> {
+			    println ("\nUrl Register:")
+			    UrlRegister.print()
 			}
 			else -> {
 			    fatalErrorPrint ("$here: command were '-print register port'","'-print register $wor'", "Check input", here)
@@ -250,6 +257,7 @@ fun executePrintOfWordList(wor_l: List<String>) {
 	catch (e: java.util.EmptyStackException) {done = true} // catch
 	
     } // while
+    println ()
     exiting(here)
 }
 

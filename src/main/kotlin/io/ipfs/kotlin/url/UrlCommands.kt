@@ -38,7 +38,7 @@ fun executeHostOfWordList(wor_l: List<String>) {
 			is HostType.HostLocal -> {"localhost"}
 			is HostType.HostUserDefined,
 			is HostType.HostRemote -> {
-			    fatalErrorPrint("<host-value> were defined","none","enter -host type value",here)
+			    fatalErrorPrint("<host-value> were defined","none","enter -host $wor <value>",here)
 			}		    
 		    } // when hosTyp
 		if(isDebug(here)) println("$here: Host Value set to default '$worNex'")
