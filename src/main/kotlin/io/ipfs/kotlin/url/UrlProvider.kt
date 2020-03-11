@@ -13,7 +13,7 @@ import java.util.Stack
 
 class UrlProvider {
 
-    val register = UrlRegister()
+    val register = UrlRegister
     
     private fun build(hosVal: HostValue, porVal: PortValue): UrlValue {
 	val (here, caller) = moduleHereAndCaller()
@@ -91,7 +91,7 @@ class UrlProvider {
 	    val hosVal = hosPro.provideHost(hosTyp)   
 	    val porPro = PortProvider ()
 	    val porTyp = portTypeFromParameterMap() 
-	    val porVal = porPro.providePort(porTyp)   
+	    val porVal = porPro.provide(porTyp)   
 	    buildAndStoreUrl(UrlTyp, hosVal, porVal)
 	}
 	

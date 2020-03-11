@@ -45,14 +45,14 @@ class HostProvider {
 	return result 
     }
 
-    private fun build(HosTyp: HostType): HostValue {
+    private fun build(hosTyp: HostType): HostValue {
 	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 
-	if(isTrace(here)) println ("$here: input HosTyp '$HosTyp'")
+	if(isTrace(here)) println ("$here: input hosTyp '$hosTyp'")
 
 	val result = 
-	    when (HosTyp) {
+	    when (hosTyp) {
 		is HostType.HostUserDefined -> {
 		    val nam = hostNameFromParameterMap()
 		    HostValue(nam)
@@ -67,28 +67,28 @@ class HostProvider {
 	return result
     }
 
-    private fun buildAndStoreUrl(HosTyp: HostType) {
+    private fun buildAndStoreUrl(hosTyp: HostType) {
 	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 
-	if(isTrace(here)) println ("$here: input HosTyp '$HosTyp'")
+	if(isTrace(here)) println ("$here: input hosTyp '$hosTyp'")
     
-	val PorVal = build(HosTyp)
-	register.store (HosTyp, PorVal)
+	val porVal = build(hosTyp)
+	register.store (hosTyp, porVal)
 	
 	exiting(here)
 	return
     }
     
-    fun provideHost(HosTyp: HostType) : HostValue {
+    fun provideHost(hosTyp: HostType) : HostValue {
 	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
 	if (register.isEmpty()){
-	    buildAndStoreUrl(HosTyp)
+	    buildAndStoreUrl(hosTyp)
 	}
 	
-	val result = register.retrieve(HosTyp)!!
+	val result = register.retrieve(hosTyp)!!
 	
 	if (isTrace(here)) println("$here: output result '$result'")
 	exiting(here)

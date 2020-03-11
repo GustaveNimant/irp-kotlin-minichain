@@ -44,9 +44,7 @@ fun executeHostOfWordList(wor_l: List<String>) {
 
     if(isTrace(here)){
     	println ("Host Register is:")
-	for ( (k, v) in hosReg.register) {
-	    println ("$k => $v")
-	}
+	hosReg.print() 
     }
     exiting(here)
 }
@@ -56,11 +54,12 @@ fun executePortOfWordList(wor_l: List<String>) {
     entering(here, caller)
     
     // Ex.: -port <PortType> <Integer>
+    
     var done = false
     if(isTrace(here)) println ("$here: input wor_l '$wor_l'")
     var wor_s = wordStackOfWordList(wor_l)
 
-    val porReg = PortRegister()
+    val porReg = PortRegister
     
     while (!done) {
 	try {
@@ -70,11 +69,17 @@ fun executePortOfWordList(wor_l: List<String>) {
 	    val porTyp = PortType.make (wor)
 	    when (porTyp) {
 		is PortType.PortUserDefined -> {
- 		    val worNex = wor_s.pop()
+ 		    try { val worNex = wor_s.pop()
 		    if(isLoop(here)) println("$here: worNex '$worNex'")
 		    val int: Int = worNex.toInt() 
 		    val porVal = PortValue(int)
 		    porReg.store(porTyp, porVal)
+		    }
+		    catch (e: java.util.EmptyStackException) {
+		    if(isDebug(here)) println("$here: Port Value set to 5001")
+		    val porVal = PortValue(5001)
+		    porReg.store(porTyp, porVal)
+		    } 
 		}		    
 		is PortType.PortGateway -> {
 		    val porVal = PortValue(5001)
@@ -92,7 +97,7 @@ fun executePortOfWordList(wor_l: List<String>) {
 
     if(isTrace(here)){
     	println ("Port Register is:")
-	for ( (k, v) in porReg.register) {
+	for ( (k, v) in PortRegister.portRegisterMap) {
 	    println ("$k => $v")
 	}
     }

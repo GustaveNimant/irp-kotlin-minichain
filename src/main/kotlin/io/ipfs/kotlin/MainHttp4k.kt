@@ -152,7 +152,7 @@ fun executeGetOfWordList(wor_l: List<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
     
-    // Ex.: -get path <path>
+    // Ex.: -get port <port-type> host <host-type> route <route>
     // Port and Host are defined in a previous command
 
        // HTTP clients are also HttpHandlers!
@@ -165,7 +165,11 @@ fun executeGetOfWordList(wor_l: List<String>) {
     println("$here: networkResponse")
     println(networkResponse)
 
- 
+    /* Local variables */
+    var hosStr =""
+    var porStr =""
+    var rouStr =""
+    
     var done = false
     if(isTrace(here)) println ("$here: input wor_l '$wor_l'")
     var wor_s = wordStackOfWordList(wor_l)
@@ -177,9 +181,17 @@ fun executeGetOfWordList(wor_l: List<String>) {
 	    if(isLoop(here)) println("$here: while wor '$wor'")
 	    
 	    when (wor_3) {
-		"pat" -> {
-		    val path = wor_s.pop()
-		    println("$here: when path '$path'")
+		"hos" -> {
+		    hosStr = wor_s.pop()
+		}
+		"por" -> {
+		    porStr = wor_s.pop()
+		}
+		"rou" -> {
+		    rouStr = wor_s.pop()
+		    println("$here: when porStr '$porStr'")
+		    println("$here: when hosStr '$hosStr'")
+		    println("$here: when rouStr '$rouStr'")
 		}
 		else -> {
 		    fatalErrorPrint ("command were 'pat'h ","'$wor'", "Check input", here)
@@ -189,30 +201,55 @@ fun executeGetOfWordList(wor_l: List<String>) {
 	catch (e: java.util.EmptyStackException) {done = true} // catch
 	
     } // while
+
+    val porPro = PortProvider ()
+    val porTyp = PortType.make (porStr)
+    val porVal = porPro.provide(porTyp)
+    
     exiting(here)
 }
 
-fun executeQuickStartOfWordList(wor_l: List<String>) {
+fun executePrintOfWordList(wor_l: List<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
     
-    // https://www.http4k.org/quickstart/
-    val app = { request: Request -> Response(OK).body("Hello, ${request.query("name")}!") }
-    println ("$here: app $app")
+    // Ex.: -print register port
     
-    jettyServer.start()
-    println ("$here: jettyServer started on Port 9000")
+    var done = false
+    if(isTrace(here)) println ("$here: input wor_l '$wor_l'")
+    var wor_s = wordStackOfWordList(wor_l)
     
-    val request = Request(Method.GET, "http://localhost:9000").query("name", "John Doe")
-    println ("$here: request $request")
-    
-    val client = ApacheClient()
-    println ("$here: client $client")
-    
-    println(client(request))
-    
-    jettyServer.stop()
-
+    while (!done) {
+	try {
+	    val wor = wor_s.pop()
+	    val wor_3 = wor.substring(0,3)
+	    if(isLoop(here)) println("$here: while wor '$wor'")
+	    
+	    when (wor_3) {
+		"reg" -> {
+	              val subWor = wor_s.pop()
+	              val subWor_3 = subWor.substring(0,3)
+	   	      if(isLoop(here)) println("$here: while subWor '$subWor'")
+		      
+		      when (subWor) {
+		      	"port" -> {
+			    val porReg = PortRegister
+			    println ("$here: Port Register:")
+			    porReg.print()
+			}
+			else -> {
+			    fatalErrorPrint ("$here: command were '-print register port'","'-print register $wor'", "Check input", here)
+			}
+		    }
+		}// when (wor)
+		else -> {
+		    fatalErrorPrint ("command were '-print register'","'$wor'", "Check input", here)
+		} // else
+	    } // when (wor_3)
+	} // try
+	catch (e: java.util.EmptyStackException) {done = true} // catch
+	
+    } // while
     exiting(here)
 }
 
@@ -273,6 +310,30 @@ fun executeProvideOfWordList(wor_l: List<String>) {
 	catch (e: java.util.EmptyStackException) {done = true} // catch
 	
     } // while
+    exiting(here)
+}
+
+fun executeQuickStartOfWordList(wor_l: List<String>) {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+    
+    // https://www.http4k.org/quickstart/
+    val app = { request: Request -> Response(OK).body("Hello, ${request.query("name")}!") }
+    println ("$here: app $app")
+    
+    jettyServer.start()
+    println ("$here: jettyServer started on Port 9000")
+    
+    val request = Request(Method.GET, "http://localhost:9000").query("name", "John Doe")
+    println ("$here: request $request")
+    
+    val client = ApacheClient()
+    println ("$here: client $client")
+    
+    println(client(request))
+    
+    jettyServer.stop()
+
     exiting(here)
 }
 
@@ -342,6 +403,7 @@ fun mainMenu (parMap: Map<String, List<String>>) {
 	    "ipf" -> {wrapperExecuteIpfsOfWordList(wor_l)}
 	    "kwe" -> {wrapperExecuteKeywordOfWordList(wor_l)}
 	    "por" -> {wrapperExecutePortOfWordList(wor_l)}
+	    "pri" -> {wrapperExecutePrintOfWordList(wor_l)}
 	    "pro" -> {wrapperExecuteProvideOfWordList(wor_l)}
 	    "ser" -> {wrapperExecuteServerOfWordList(wor_l)}
 	    else -> {
@@ -451,20 +513,6 @@ fun wrapperExecuteHostOfWordList (wor_l: List<String>) {
     exiting(here)
 }
 
-fun wrapperExecuteQuickStartOfWordList (wor_l: List<String>) {
-    val (here, caller) = moduleHereAndCaller()
-    entering(here, caller)
-
-    if (isTrace(here)) println("$here: input wor_l '$wor_l'")
-    try {
-	executeQuickStartOfWordList(wor_l)
-    }
-    catch (e: java.net.ConnectException){
-	fatalErrorPrint ("Connection to 127.0.0.1:9000", "Connection refused", "Check", here)}
-    if (isTrace(here)) println("$here: input wor_l '$wor_l'")
-    exiting(here)
-}
-
 fun wrapperExecuteInputOfWordList (wor_l: List<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
@@ -524,6 +572,20 @@ fun wrapperExecutePortOfWordList (wor_l: List<String>) {
     exiting(here)
 }
 
+fun wrapperExecutePrintOfWordList (wor_l: List<String>) {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    if (isTrace(here)) println("$here: input wor_l '$wor_l'")
+    try {
+	executePrintOfWordList(wor_l)
+    }
+    catch (e: java.net.ConnectException){
+	fatalErrorPrint ("Connection to 127.0.0.1:5001", "Connection refused", "launch Port :\n\tgo to minichain jsm; . config.sh; ipmsd.sh", here)}
+    
+    exiting(here)
+}
+
 fun wrapperExecuteProvideOfWordList (wor_l: List<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
@@ -535,6 +597,20 @@ fun wrapperExecuteProvideOfWordList (wor_l: List<String>) {
     catch (e: java.net.ConnectException){
 	fatalErrorPrint ("Connection to 127.0.0.1:5001", "Connection refused", "launch Port :\n\tgo to minichain jsm; . config.sh; ipmsd.sh", here)}
     
+    exiting(here)
+}
+
+fun wrapperExecuteQuickStartOfWordList (wor_l: List<String>) {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    if (isTrace(here)) println("$here: input wor_l '$wor_l'")
+    try {
+	executeQuickStartOfWordList(wor_l)
+    }
+    catch (e: java.net.ConnectException){
+	fatalErrorPrint ("Connection to 127.0.0.1:9000", "Connection refused", "Check", here)}
+    if (isTrace(here)) println("$here: input wor_l '$wor_l'")
     exiting(here)
 }
 

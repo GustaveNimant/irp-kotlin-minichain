@@ -13,7 +13,7 @@ import java.util.Stack
 
 class PortProvider {
 
-    val register = PortRegister()
+    val register = PortRegister
 
     private fun portIntFromParameterMap(): Int {
 	val (here, caller) = moduleHereAndCaller()
@@ -27,6 +27,8 @@ class PortProvider {
 	else {
 	    5001
 	}
+
+	if(isTrace(here)) println("$here: output result '$result'")
 	exiting(here)
 	return result 
     }
@@ -42,18 +44,20 @@ class PortProvider {
 	else {
 	    fatalErrorPrint ("port has been defined by User", "it has not", "Enter commanf : --args:\"port <int>\"", here)
 	}
+
+	if(isTrace(here)) println("$here: output result '$result'")
 	exiting(here)
 	return result 
     }
 
-    private fun build(PorTyp: PortType): PortValue {
+    private fun build(porTyp: PortType): PortValue {
 	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 
-	if(isTrace(here)) println ("$here: input PorTyp '$PorTyp'")
+	if(isTrace(here)) println ("$here: input porTyp '$porTyp'")
 
 	val result = 
-	    when (PorTyp) {
+	    when (porTyp) {
 		is PortType.PortUserDefined -> {
 		    val int = portIntFromParameterMap()
 		    PortValue(int)
@@ -68,33 +72,31 @@ class PortProvider {
 	return result
     }
 
-    private fun buildAndStoreUrl(PorTyp: PortType) {
+    private fun buildAndStoreUrl(porTyp: PortType) {
 	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 
-	if(isTrace(here)) println ("$here: input PorTyp '$PorTyp'")
+	if(isTrace(here)) println ("$here: input porTyp '$porTyp'")
     
-	val PorVal = build(PorTyp)
-	register.store (PorTyp, PorVal)
+	val PorVal = build(porTyp)
+	register.store (porTyp, PorVal)
 	
 	exiting(here)
 	return
     }
     
-    fun providePort(PorTyp: PortType) : PortValue {
+    fun provide(porTyp: PortType) : PortValue {
 	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
 	if (register.isEmpty()){
-	    buildAndStoreUrl(PorTyp)
+	    buildAndStoreUrl(porTyp)
 	}
 	
-	val result = register.retrieve(PorTyp)!!
+	val result = register.retrieve(porTyp)!!
 	
 	if (isTrace(here)) println("$here: output result '$result'")
 	exiting(here)
 	return result
     }
-    
-
  }

@@ -11,15 +11,15 @@ import java.util.Stack
  * Author : Emile Achadde 25 février 2020 at 19:03:02+01:00
  */
 
-class UrlRegister {
+object UrlRegister {
 
-    var register : MutableMap<UrlType, UrlValue> = mutableMapOf<UrlType, UrlValue>()
-	 
+    var urlRegisterMap : MutableMap<UrlType, UrlValue> = mutableMapOf<UrlType, UrlValue>()
+
     fun isEmpty (): Boolean {
 	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 
-	val result = register.isEmpty()
+	val result = urlRegisterMap.isEmpty()
 
 	if(isTrace(here)) println ("$here: output result $result")
         return result
@@ -31,8 +31,8 @@ class UrlRegister {
 	
 	if(isTrace(here)) println ("$here: input urlTyp '$urlTyp'")
 	
-	val result = if (register.containsKey(urlTyp)) {
-	    (register.get(urlTyp)!!.isEmpty())
+	val result = if (urlRegisterMap.containsKey(urlTyp)) {
+	    (urlRegisterMap.get(urlTyp)!!.isEmpty())
 	}
 	else {false}
 	
@@ -55,7 +55,7 @@ class UrlRegister {
 	    }
 	}
 	else {
-	    register.put(urlTyp, urlVal)
+	    urlRegisterMap.put(urlTyp, urlVal)
 	}
 	if(isTrace(here)) println ("$here: ($urlTyp, $urlVal) couple has been stored")
     }
@@ -64,7 +64,7 @@ class UrlRegister {
          val (here, caller) = moduleHereAndCaller()
     	 entering(here, caller)
 
-	 val result = register.get(urlTyp)
+	 val result = urlRegisterMap.get(urlTyp)
 	 
 	 if (result!!.isEmpty()) {
 	   fatalErrorPrint("an Url Value existed for Url Type '$urlTyp'", "it did not","Check", here)
@@ -72,5 +72,12 @@ class UrlRegister {
 	 if(isTrace(here)) println ("$here: output result '$result'")
 	 exiting(here)
 	 return result
+    }
+    
+    fun print() {
+	val module = moduleName() 
+	for ( (k, v) in urlRegisterMap) {
+	    println ("$module: $k => $v")
+	}
     }
 }

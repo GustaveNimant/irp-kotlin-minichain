@@ -11,15 +11,15 @@ import java.util.Stack
  * Author : Emile Achadde 25 février 2020 at 19:03:02+01:00
  */
 
-class PortRegister {
+object PortRegister {
 
-    var register : MutableMap<PortType, PortValue> = mutableMapOf<PortType, PortValue>()
-	 
+    var portRegisterMap : MutableMap<PortType, PortValue> = mutableMapOf<PortType, PortValue>()
+
     fun isEmpty (): Boolean {
 	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 
-	val result = register.isEmpty()
+	val result = portRegisterMap.isEmpty()
 
 	if(isTrace(here)) println ("$here: output result $result")
         return result
@@ -31,11 +31,8 @@ class PortRegister {
 	
 	if(isTrace(here)) println ("$here: input porTyp '$porTyp'")
 	
-	val result = if (register.containsKey(porTyp)) {
-	    (register.get(porTyp)!!.isEmpty())
-	}
-	else {false}
-	
+	val result = (portRegisterMap.containsKey(porTyp)) 
+		
 	if(isTrace(here)) println ("$here: output result '$result'")
 	
 	exiting(here)
@@ -47,15 +44,18 @@ class PortRegister {
 	entering(here, caller)
 	
 	if(isTrace(here)) println ("$here: input porTyp '$porTyp'")
+	if(isTrace(here)) println ("$here: input porVal '$porVal'")
 
 	if (isStored(porTyp)) {
+	    if(isDebug(here)) println ("$here: porTyp '$porTyp' already stored")
 	    val value = retrieve(porTyp)
+	    if(isDebug(here)) println ("$here: retrieved value '$value'")
 	    if (value != porVal) {
 		fatalErrorPrint("already stored Port Value '$value' for Port Type '$porTyp' were equal to new one", porVal.toString(), "Check", here)
 	    }
 	}
 	else {
-	    register.put(porTyp, porVal)
+	    portRegisterMap.put(porTyp, porVal)
 	}
 	if(isTrace(here)) println ("$here: ($porTyp, $porVal) couple has been stored")
     }
@@ -64,7 +64,7 @@ class PortRegister {
          val (here, caller) = moduleHereAndCaller()
     	 entering(here, caller)
 
-	 val result = register.get(porTyp)
+	 val result = portRegisterMap.get(porTyp)
 	 
 	 if (result!!.isEmpty()) {
 	   fatalErrorPrint("an Port Value existed for Port Type '$porTyp'", "it did not","Check", here)
@@ -74,6 +74,12 @@ class PortRegister {
 	 return result
     }
 
+    fun print() {
+	val module = moduleName() 
+	for ( (k, v) in portRegisterMap) {
+	    println ("$module: $k => $v")
+	}
+    }
 }
 
 

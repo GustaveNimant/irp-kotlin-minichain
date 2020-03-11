@@ -26,6 +26,7 @@ fun helpList(): List<String> {
 	"gradlew run --args=\"-kwe(xtract) -input <file-path> (extract keyword value couple",
 	"gradlew run --args=\"-loop<function name>|all\" print message inside a loop",
 	"gradlew run --args=\"-port 5001\" defines port with host default (127.0.0.1)",
+	"gradlew run --args=\"-print register port",
 	"gradlew run --args=\"-qui(ckStart) (https://www.http4k.org/quickstart/)",
 	"gradlew run --args=\"-trace <function name>|all\" print input and output data",
 	"gradlew run --args=\"-verbose<function name>|all\"",

@@ -10,15 +10,15 @@ import java.util.Stack
  * Author : Emile Achadde 26 février 2020 at 17:42:58+01:00
  */
 
+var hostRegisterMap : MutableMap<HostType, HostValue> = mutableMapOf<HostType, HostValue>()
+
 class HostRegister {
 
-    var register : MutableMap<HostType, HostValue> = mutableMapOf<HostType, HostValue>()
-	 
     fun isEmpty (): Boolean {
 	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 
-	val result = register.isEmpty()
+	val result = hostRegisterMap.isEmpty()
 
 	if(isTrace(here)) println ("$here: output result $result")
         return result
@@ -30,8 +30,8 @@ class HostRegister {
 	
 	if(isTrace(here)) println ("$here: input hosTyp '$hosTyp'")
 	
-	val result = if (register.containsKey(hosTyp)) {
-	    (register.get(hosTyp)!!.isEmpty())
+	val result = if (hostRegisterMap.containsKey(hosTyp)) {
+	    (hostRegisterMap.get(hosTyp)!!.isEmpty())
 	}
 	else {false}
 	
@@ -56,7 +56,7 @@ class HostRegister {
 	    }
 	}
 	else {
-	    register.put(hosTyp, hosVal)
+	    hostRegisterMap.put(hosTyp, hosVal)
 	}
 	if(isTrace(here)) println ("$here: ($hosTyp, $hosVal) couple has been stored")
     }
@@ -65,7 +65,7 @@ class HostRegister {
          val (here, caller) = moduleHereAndCaller()
     	 entering(here, caller)
 
-	 val result = register.get(hosTyp)
+	 val result = hostRegisterMap.get(hosTyp)
 	 
 	 if (result!!.isEmpty()) {
 	   fatalErrorPrint("an Host Value existed for Host Type '$hosTyp'", "it did not","Check", here)
@@ -75,6 +75,12 @@ class HostRegister {
 	 return result
     }
 
+    fun print() {
+	val module = moduleName() 
+	for ( (k, v) in hostRegisterMap) {
+	    println ("$module: $k => $v")
+	}
+    }
 }
 
 
