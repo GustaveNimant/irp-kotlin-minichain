@@ -67,6 +67,7 @@ fun executeIpfsOfWordList(wor_l: List<String>) {
     
     // Ex.: -ipfs add string truc much
     // Ex.: -ipfs config Identity.PeerID
+    // Ex.: -ipfs peerid
     // Ex.: -ipfs cat QmdKAX85S5uVKWx4ds5NdznJPjgsqAATnnkA8nE2bXQSSa
     // Ex.: -ipfs get block QmdKAX85S5uVKWx4ds5NdznJPjgsqAATnnkA8nE2bXQSSa
     
@@ -84,35 +85,45 @@ fun executeIpfsOfWordList(wor_l: List<String>) {
 		"add" -> { // "-ipfs add dir(ectory)|fil(e)|str(ing) ./parser.bnf" "-ipfs add truc much"
 		    val mulH = ipfsAddOfWordStack(wor_s)
 		}
-		"cat" -> { // -ipfs cat QmdKAX85S5uVKWx4ds5NdznJPjgsqAATnnkA8nE2bXQSSa
-                           val immCon = immutableValueOfCatWordStack(wor_s)
-			   println ()
-			   println ("----- Hash Content -----")
-			   println (immCon.content)
-			   println ("----- End of Hash Content -----")
-			   println ()
+		"cat" -> {
+		    // -ipfs cat QmdKAX85S5uVKWx4ds5NdznJPjgsqAATnnkA8nE2bXQSSa
+                    val immCon = immutableValueOfCatWordStack(wor_s)
+		    println ()
+		    println ("----- Hash Content -----")
+		    println (immCon.content)
+		    println ("----- End of Hash Content -----")
+		    println ()
     		}
-		"com" -> { // commit
-		           wor_s.clear()
-                           ipfsCommit()
+		"com" -> {
+		    // commit
+		    wor_s.clear()
+                    ipfsCommit()
     		}
-		"con" -> { // config Identity.PeerID
-                           val conStr = ipfsConfigOfWordStack(wor_s)
-			   println ("Config: $conStr")
-		           wor_s.clear()
+		"con" -> {
+		    // -ipfs config Identity.PeerID
+                    val conStr = ipfsConfigOfWordStack(wor_s)
+		    println()
+		    println ("PeerId: $conStr")
+		    println()
+		    wor_s.clear()
     		}
 		"get" -> {
 		    executeIpfsGetOfWordStack(wor_s)
 		}
 		"hel" -> {
 		    wor_s.clear()
-			val hel_l = helpList()
-			val h_l = hel_l.filter({h -> h.contains("-ipfs ")})
-			printOfStringList(h_l)
+		    val hel_l = helpList()
+		    val h_l = hel_l.filter({h -> h.contains("-ipfs ")})
+		    println()
+		    printOfStringList(h_l)
+		    println()
     		}
 		"pee" -> {
-		    val peeId = wrapperPeerId() // peerid = "config Identity.PeerID"
-		    println("$here: peerid $peeId")
+		    // -ipfs peerid = "config Identity.PeerID"
+		    val peeId = peerIdProvide()
+		    println()
+		    println ("PeerId: $peeId")
+		    println()
 		}
 		else -> {
 		    fatalErrorPrint ("command were 'add' 'cat' 'com'mmit 'con'fig 'get' 'hel'p 'pee'rid","'"+wor+"'", "Check input", here)
@@ -259,17 +270,28 @@ fun ipfsConfigOfWordStack(wor_s: Stack<String>): String {
 
     // ( ipfs [ --offline] config ) Identity.PeerID
 
+    if(wor_s.isEmpty()){
+	fatalErrorPrint("-ipfs config Identity.PeerID", "empty word", "add Identity.PeerID", here)
+    }
+
     val word = stringOfGlueOfWordStack(" ", wor_s)
     wor_s.clear()
     if(isTrace(here)) println ("$here: input word '$word'")
 
-    val result =
-	when(word) {
-	    "Identity.PeerID" -> {wrapperIdentityPeerID()}
-	    else -> {
-		fatalErrorPrint("Identity.PeerID", "'"+word+"'", "Check", here)
-	    }
-	} // when
+    var result = ""
+    when(word) {
+	"Identity.PeerID" -> {result = peerIdProvide()}
+	"help" -> {
+	    val hel_l = helpList()
+	    val h_l = hel_l.filter({h -> h.contains("config ")})
+	    println()
+	    printOfStringList(h_l)
+	    println()
+	}
+	else -> {
+	    fatalErrorPrint("-ipfs config Identity.PeerID", "'$word'", "Correct command", here)
+	}
+    } // when
     
     if(isTrace(here)) println ("$here: output result '$result'")
 
@@ -277,26 +299,7 @@ fun ipfsConfigOfWordStack(wor_s: Stack<String>): String {
     return result
 }
 
-fun wrapperIdentityPeerID(): String {
-    val (here, caller) = moduleHereAndCaller()
-    entering(here, caller)
-
-    val result =
-	try {
-	    val peeId = LocalIpfs().peerid.peerId()
-	    peeId!!.Value
-	}
-        catch (e: java.net.UnknownHostException) {
-	    fatalErrorPrint ("Connection to 127.0.0.1:5001", "Connection refused", "launch Host :\n\tgo to minichain jsm; . config.sh; ipmsd.sh", here)
-	}
-	
-    if(isTrace(here)) println ("$here: output result '$result'")
-	
-    exiting(here)
-    return result
-}
-
-fun wrapperPeerId(): String {
+fun peerIdProvide(): String {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 

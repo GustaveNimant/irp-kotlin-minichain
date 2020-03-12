@@ -6,7 +6,9 @@ import io.ipfs.kotlin.model.MessageWithCode
 import okhttp3.Request
 import okhttp3.ResponseBody
 
-// EA : 18 Feb 2020 : body()!! => body!!
+/**
+ * Revision : Emile Achadde 18 Feb 2020 : body()!! => body!!
+ */
 
 open class IpfsConnection(val config: IpfsConfiguration) {
 
