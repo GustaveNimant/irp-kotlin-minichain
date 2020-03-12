@@ -6,15 +6,12 @@ import io.ipfs.kotlin.url.*
 
 import java.io.File
 import java.util.Stack
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 
 import org.http4k.client.ApacheClient
 import org.http4k.core.Method
-//import org.http4k.core.Request
-//import org.http4k.core.Response
-//import org.http4k.core.Status.Companion.OK
-//import org.http4k.server.Jetty
-//import org.http4k.server.asServer
-
 import org.http4k.client.OkHttp
 import org.http4k.core.Filter
 import org.http4k.core.HttpHandler
@@ -66,18 +63,31 @@ fun commandSetOfParameterMap (parMap: Map<String, List<String>>): Set<String> {
     entering(here, caller)
 
     if(isTrace(here)) println ("$here: input parMap $parMap")
+
     val result = parMap.keys
 
     if(isTrace(here)) println ("$here: output result $result")
+
     exiting(here)
     return result 
-    }
+}
+
+fun date (): String {
+    val current = LocalDateTime.now()
+    val formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
+    val result = current.format(formatter)
+    return result
+}
 
 fun endProgram () {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
-    println("\nnormal termination")
+    println ()
+    println("normal termination")
+    println(date())
+    println ()
+    
     exiting(here)
 }
 
@@ -372,7 +382,8 @@ fun main(args: Array<String>) {
 
     mainMenu(parMap)
     
-    println("\nnormal termination")
+    endProgram()
+    
     exiting(here)
 }
 

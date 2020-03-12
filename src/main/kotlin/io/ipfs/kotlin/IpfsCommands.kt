@@ -20,7 +20,11 @@ fun executeIpfsOfWordList(wor_l: List<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
     
-    // Ex.: (-ipfs) add truc much
+    // Ex.: -ipfs add string truc much
+    // Ex.: -ipfs config Identity.PeerID
+    // Ex.: -ipfs cat QmdKAX85S5uVKWx4ds5NdznJPjgsqAATnnkA8nE2bXQSSa
+    // Ex.: -ipfs get block QmdKAX85S5uVKWx4ds5NdznJPjgsqAATnnkA8nE2bXQSSa
+    
     var done = false
     if(isTrace(here)) println ("$here: input wor_l '$wor_l'")
     var wor_s = wordStackOfWordList(wor_l)
@@ -91,12 +95,61 @@ fun executeIpfsOfWordList(wor_l: List<String>) {
     exiting(here)
 }
 
+fun immutableValueOfCatWordList (wor_l: List<String>): ImmutableValue {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    // Improve double the get case
+    // -ipfs cat QmdKAX85S5uVKWx4ds5NdznJPjgsqAATnnkA8nE2bXQSSa
+    
+    if(isTrace(here)) println("$here: input wor_l '$wor_l'")
+    val hash = wor_l[1]
+    if(isDebug(here)) println("$here: (hash) = '($hash)'")
+
+    val type = "text" // arbitrary
+    val mulTyp = MultiHashType.make (hash)
+    val immTyp = ImmutableType.make (type, mulTyp)
+    val proImm = ImmutableProvider()
+    val result = proImm.provide(immTyp)
+    if(isDebug(here)) println("$here: mulTyp '$mulTyp'")
+    if(isDebug(here)) println("$here: immTyp '$immTyp'")
+    if(isTrace(here)) println ("$here: output result '$result'")
+    
+    exiting(here)
+    return result
+}
+
+fun immutableValueOfGetWordList (wor_l: List<String>): ImmutableValue {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    // -ipfs get block QmdKAX85S5uVKWx4ds5NdznJPjgsqAATnnkA8nE2bXQSSa
+    
+    if(isTrace(here)) println("$here: input wor_l '$wor_l'")
+    val (type, what) = Pair(wor_l[1], wor_l[2])
+    if(isDebug(here)) println("$here: (type, what) = '($type, $what)'")
+
+    val mulTyp = MultiHashType.make (what)
+    val immTyp = ImmutableType.make (type, mulTyp)
+    val proImm = ImmutableProvider()
+    val result = proImm.provide(immTyp)
+    if(isDebug(here)) println("$here: mulTyp '$mulTyp'")
+    if(isDebug(here)) println("$here: immTyp '$immTyp'")
+
+    if(isTrace(here)) println ("$here: output result '$result'")
+    
+    exiting(here)
+    return result
+}
+
 fun ipfsAddOfWordStack(wor_s: Stack<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
+
     // "-ipfs add dir(ectory)|fil(e)|str(ing) 
     //  ./parser.bnf" "-ipfs add truc much" 
     // Ex.: (-ipfs) add truc much
+
     var done = false
 
     if(isTrace(here)) println ("$here: input wor_s '$wor_s'")
@@ -190,54 +243,6 @@ fun ipfsConfigOfWordStack(wor_s: Stack<String>): String {
     
     if(isTrace(here)) println ("$here: output result '$result'")
 
-    exiting(here)
-    return result
-}
-
-fun immutableValueOfCatWordList (wor_l: List<String>): ImmutableValue {
-    val (here, caller) = moduleHereAndCaller()
-    entering(here, caller)
-
-    // Improve double the get case
-    
-    // (-ipfs cat) QmdKAX85S5uVKWx4ds5NdznJPjgsqAATnnkA8nE2bXQSSa
-    
-    if(isTrace(here)) println("$here: input wor_l '$wor_l'")
-    val hash = wor_l[1]
-    if(isDebug(here)) println("$here: (hash) = '($hash)'")
-
-    val type = "text" // arbitrary
-    val mulTyp = MultiHashType.make (hash)
-    val immTyp = ImmutableType.make (type, mulTyp)
-    val proImm = ImmutableProvider()
-    val result = proImm.provide(immTyp)
-    if(isDebug(here)) println("$here: mulTyp '$mulTyp'")
-    if(isDebug(here)) println("$here: immTyp '$immTyp'")
-    if(isTrace(here)) println ("$here: output result '$result'")
-    
-    exiting(here)
-    return result
-}
-
-fun immutableValueOfGetWordList (wor_l: List<String>): ImmutableValue {
-    val (here, caller) = moduleHereAndCaller()
-    entering(here, caller)
-
-    // (-ipfs get) block QmdKAX85S5uVKWx4ds5NdznJPjgsqAATnnkA8nE2bXQSSa
-    
-    if(isTrace(here)) println("$here: input wor_l '$wor_l'")
-    val (type, what) = Pair(wor_l[1], wor_l[2])
-    if(isDebug(here)) println("$here: (type, what) = '($type, $what)'")
-
-    val mulTyp = MultiHashType.make (what)
-    val immTyp = ImmutableType.make (type, mulTyp)
-    val proImm = ImmutableProvider()
-    val result = proImm.provide(immTyp)
-    if(isDebug(here)) println("$here: mulTyp '$mulTyp'")
-    if(isDebug(here)) println("$here: immTyp '$immTyp'")
-
-    if(isTrace(here)) println ("$here: output result '$result'")
-    
     exiting(here)
     return result
 }
