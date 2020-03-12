@@ -126,61 +126,79 @@ fun executePrintOfWordList(wor_l: List<String>) {
     exiting(here)
 }
 
-fun executeProvideOfWordList(wor_l: List<String>) {
+fun provideHashOfWord(wor: String) {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    when (wor) {
+	"hashtype" -> {
+	    val hasFunTyp = hashFunctionType()
+	    println ("$here: hashFunctionType $hasFunTyp")
+	}
+	"hashinput" -> {
+	    val hasInpStr = hashInputString()
+	    println ("$here: hashInputString $hasInpStr")
+	}
+	"hashvalue" -> {
+	    val hasFunTyp = hashFunctionType()
+	    val hasInpStr = hashInputString()
+	    val hasValue = hashStringOfTypeOfInput(hasFunTyp, hasInpStr)
+	    println ("$here: hashFunctionType '$hasFunTyp'")
+	    println ("$here: hashInputString '$hasInpStr'")
+	    println ("$here: hash Value '$hasValue'")
+	}
+	else -> {
+	    fatalErrorPrint ("$here: command were '-provide hashtype' or '-provide hashinput' '-provide hashvalue","'-provide $wor'", "Check input", here)
+	}
+    }
+    
+    exiting(here)
+}
+
+fun executeProvideOfWordStack(wor_s: Stack<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
     
     // Ex.: -provide peerid
     
-    var done = false
-    if(isTrace(here)) println ("$here: input wor_l '$wor_l'")
-    var wor_s = wordStackOfWordList(wor_l)
-    
-    while (!done) {
-	try {
-	    val wor = wor_s.pop()
-	    val wor_3 = wor.substring(0,3)
-	    if(isLoop(here)) println("$here: while wor '$wor'")
-	    
-	    when (wor_3) {
-		"hel" -> {
-		    wor_s.clear()
-		    printHelpOfString("-provide ")
-    		}
-		"has" -> {
-		    when (wor) {
-			"hashtype" -> {
-			    val hasFunTyp = hashFunctionType()
-			    println ("$here: hashFunctionType $hasFunTyp")
-			}
-			"hashinput" -> {
-			    val hasInpStr = hashInputString()
-			    println ("$here: hashInputString $hasInpStr")
-			}
-			"hashvalue" -> {
-			    val hasFunTyp = hashFunctionType()
-			    val hasInpStr = hashInputString()
-			    val hasValue = hashStringOfTypeOfInput(hasFunTyp, hasInpStr)
-			    println ("$here: hashFunctionType '$hasFunTyp'")
-			    println ("$here: hashInputString '$hasInpStr'")
-			    println ("$here: hash Value '$hasValue'")
-			}
-			else -> {
-			    fatalErrorPrint ("$here: command were '-provide hashtype' or '-provide hashinput' '-provide hashvalue","'-provide $wor'", "Check input", here)
-			}
-		    }
-		}// when (wor)
-		"pee" -> {
-		    providePeerId()
-		}
-		else -> {
-		    fatalErrorPrint ("command were 'add', 'get'","'"+wor+"'", "Check input", here)
-		} // else
-	    } // when (wor_3)
-	} // try
-	catch (e: java.util.EmptyStackException) {done = true} // catch
+    if(isTrace(here)) println ("$here: input wor_s '$wor_s'")
+    try {
+	val wor = wor_s.pop()
+	val wor_3 = wor.substring(0,3)
+	if(isLoop(here)) println("$here: while wor '$wor'")
 	
-    } // while
+	when (wor_3) {
+	    "hel" -> {
+		wor_s.clear()
+		printHelpOfString("-provide ")
+    	    }
+	    "has" -> {
+		provideHashOfWord(wor)
+	    }
+	    "pee" -> {
+		providePeerId()
+	    }
+	    "url" -> {
+		try {val urlStr = wor_s.pop()
+		     println ("$here: urlStr '$urlStr'")
+		     val urlTyp = UrlType.make(urlStr)
+		     val proUrl = UrlProvider()
+		     proUrl.provideOfUrlType(urlTyp)
+		}
+		catch (e: java.util.EmptyStackException) {
+		    fatalErrorPrint ("urltype were localIpfsApi|localServer|remote","urltype is empty", "enter url <urltype>", here)
+    }
+	    }
+	    else -> {
+		
+		fatalErrorPrint ("keyword were 'hel'p, 'hashtype', 'hashinput', 'hashvalue', 'pee'rid, 'url'","'$wor'", "Check input", here)
+		} // else
+	} // when (wor_3)
+    } // try
+    catch (e: java.util.EmptyStackException) {
+	fatalErrorPrint ("keyword were 'hel'p, 'hashtype', 'hashinput', 'hashvalue', 'pee'rid","keyword is empty", "Check input", here)
+    }
+    
     exiting(here)
 }
 
@@ -251,7 +269,6 @@ fun mainMenu (parMap: Map<String, List<String>>) {
 	    "por" -> {wrapperExecutePortOfWordList(wor_l)}
 	    "pri" -> {wrapperExecutePrintOfWordList(wor_l)}
 	    "pro" -> {wrapperExecuteProvideOfWordList(wor_l)}
-	    "ser" -> {wrapperExecuteServerOfWordList(wor_l)}
 	    else -> {
 		fatalErrorPrint ("command were one of end, exi(t), gen(erate), has(h), hel(p), hos(t), htt(p4k), inp(ut), ipf(s, kwe(xtract), run", "'$com'", "re Run", here)
 	    } // else
@@ -399,7 +416,8 @@ fun wrapperExecuteProvideOfWordList (wor_l: List<String>) {
 
     if (isTrace(here)) println("$here: input wor_l '$wor_l'")
     try {
-	executeProvideOfWordList(wor_l)
+	val wor_s = wordStackOfWordList(wor_l)
+	executeProvideOfWordStack(wor_s)
     }
     catch (e: java.net.ConnectException){
 	fatalErrorPrint ("Connection to 127.0.0.1:5001", "Connection refused", "launch Port :\n\tgo to minichain jsm; . config.sh; ipmsd.sh", here)}

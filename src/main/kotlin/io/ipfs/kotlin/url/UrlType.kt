@@ -27,4 +27,26 @@ sealed class UrlType () {
 	return result
     }
 
+  companion object {
+      fun make (wor: String): UrlType {
+	  val (here, caller) = moduleHereAndCaller()
+	  entering(here, caller)
+	  
+	  if(isTrace(here)) println ("$here: input wor '$wor'")
+	  
+	  val result =
+	      when (wor) {
+		  "localIpfsApi" -> UrlType.UrlLocal.UrlLocalIpfsApi
+		  "localServer" -> UrlType.UrlLocal.UrlLocalServer 
+		  "remote" -> UrlType.UrlRemote.UrlRemoteIpfs
+		  else -> {
+		      fatalErrorPrint("localIpfsApi|localServer|remote", "'$wor'", "Check", here)
+		      }
+	      }
+	  if(isTrace(here)) println ("$here: output result $result")
+	  
+	  exiting(here)
+	  return result
+      }
+  }
 }
