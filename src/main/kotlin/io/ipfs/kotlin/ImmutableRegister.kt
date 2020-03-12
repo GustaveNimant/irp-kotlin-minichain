@@ -9,7 +9,7 @@ import io.ipfs.kotlin.defaults.*
  * Author : Emile Achadde 01 mars 2020 at 10:30:45+01:00
  */
 
-class ImmutableRegister {
+object ImmutableRegister {
     
     var register : MutableMap<ImmutableType, ImmutableValue> = mutableMapOf<ImmutableType, ImmutableValue>()
 

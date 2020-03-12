@@ -9,11 +9,12 @@ import io.ipfs.kotlin.defaults.*
  * Done by   : LocalIpfs().get.cat(strHas)
  * Command   : gradlew run --args="-ipfs cat QmbEm7hDJ9zB22UPnXRGfaWrFoEbJZbHPTEa6udMZ48riz" 
  * Author : Emile Achadde 01 mars 2020 at 10:29:03+01:00
+ * Revision : class => object by Emile Achadde 12 mars 2020 at 10:42:28+01:00
  */
 
 class ImmutableProvider {
 
-    val register = ImmutableRegister()
+    val register = ImmutableRegister
     
     fun build (immTyp: ImmutableType): ImmutableValue {
 	val (here, caller) = moduleHereAndCaller()
@@ -25,11 +26,11 @@ class ImmutableProvider {
 
 	val str = LocalIpfs().get.cat(strHas)
 	
-	if(isDebug(here)) println("$here: input str:")
+	if(isDebug(here)) println("$here: str from LocalIpfs:")
 	if(isDebug(here)) println(str)
 	val result = ImmutableValue(str)
 	if(isTrace(here)) println("$here: output result:")
-	if(isTrace(here)) println(result.contentOf())
+	if(isTrace(here)) println(result.content)
 	
 	exiting(here)
 	return result 

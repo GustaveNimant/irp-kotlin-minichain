@@ -14,6 +14,7 @@ import java.io.File
  * val commit = LocalIpfs().info.version()!!.Commit
  * Author : Emile Achadde 22 février 2020 at 15:32:44+01:00
  * Revision : Emile Achadde 02 mars 2020 at 10:24:15+01:00
+ * Revision : ImmutableValue by Emile Achadde 12 mars 2020 at 10:58:56+01:00
  */
 
 fun executeIpfsGetOfWordStack(wor_s: Stack<String>) {
@@ -83,11 +84,13 @@ fun executeIpfsOfWordList(wor_l: List<String>) {
 		"add" -> { // "-ipfs add dir(ectory)|fil(e)|str(ing) ./parser.bnf" "-ipfs add truc much"
 		    val mulH = ipfsAddOfWordStack(wor_s)
 		}
-		"cat" -> { // (-ipfs cat) QmdKAX85S5uVKWx4ds5NdznJPjgsqAATnnkA8nE2bXQSSa
-                           val immCon = immutableValueOfCatWordList(wor_l)
-			   println ("Content:")
-			   println (immCon.toString())
-		           wor_s.clear()
+		"cat" -> { // -ipfs cat QmdKAX85S5uVKWx4ds5NdznJPjgsqAATnnkA8nE2bXQSSa
+                           val immCon = immutableValueOfCatWordStack(wor_s)
+			   println ()
+			   println ("----- Hash Content -----")
+			   println (immCon.content)
+			   println ("----- End of Hash Content -----")
+			   println ()
     		}
 		"com" -> { // commit
 		           wor_s.clear()
@@ -122,15 +125,15 @@ fun executeIpfsOfWordList(wor_l: List<String>) {
     exiting(here)
 }
 
-fun immutableValueOfCatWordList (wor_l: List<String>): ImmutableValue {
+fun immutableValueOfCatWordStack (wor_s: Stack<String>): ImmutableValue {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
     // Improve double the get case
     // -ipfs cat QmdKAX85S5uVKWx4ds5NdznJPjgsqAATnnkA8nE2bXQSSa
     
-    if(isTrace(here)) println("$here: input wor_l '$wor_l'")
-    val hash = wor_l[1]
+    if(isTrace(here)) println("$here: input wor_s '$wor_s'")
+    val hash = wor_s.pop()
     if(isDebug(here)) println("$here: (hash) = '($hash)'")
 
     val type = "text" // arbitrary
@@ -190,7 +193,6 @@ fun ipfsAddOfWordStack(wor_s: Stack<String>) {
 	    when (wor_3) {
 		"dir" -> { // (-ipfs add) dir(ectory) /directory-path
 	              val dirPat = wor_s.pop()    
-		      wor_s.clear()
 		      val namHasMap = namedHashMapOfDirectoryPath(dirPat)
 		      println ("$here: namedHashMap for directory '$dirPat'")
 
@@ -201,7 +203,6 @@ fun ipfsAddOfWordStack(wor_s: Stack<String>) {
 		"fil" -> { // (-ipfs add) fil(e) /file-path
 	              val filPat = wor_s.pop()    
 		      val mulHas = multiHashTypeOfFilePath(filPat)
-		      wor_s.clear()
 		      val strHas = mulHas.hashOf()
 		      println ("$here: file '$filPat' MultiHashType '$strHas'")
 		      val namHasMap = namedHashMapOfFilePath(filPat)
@@ -211,19 +212,21 @@ fun ipfsAddOfWordStack(wor_s: Stack<String>) {
 		      }
     		}
 		"str" -> { // (-ipfs add) str(ing) <file_path>|<string>
-		       val str = stringOfGlueOfWordStack(" ", wor_s)
-                       val mulHas = multiHashTypeOfString (str)
-		       wor_s.clear()
-		       val strHas = mulHas.hashOf()
-		       println ("$here: string '$str' MultiHashType '$strHas'")
-		       val namHasMap = namedHashMapOfString(str)
-		       println ("$here: namedHashMap for string '$str'")
-		       for ( (k, v) in namHasMap) {
-			  println ("$k => $v")
-		      }
+			   val str = stringOfGlueOfWordStack(" ", wor_s)
+			   wor_s.clear()
+
+			   val mulHas = multiHashTypeOfString (str)
+			   val strHas = mulHas.hashOf()
+			   val namHasMap = namedHashMapOfString(str)
+			   if(isDebug(here)) {
+			       println ("$here: string '$str' MultiHashType '$strHas'")
+			       println ("$here: namedHashMap for string '$str'")
+			       for ( (k, v) in namHasMap) {
+				   println ("$k => $v")
+			       }
+			   }
     		}
 		"hel" -> {
-		    wor_s.clear()
 			val hel_l = helpList()
 			val h_l = hel_l.filter({h -> h.contains("-ipfs ")})
 			printOfStringList(h_l)
