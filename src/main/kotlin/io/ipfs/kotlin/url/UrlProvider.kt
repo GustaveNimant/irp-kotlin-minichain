@@ -5,7 +5,7 @@ import java.io.File
 import java.util.Stack
 
 /**
- * What is it : the Provider providing an Url knowing its UrlType.
+ * What is it : the Provider providing an Url knowing its urlType.
  * Example : (LocalIpfsApi, "127.0.0.1:5001") 
  * Author : Emile Achadde 25 février 2020 at 19:03:02+01:00
  * Revision : make by Emile Achadde 28 février 2020 at 09:46:19+01:00
@@ -66,50 +66,52 @@ class UrlProvider {
 	return result 
     }
     
-    private fun buildAndStoreUrl(UrlTyp: UrlType, hosVal: HostValue, porVal: PortValue) {
+    private fun buildAndStoreUrl(urlTyp: UrlType, hosVal: HostValue, porVal: PortValue) {
 	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 
-	if(isTrace(here)) println ("$here: input UrlTyp '$UrlTyp'")
+	if(isTrace(here)) println ("$here: input urlTyp '$urlTyp'")
 	if(isTrace(here)) println ("$here: input hosVal '$hosVal'")
 	if(isTrace(here)) println ("$here: input porVal '$porVal'")
     
 	val UrlVal = build(hosVal, porVal)
-	register.store (UrlTyp, UrlVal)
+	register.store (urlTyp, UrlVal)
 	
 	exiting(here)
 	return
     }
     
-    public fun provideUrl(UrlTyp: UrlType) : UrlValue {
+    public fun provideOfUrlType(urlTyp: UrlType) : UrlValue {
 	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
 	if (register.isEmpty()){
 	    val hosPro = HostProvider ()
 	    val hosTyp = hostTypeFromParameterMap() 
-	    val hosVal = hosPro.provideHost(hosTyp)   
+	    val hosVal = hosPro.provideOfHostType(hosTyp)   
 	    val porPro = PortProvider ()
 	    val porTyp = portTypeFromParameterMap() 
-	    val porVal = porPro.provide(porTyp)   
-	    buildAndStoreUrl(UrlTyp, hosVal, porVal)
+	    val porVal = porPro.provideOfPortType(porTyp)   
+	    buildAndStoreUrl(urlTyp, hosVal, porVal)
 	}
 	
-	val result = register.retrieve(UrlTyp)!!
+	val result = register.retrieve(urlTyp)!!
 	
-	if (isTrace(here)) println("$here: output result '$result'")
+	println()
+	println(urlTyp.toString()+" => '$result'")
+	println()
+
 	exiting(here)
 	return result
     }
 
-    public fun printOfUrlType (UrlTyp: UrlType) {
+    public fun printOfUrlType (urlTyp: UrlType) {
 	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
-	val url = provideUrl (UrlTyp)
+	val url = provideOfUrlType(urlTyp)
 	val str = url.toString()
-	println ("UrlType $UrlTyp => $str")
+	println ("urlType $urlTyp => $str")
 	exiting(here)
     }
-
 }

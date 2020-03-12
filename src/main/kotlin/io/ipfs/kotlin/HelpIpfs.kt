@@ -14,7 +14,7 @@ fun helpList(): List<String> {
 	"gradlew run --args=\"-gen pro(vider)|reg(ister)|typ()e|val(ue) <module-name> <abbreviation>",
 	"gradlew run --args=\"-gen generates one of the four kind of modules above",
 	"gradlew run --args=\"-gen pro immutable imm\" (example)",
-	"gradlew run --args=\"-http4k get (client OkHttp)",
+	"gradlew run --args=\"-http4k get port <port-type> host <host-type> route <route>(client OkHttp)",
 	"gradlew run --args=\"-http4k example (launches serveur Jetty on localhost:9000)",
 	"gradlew run --args=\"-http4k quickstart (elementary example server + client)",
 	"gradlew run --args=\"-host 127.0.0.1|<host name>\" defines host with port default (5001)",

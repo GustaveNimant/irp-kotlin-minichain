@@ -16,7 +16,7 @@ class ImmutableProvider {
 
     val register = ImmutableRegister
     
-    fun build (immTyp: ImmutableType): ImmutableValue {
+    private fun build (immTyp: ImmutableType): ImmutableValue {
 	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
@@ -36,7 +36,7 @@ class ImmutableProvider {
 	return result 
     }
     
-    fun buildAndStore(immTyp: ImmutableType){
+    private fun buildAndStore(immTyp: ImmutableType){
 	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
@@ -48,7 +48,7 @@ class ImmutableProvider {
 	exiting(here)
     }
     
-    fun provide(immTyp: ImmutableType) : ImmutableValue {
+    fun provideOfImmutableType(immTyp: ImmutableType) : ImmutableValue {
 	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
@@ -62,10 +62,11 @@ class ImmutableProvider {
 	}
 	
 	val result = register.retrieve(immTyp)
-	if (isTrace(here)) println("$here: output result '$result'")
+	println()
+	println("$immTyp => '$result'")
+	println()
 	
 	exiting(here)
 	return result
     }
-    
 }

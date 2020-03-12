@@ -5,7 +5,6 @@ import java.io.File
 import java.util.Stack
 
 /**
- * Improve : implement toString()
  * Author : Emile Achadde 25 février 2020 at 19:03:02+01:00
  */
 

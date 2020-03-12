@@ -85,7 +85,7 @@ class PortProvider {
 	return
     }
     
-    fun provide(porTyp: PortType) : PortValue {
+    fun provideOfPortType(porTyp: PortType) : PortValue {
 	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
@@ -94,8 +94,11 @@ class PortProvider {
 	}
 	
 	val result = register.retrieve(porTyp)!!
-	
-	if (isTrace(here)) println("$here: output result '$result'")
+
+	println()
+	println(porTyp.toString()+" => '$result'")
+	println()
+
 	exiting(here)
 	return result
     }

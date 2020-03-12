@@ -14,9 +14,9 @@ val localIpfsConfig by lazy {
     entering (here, caller)
 
     val provider = UrlProvider()
-    val UrlVal = provider.provideUrl(UrlType.UrlLocal.UrlLocalIpfsApi) 
+    val UrlVal = provider.provideOfUrlType(UrlType.UrlLocal.UrlLocalIpfsApi) 
     val urlStr = UrlVal.toString()
-    if(isDebug(here)) println("$here: url '$urlStr'")
+    if(isVerbose(here)) println("$here: urlStr '$urlStr'")
 
     val result = IpfsConfiguration("http://$urlStr/api/v0/", createOKHTTP(), createMoshi())
     if(isVerbose(here)) println("$here : output result $result")

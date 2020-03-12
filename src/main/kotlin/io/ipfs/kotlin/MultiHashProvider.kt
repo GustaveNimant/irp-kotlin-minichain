@@ -16,7 +16,7 @@ class MultiHashProvider {
 
     val register = MultiHashRegister
     
-    fun build (funNam: String, hasInf: String): MultiHashValue {
+    private fun build (funNam: String, hasInf: String): MultiHashValue {
 	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
@@ -32,7 +32,7 @@ class MultiHashProvider {
 	return result 
     }
     
-    fun buildAndStore(mulTyp: MultiHashType){
+    private fun buildAndStore(mulTyp: MultiHashType){
 	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
@@ -46,7 +46,7 @@ class MultiHashProvider {
 	exiting(here)
     }
     
-    fun provide(mulTyp: MultiHashType) : MultiHashValue {
+    public fun provideOfMultiHashType(mulTyp: MultiHashType) : MultiHashValue {
 	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
@@ -60,7 +60,9 @@ class MultiHashProvider {
 	}
 	
 	val result = register.retrieve(mulTyp)
-	if (isTrace(here)) println("$here: output result '$result'")
+	println()
+	println(mulTyp.toString()+" => '$result'")
+	println()
 	
 	exiting(here)
 	return result
@@ -70,7 +72,7 @@ class MultiHashProvider {
 	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
-	val result = provide (mulTyp)
+	val result = provideOfMultiHashType(mulTyp)
 	println ("MultiHashValue: $result")
 	exiting(here)
     }

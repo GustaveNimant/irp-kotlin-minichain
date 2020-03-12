@@ -102,8 +102,10 @@ fun executeGetOfWordList(wor_l: List<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
     
-    // Ex.: -get port <port-type> host <host-type> route <route>
+    // Ex.: -http4k get port <port-type> host <host-type> route <route>
     // Port and Host are defined in a previous command
+
+    if(isTrace(here)) println ("$here: input wor_l '$wor_l'")
 
     // HTTP clients are also HttpHandlers!
     val client: HttpHandler = OkHttp()
@@ -121,7 +123,6 @@ fun executeGetOfWordList(wor_l: List<String>) {
     var rouStr =""
     
     var done = false
-    if(isTrace(here)) println ("$here: input wor_l '$wor_l'")
     var wor_s = wordStackOfWordList(wor_l)
     
     while (!done) {
@@ -131,6 +132,9 @@ fun executeGetOfWordList(wor_l: List<String>) {
 	    if(isLoop(here)) println("$here: while wor '$wor'")
 	    
 	    when (wor_3) {
+		"hel" -> {
+		    printHelpOfString("get ")
+		}
 		"hos" -> {
 		    hosStr = wor_s.pop()
 		}
@@ -144,7 +148,7 @@ fun executeGetOfWordList(wor_l: List<String>) {
 		    println("$here: when rouStr '$rouStr'")
 		}
 		else -> {
-		    fatalErrorPrint ("command were 'pat'h ","'$wor'", "Check input", here)
+		    fatalErrorPrint ("command were 'hos't or 'por't or 'rou'te ","'$wor'", "Check input", here)
 		} // else
 	    } // when (wor_3)
 	} // try
@@ -154,7 +158,7 @@ fun executeGetOfWordList(wor_l: List<String>) {
 
     val porPro = PortProvider ()
     val porTyp = PortType.make (porStr)
-    val porVal = porPro.provide(porTyp)
+    val porVal = porPro.provideOfPortType(porTyp)
     
     exiting(here)
 }

@@ -120,7 +120,7 @@ fun executeIpfsOfWordList(wor_l: List<String>) {
     		}
 		"pee" -> {
 		    // -ipfs peerid = "config Identity.PeerID"
-		    val peeId = peerIdProvide()
+		    val peeId = providePeerId()
 		    println()
 		    println ("PeerId: $peeId")
 		    println()
@@ -151,7 +151,7 @@ fun immutableValueOfCatWordStack (wor_s: Stack<String>): ImmutableValue {
     val mulTyp = MultiHashType.make (hash)
     val immTyp = ImmutableType.make (type, mulTyp)
     val proImm = ImmutableProvider()
-    val result = proImm.provide(immTyp)
+    val result = proImm.provideOfImmutableType(immTyp)
     if(isDebug(here)) println("$here: mulTyp '$mulTyp'")
     if(isDebug(here)) println("$here: immTyp '$immTyp'")
     if(isTrace(here)) println ("$here: output result '$result'")
@@ -174,7 +174,7 @@ fun immutableValueOfGetWordStack (wor_s: Stack<String>): ImmutableValue {
     val mulTyp = MultiHashType.make (what)
     val immTyp = ImmutableType.make (type, mulTyp)
     val proImm = ImmutableProvider()
-    val result = proImm.provide(immTyp)
+    val result = proImm.provideOfImmutableType(immTyp)
     if(isDebug(here)) println("$here: mulTyp '$mulTyp'")
     if(isDebug(here)) println("$here: immTyp '$immTyp'")
 
@@ -280,7 +280,7 @@ fun ipfsConfigOfWordStack(wor_s: Stack<String>): String {
 
     var result = ""
     when(word) {
-	"Identity.PeerID" -> {result = peerIdProvide()}
+	"Identity.PeerID" -> {result = providePeerId()}
 	"help" -> {
 	    val hel_l = helpList()
 	    val h_l = hel_l.filter({h -> h.contains("config ")})
@@ -299,7 +299,7 @@ fun ipfsConfigOfWordStack(wor_s: Stack<String>): String {
     return result
 }
 
-fun peerIdProvide(): String {
+fun providePeerId(): String {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
@@ -309,12 +309,14 @@ fun peerIdProvide(): String {
 	    if(isDebug(here)) println ("$here: peeId '$peeId'")
 	    peeId!!.Value
 	}
-        catch (e: java.net.UnknownHostException) {
-	    fatalErrorPrint ("Connection to 127.0.0.1:5001", "Connection refused", "launch Host :\n\tgo to minichain jsm; . config.sh; ipmsd.sh", here)
-	}
-	
-    if(isTrace(here)) println ("$here: output result '$result'")
-	
+    catch (e: java.net.UnknownHostException) {
+	fatalErrorPrint ("Connection to 127.0.0.1:5001", "Connection refused", "launch Host :\n\tgo to minichain jsm; . config.sh; ipmsd.sh", here)
+    }
+    
+    println ()
+    println ("peerId: $result")
+    println ()
+    
     exiting(here)
     return result
 }

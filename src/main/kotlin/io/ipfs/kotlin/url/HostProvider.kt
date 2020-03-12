@@ -81,7 +81,7 @@ class HostProvider {
 	return
     }
     
-    fun provideHost(hosTyp: HostType) : HostValue {
+    public fun provideOfHostType(hosTyp: HostType) : HostValue {
 	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
@@ -91,7 +91,10 @@ class HostProvider {
 	
 	val result = register.retrieve(hosTyp)!!
 	
-	if (isTrace(here)) println("$here: output result '$result'")
+	println()
+	println(hosTyp.toString()+" => '$result'")
+	println()
+
 	exiting(here)
 	return result
     }

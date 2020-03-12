@@ -171,7 +171,7 @@ fun executeProvideOfWordList(wor_l: List<String>) {
 		    }
 		}// when (wor)
 		"pee" -> {
-		    notYetImplemented("peerid")
+		    providePeerId()
 		}
 		else -> {
 		    fatalErrorPrint ("command were 'add', 'get'","'"+wor+"'", "Check input", here)
