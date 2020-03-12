@@ -16,6 +16,50 @@ import java.io.File
  * Revision : Emile Achadde 02 mars 2020 at 10:24:15+01:00
  */
 
+fun executeIpfsGetOfWordStack(wor_s: Stack<String>) {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+    
+    // Ex.: -ipfs get help
+    // Ex.: -ipfs get block QmdKAX85S5uVKWx4ds5NdznJPjgsqAATnnkA8nE2bXQSSa	
+	   
+    if(isTrace(here)) println ("$here: input wor_s '$wor_s'")
+    
+    try {
+	val wor = wor_s.pop()
+	val wor_3 = wor.substring(0,3)
+	if(isLoop(here)) println("$here: while wor '$wor'")
+	
+	when (wor_3) {
+	    "hel" -> {
+		var hel_l = helpList()	
+		val get_l = hel_l.filter({h -> h.contains("get ")})
+		println()
+		printOfStringList(get_l)
+		println()
+            }		       
+	    "blo" -> {
+		val immCon = immutableValueOfGetWordStack(wor_s)
+		println ("Content:")
+		println (immCon.toString())
+	    }
+	    else -> {
+		fatalErrorPrint ("-ipfs get help or -ipfs get block <hash>","'$wor'", "Check input", here)
+	    }
+	} // when (wor_3)
+    } // try
+    catch (e: java.util.EmptyStackException) {
+	fatalErrorPrint ("-ipfs get help or block","empty Stack", "Check input", here)
+    }
+
+    if (!wor_s.isEmpty()){
+	val str = stringOfGlueOfWordStack(",", wor_s)
+	fatalErrorPrint ("-ipfs get command stack were empty","'$str'", "Check input", here)
+    }
+
+    exiting(here)
+}
+
 fun executeIpfsOfWordList(wor_l: List<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
@@ -55,24 +99,7 @@ fun executeIpfsOfWordList(wor_l: List<String>) {
 		           wor_s.clear()
     		}
 		"get" -> {
-		    wor_s.clear()
-		    when (wor_l.size) {
-			2 -> {
-			    var hel_l = helpList()
-			    val get_l = hel_l.filter({h -> h.contains("get ")})
-			    printOfStringList(get_l)
-			    wor_s.clear()
-			}
-			3 -> {val immCon = immutableValueOfGetWordList(wor_l)
-			      println ("Content:")
-			      println (immCon.toString())
-			      wor_s.clear()
-			}
-			else -> {
-			    val str = stringOfGlueOfStringList("\n", wor_l)
-			    fatalErrorPrint ("one argument (help) or two arguments (type and what) for -ipfs get command", str, "Check input", here)
-			}
-    		    } // when
+		    executeIpfsGetOfWordStack(wor_s)
 		}
 		"hel" -> {
 		    wor_s.clear()
@@ -119,14 +146,15 @@ fun immutableValueOfCatWordList (wor_l: List<String>): ImmutableValue {
     return result
 }
 
-fun immutableValueOfGetWordList (wor_l: List<String>): ImmutableValue {
+fun immutableValueOfGetWordStack (wor_s: Stack<String>): ImmutableValue {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
     // -ipfs get block QmdKAX85S5uVKWx4ds5NdznJPjgsqAATnnkA8nE2bXQSSa
     
-    if(isTrace(here)) println("$here: input wor_l '$wor_l'")
-    val (type, what) = Pair(wor_l[1], wor_l[2])
+    if(isTrace(here)) println("$here: input wor_s '$wor_s'")
+    val type = wor_s.pop()
+    val what = wor_s.pop()
     if(isDebug(here)) println("$here: (type, what) = '($type, $what)'")
 
     val mulTyp = MultiHashType.make (what)
@@ -147,9 +175,8 @@ fun ipfsAddOfWordStack(wor_s: Stack<String>) {
     entering(here, caller)
 
     // "-ipfs add dir(ectory)|fil(e)|str(ing) 
-    //  ./parser.bnf" "-ipfs add truc much" 
-    // Ex.: (-ipfs) add truc much
-
+    // Ex.: "-ipfs add string truc much" 
+ 
     var done = false
 
     if(isTrace(here)) println ("$here: input wor_s '$wor_s'")
@@ -207,8 +234,8 @@ fun ipfsAddOfWordStack(wor_s: Stack<String>) {
 	    } // when
 	} // try
 	catch (e: java.util.EmptyStackException) {done = true} // catch
-	
     } // while
+
     exiting(here)
 }
 

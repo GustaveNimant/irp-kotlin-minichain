@@ -20,7 +20,7 @@ fun helpList(): List<String> {
 	"gradlew run --args=\"-input <file-path> : stores file-path in ParameterMap",
 	"gradlew run --args=\"-ipfs add <path> : add a file or a directory to Ipfs",
 	"gradlew run --args=\"-ipfs add <string> : add a string to Ipfs",
-	"gradlew run --args=\"-ipfs get <type> <MultiHash>",
+	"gradlew run --args=\"-ipfs get block <MultiHash>",
 	"gradlew run --args=\"-ipfs get help",
 	"gradlew run --args=\"-ipfs peerid (ipfs --offline config Identity.PeerID)",
 	"gradlew run --args=\"-kwe(xtract) -input <file-path> (extract keyword value couple",
