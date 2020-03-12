@@ -14,7 +14,9 @@ fun helpList(): List<String> {
 	"gradlew run --args=\"-gen pro(vider)|reg(ister)|typ()e|val(ue) <module-name> <abbreviation>",
 	"gradlew run --args=\"-gen generates one of the four kind of modules above",
 	"gradlew run --args=\"-gen pro immutable imm\" (example)",
-	"gradlew run --args=\"-get (client OkHttp)",
+	"gradlew run --args=\"-http4k get (client OkHttp)",
+	"gradlew run --args=\"-http4k example (launches serveur Jetty on localhost:9000)",
+	"gradlew run --args=\"-http4k quickstart (elementary example server + client)",
 	"gradlew run --args=\"-host 127.0.0.1|<host name>\" defines host with port default (5001)",
 	"gradlew run --args=\"-ipfs add [Options] <path> : add a file or a directory to Ipfs https://docs.ipfs.io/reference/api/cli/#ipfs-add",
 	"gradlew run --args=\"-input <file-path> : stores file-path in ParameterMap",
@@ -29,6 +31,8 @@ fun helpList(): List<String> {
 	"gradlew run --args=\"-loop<function name>|all\" print message inside a loop",
 	"gradlew run --args=\"-port 5001\" defines port with host default (127.0.0.1)",
 	"gradlew run --args=\"-print register port",
+	"gradlew run --args=\"-provide peerid",
+	"gradlew run --args=\"-provide hashtype|hashinput|hashvalue",
 	"gradlew run --args=\"-qui(ckStart) (https://www.http4k.org/quickstart/)",
 	"gradlew run --args=\"-trace <function name>|all\" print input and output data",
 	"gradlew run --args=\"-verbose<function name>|all\"",
@@ -94,4 +98,12 @@ fun helpOfParameterMap(parMap: Map<String, List<String>>) {
       exiting(here)
       exitProcess(0)
     }
+}
+
+fun printHelpOfString(str: String) {
+    val hel_l = helpList()
+    val h_l = hel_l.filter({h -> h.contains(str)})
+    println()
+    printOfStringList(h_l)
+    println()
 }

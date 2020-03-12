@@ -319,3 +319,17 @@ fun peerIdProvide(): String {
     return result
 }
 
+fun wrapperExecuteIpfsOfWordList (wor_l: List<String>) {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    if (isTrace(here)) println("$here: input wor_l '$wor_l'")
+    try {
+	executeIpfsOfWordList(wor_l)
+    }
+    catch (e: java.net.ConnectException){
+	fatalErrorPrint ("Connection to 127.0.0.1:5001", "Connection refused", "launch Ipfs :\n\tgo to minichain jsm; . config.sh; ipmsd.sh", here)}
+    
+    exiting(here)
+}
+
