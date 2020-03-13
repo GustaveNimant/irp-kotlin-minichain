@@ -5,9 +5,12 @@ import java.util.Stack
 import java.security.MessageDigest
 
 /**
- * Command : gradlew run --args="-hash <type> <length>"
- * Example : gradlew run --args="-hash sha 256"
+ * Command : --args="-hash <type> <length>"
+ * Example : --args="-hashfunction sha 256"
+ * Example : --args="-hashfunction sha 256 -hashinput truc much -print hashtype -print hashinput -print hashvalue"
  * Author : Emile Achadde 04 mars 2020 at 10:40:15+01:00
+ * Remark : the information to calculate the Hash of a string are provided via the arguments 
+ * Remark : the string is directly provided or the path file that contains it.  
  */
 
 fun hashStringOfTypeOfInput(typ: String, inp: String): String {
@@ -43,7 +46,7 @@ fun hashStringOfTypeOfInput(typ: String, inp: String): String {
 fun hashFunctionTypeOfTypeOfLength (typ:String, len: Int): String {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
-    // Ex.: (-has)h sha 256
+    // Ex.: -hashfunction sha 256
 
     if(isTrace(here)) println("$here: typ '$typ'")
     if(isTrace(here)) println("$here: len '$len'")
@@ -95,7 +98,7 @@ fun hashInputString(): String {
 
     val wor_l = try {ParameterMap.getValue("hashinput")}
                 catch(e: java.util.NoSuchElementException) {
-		    fatalErrorPrint("and input string were defined in the input", "it is not","enter for example -hashinput some string", here)}
+		    fatalErrorPrint("an input string were defined in the input", "it is not","enter for example -hashinput some string", here)}
     
     
     val str = stringOfGlueOfStringList(" ", wor_l)
@@ -111,3 +114,79 @@ fun hashInputString(): String {
     return result
     exiting(here)
 }
+
+fun printHashOfWord(wor: String) {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    when (wor) {
+	"hashtype" -> {
+	    val hasFunTyp = hashFunctionType()
+	    println()
+	    println ("hashFunctionType $hasFunTyp")
+	    println()
+	}
+	"hashinput" -> {
+	    val hasInpStr = hashInputString()
+	    println()
+	    println ("hashInputString $hasInpStr")
+	    println()
+	}
+	"hashvalue" -> {
+	    val hasFunTyp = hashFunctionType()
+	    val hasInpStr = hashInputString()
+	    val hasValue = hashStringOfTypeOfInput(hasFunTyp, hasInpStr)
+	    println()
+	    println ("hashFunctionType '$hasFunTyp'")
+	    println ("hashInputString '$hasInpStr'")
+	    println ("hashValue '$hasValue'")
+	    println()
+	}
+	else -> {
+	    fatalErrorPrint ("$here: command were '-provide hashtype' or '-provide hashinput' '-provide hashvalue","'-provide $wor'", "Check input", here)
+	}
+    }
+    exiting(here)
+}
+
+fun provideHashOfWord(wor: String): String {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    val result = 
+	when (wor) {
+	    "hashtype" -> {
+		hashFunctionType()
+	    }
+	    "hashinput" -> {
+		hashInputString()
+	    }
+	    "hashvalue" -> {
+		val hasFunTyp = hashFunctionType()
+		val hasInpStr = hashInputString()
+		hashStringOfTypeOfInput(hasFunTyp, hasInpStr)
+	    }
+	    else -> {
+		fatalErrorPrint ("$here: command were '-provide hashtype' or '-provide hashinput' '-provide hashvalue","'-provide $wor'", "Check input", here)
+	    }
+	}
+    
+    exiting(here)
+    return result
+}
+
+fun wrapperExecuteHashOfWord(wor: String) {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    val result = 
+	when (wor) {
+	    "hashfunction" -> hashFunctionType()
+	    "hashinput" -> hashInputString()
+	    else -> {
+	    }
+	}
+    println ("$here: result $result")
+    exiting(here)
+}
+

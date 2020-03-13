@@ -128,7 +128,7 @@ fun executeGetOfWordStack(wor_l: List<String>) {
     while (!done) {
 	try {
  	    val wor = wor_s.pop()
-	    val wor_3 = wor.substring(0,3)
+	    val wor_3 = threeFirstCharactersOfStringOfCaller(wor, here)
 	    if(isLoop(here)) println("$here: while wor '$wor'")
 	    
 	    when (wor_3) {
@@ -179,7 +179,7 @@ fun executeHttp4kOfWordList(wor_l: List<String>) {
     while (!done) {
 	try {
  	    val wor = wor_s.pop()
-	    val wor_3 = wor.substring(0,3)
+	    val wor_3 = threeFirstCharactersOfStringOfCaller(wor, here)
 	    if(isLoop(here)) println("$here: while wor '$wor'")
 	    
 	    when (wor_3) {
@@ -238,7 +238,7 @@ fun executeServerJettyOfWordStack(wor_s: Stack<String>) {
     while (!done) {
 	try {
 	    val wor = wor_s.pop()
-	    val wor_3 = wor.substring(0,3)
+	    val wor_3 = threeFirstCharactersOfStringOfCaller(wor, here)
 	    if(isLoop(here)) println("$here: while wor '$wor'")
 	    
 	    when (wor_3) {
@@ -280,7 +280,7 @@ fun executeServerOfWordStack(wor_s: Stack<String>) {
     while (!done) {
 	try {
 	    val wor = wor_s.pop()
-	    val wor_3 = wor.substring(0,3)
+	    val wor_3 = threeFirstCharactersOfStringOfCaller(wor, here)
 	    if(isLoop(here)) println("$here: while wor '$wor'")
 	    
 	    when (wor_3) {

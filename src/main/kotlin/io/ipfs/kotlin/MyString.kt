@@ -302,6 +302,13 @@ fun stringStackOfStringList (str_l: List<String>) : Stack<String> {
     return stack
 }
 
+fun threeFirstCharactersOfStringOfCaller(str: String, caller: String): String {
+    return try {str.substring(0,3)}
+    catch(e: java.lang.StringIndexOutOfBoundsException){
+	fatalErrorPrint("current word had length > 2","'$str'","Check input", caller)
+    }
+}
+
 fun wordListOfString (str: String): List<String> {
     val trimedString = str.trim(' ')    
     val regex = Regex("""\s+""")

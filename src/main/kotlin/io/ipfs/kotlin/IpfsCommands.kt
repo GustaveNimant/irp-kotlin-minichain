@@ -28,7 +28,7 @@ fun executeIpfsGetOfWordStack(wor_s: Stack<String>) {
     
     try {
 	val wor = wor_s.pop()
-	val wor_3 = wor.substring(0,3)
+	val wor_3 = threeFirstCharactersOfStringOfCaller(wor, here)
 	if(isLoop(here)) println("$here: while wor '$wor'")
 	
 	when (wor_3) {
@@ -78,7 +78,7 @@ fun executeIpfsOfWordList(wor_l: List<String>) {
     while (!done) {
 	try {
 	    val wor = wor_s.pop()
-	    val wor_3 = wor.substring(0,3)
+	    val wor_3 = threeFirstCharactersOfStringOfCaller(wor, here)
 	    if(isLoop(here)) println("$here: wor '$wor'")
 	    
 	    when (wor_3) {
@@ -198,7 +198,7 @@ fun ipfsAddOfWordStack(wor_s: Stack<String>) {
     while (!done) {
 	try {
 	    val wor = wor_s.pop()
-	    val wor_3 = wor.substring(0,3)
+	    val wor_3 = threeFirstCharactersOfStringOfCaller(wor, here)
 	    if(isLoop(here)) println("$here: wor '$wor'")
 	    
 	    when (wor_3) {

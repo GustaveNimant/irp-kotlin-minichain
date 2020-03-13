@@ -25,14 +25,7 @@ fun executeGenerateOfWordList(wor_l: List<String>) {
     while (!done) {
 	try {
 	    val worKin = wor_s.pop()
-	    val wor_3 = try {
-		worKin.substring(0,3)
-	    }
-	    catch(e: java.lang.StringIndexOutOfBoundsException)
-	    {
-		fatalErrorPrint ("command Kind were one of 'pro'vider 'reg'ister 'typ'e 'val'ue 'hel'p","'"+worKin+"'", "Check input", here)
-	    }
-	    
+	    val wor_3 = threeFirstCharactersOfStringOfCaller(worKin, here)
 	    if(isLoop(here)) println("$here: worKin '$worKin'")
 	    
 	    when (wor_3) {
