@@ -188,35 +188,6 @@ fun parameterMapOfArguments(args: Array<String>): Map<String, List<String>> {
   return result
 }
 
-fun printRegisterOfWordStack(wor_s: Stack<String>) {
-    val (here, caller) = moduleHereAndCaller()
-    entering(here, caller)
-    
-    // Ex.: -print register port
-
-    val wor = wor_s.pop()
-    val wor_3 = threeFirstCharactersOfStringOfCaller(wor, here)
-    if(isLoop(here)) println("$here: while wor '$wor'")
-    
-    when (wor_3) {
- 	"hos" -> {
-	    println ("\nHost Register:")
-	    HostRegister.print()
-	}
- 	"por" -> {
-	    println ("\nPort Register:")
-	    PortRegister.print()
-	}
- 	"url" -> {
-	    println ("\nUrl Register:")
-	    UrlRegister.print()
-	}
-	else -> {
-	    fatalErrorPrint ("$here: command were '-print register host|port|url'","'-print register $wor'", "Correct input", here)
-	}
-    }
-}
-    
 fun provideTic(): String {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
@@ -224,10 +195,6 @@ fun provideTic(): String {
     val timLon = getTime()
     val result = timLon.toString()
 
-    println()
-    println("Tic: $result")
-    println()
-    
     exiting(here)
     return result
 }

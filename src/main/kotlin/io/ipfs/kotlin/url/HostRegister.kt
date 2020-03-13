@@ -14,7 +14,6 @@ object HostRegister {
 
     var register : MutableMap<HostType, HostValue> = mutableMapOf<HostType, HostValue>()
 
-
     fun isEmpty (): Boolean {
 	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
@@ -74,10 +73,20 @@ object HostRegister {
     }
 
     fun print() {
-	val module = moduleName() 
-	for ( (k, v) in register) {
-	    println ("$module: $k => $v")
+	val module = moduleName()
+	if (isEmpty()){
+	    println ()
+	    println ("$module:")
+	    println ("Register is Empty")
+	    println ()
 	}
+	else {
+	    println ()
+	    for ( (k, v) in register) {
+		println ("$module: $k => $v")
+	    }
+	    println ()
+	}	    
     }
 }
 

@@ -18,13 +18,12 @@ fun executePrintOfWordStack(wor_s: Stack<String>) {
     try {
 	val wor = wor_s.pop()
 	val wor_3 = threeFirstCharactersOfStringOfCaller(wor, here)
-	if(isLoop(here)) println("$here: while wor '$wor'")
+	if(isVerbose(here)) println("$here: wor '$wor'")
 	
 	when (wor_3) {
-	    "reg" -> {printRegisterOfWordStack(wor_s)}
 	    "hel" -> {
 		wor_s.clear()
-		printHelpOfString("-provide ")
+		printHelpOfString("-print ")
     	    }
 	    "has" -> {
 		printHashOfWord(wor)
@@ -39,6 +38,7 @@ fun executePrintOfWordStack(wor_s: Stack<String>) {
 		println ("peerId: $str")
 		println ()
 	    }
+	    "reg" -> {printRegisterOfWordStack(wor_s)}
 	    "tic" -> {
 		val str = provideTic()
 		println ()
@@ -68,6 +68,36 @@ fun executePrintOfWordStack(wor_s: Stack<String>) {
     exiting(here)
 }
 
+fun printRegisterOfWordStack(wor_s: Stack<String>) {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+    
+    // Ex.: -print register port
+    // Ex.: -host local -print register host"
+
+    val wor = wor_s.pop()
+    val wor_3 = threeFirstCharactersOfStringOfCaller(wor, here)
+    if(isLoop(here)) println("$here: wor '$wor'")
+    
+    when (wor_3) {
+ 	"hos" -> {
+	    println ("\nHost Register:")
+	    HostRegister.print()
+	}
+ 	"por" -> {
+	    println ("\nPort Register:")
+	    PortRegister.print()
+	}
+ 	"url" -> {
+	    println ("\nUrl Register:")
+	    UrlRegister.print()
+	}
+	else -> {
+	    fatalErrorPrint ("$here: command were '-print register host|port|url'","'-print register $wor'", "Correct input", here)
+	}
+    }
+}
+    
 fun wrapperExecutePrintOfWordList (wor_l: List<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)

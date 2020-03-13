@@ -30,6 +30,7 @@ fun helpList(): List<String> {
 	"gradlew run --args=\"-kwe input <file-path> (extract keyword value couple)",
 	"gradlew run --args=\"-loop<function name>|all\" print message inside a loop",
 	"gradlew run --args=\"-port 5001\" defines port with host default (127.0.0.1)",
+	"gradlew run --args=\"-print register host|port|url",
 	"gradlew run --args=\"-print register port",
 	"gradlew run --args=\"-provide peerid",
 	"gradlew run --args=\"-provide hashtype|hashinput|hashvalue",
