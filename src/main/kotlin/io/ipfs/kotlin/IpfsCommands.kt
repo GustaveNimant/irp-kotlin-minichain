@@ -313,10 +313,6 @@ fun providePeerId(): String {
 	fatalErrorPrint ("Connection to 127.0.0.1:5001", "Connection refused", "launch Host :\n\tgo to minichain jsm; . config.sh; ipmsd.sh", here)
     }
     
-    println ()
-    println ("peerId: $result")
-    println ()
-    
     exiting(here)
     return result
 }

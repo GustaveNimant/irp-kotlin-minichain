@@ -5,6 +5,7 @@ import io.ipfs.kotlin.defaults.*
 import io.ipfs.kotlin.url.*
 
 import java.io.File
+import java.util.Date
 import java.util.Stack
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -126,33 +127,9 @@ fun executePrintOfWordList(wor_l: List<String>) {
     exiting(here)
 }
 
-fun provideHashOfWord(wor: String) {
-    val (here, caller) = moduleHereAndCaller()
-    entering(here, caller)
-
-    when (wor) {
-	"hashtype" -> {
-	    val hasFunTyp = hashFunctionType()
-	    println ("$here: hashFunctionType $hasFunTyp")
-	}
-	"hashinput" -> {
-	    val hasInpStr = hashInputString()
-	    println ("$here: hashInputString $hasInpStr")
-	}
-	"hashvalue" -> {
-	    val hasFunTyp = hashFunctionType()
-	    val hasInpStr = hashInputString()
-	    val hasValue = hashStringOfTypeOfInput(hasFunTyp, hasInpStr)
-	    println ("$here: hashFunctionType '$hasFunTyp'")
-	    println ("$here: hashInputString '$hasInpStr'")
-	    println ("$here: hash Value '$hasValue'")
-	}
-	else -> {
-	    fatalErrorPrint ("$here: command were '-provide hashtype' or '-provide hashinput' '-provide hashvalue","'-provide $wor'", "Check input", here)
-	}
-    }
-    
-    exiting(here)
+fun getTime (): Long {
+    val result = Date().getTime()
+    return result
 }
 
 fun executeProvideOfWordStack(wor_s: Stack<String>) {
@@ -160,6 +137,7 @@ fun executeProvideOfWordStack(wor_s: Stack<String>) {
     entering(here, caller)
     
     // Ex.: -provide peerid
+    // ex.: -port user 5021 -provide url localServer
     
     if(isTrace(here)) println ("$here: input wor_s '$wor_s'")
     try {
@@ -173,10 +151,22 @@ fun executeProvideOfWordStack(wor_s: Stack<String>) {
 		printHelpOfString("-provide ")
     	    }
 	    "has" -> {
-		provideHashOfWord(wor)
+		val str = provideHashOfWord(wor)
+		println ()
+		println ("$wor => $str")
+		println ()
 	    }
 	    "pee" -> {
-		providePeerId()
+		val str = providePeerId()
+		println ()
+		println ("peerId: $str")
+		println ()
+	    }
+	    "tic" -> {
+		val str = provideTic()
+		println ()
+		println ("peerId: $str")
+		println ()
 	    }
 	    "url" -> {
 		try {val urlStr = wor_s.pop()
@@ -186,7 +176,7 @@ fun executeProvideOfWordStack(wor_s: Stack<String>) {
 		     proUrl.provideOfUrlType(urlTyp)
 		}
 		catch (e: java.util.EmptyStackException) {
-		    fatalErrorPrint ("urltype were localIpfsApi|localServer|remote","urltype is empty", "enter url <urltype>", here)
+		    fatalErrorPrint ("urltype were localIpfsApi|localServer|remote","urltype is empty", "enter url localIpfsApi|localServer|remote", here)
     }
 	    }
 	    else -> {
@@ -309,6 +299,76 @@ fun parameterMapOfArguments(args: Array<String>): Map<String, List<String>> {
 
   exiting(here)
   return result
+}
+
+fun provideHashOfWord(wor: String): String {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    val result = 
+	when (wor) {
+	    "hashtype" -> {
+		hashFunctionType()
+	    }
+	    "hashinput" -> {
+		hashInputString()
+	    }
+	    "hashvalue" -> {
+		val hasFunTyp = hashFunctionType()
+		val hasInpStr = hashInputString()
+		hashStringOfTypeOfInput(hasFunTyp, hasInpStr)
+	    }
+	    else -> {
+		fatalErrorPrint ("$here: command were '-provide hashtype' or '-provide hashinput' '-provide hashvalue","'-provide $wor'", "Check input", here)
+	    }
+	}
+    
+    exiting(here)
+    return result
+}
+
+fun printHashOfWord(wor: String) {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    when (wor) {
+	"hashtype" -> {
+	    val hasFunTyp = hashFunctionType()
+	    println ("$here: hashFunctionType $hasFunTyp")
+	}
+	"hashinput" -> {
+	    val hasInpStr = hashInputString()
+	    println ("$here: hashInputString $hasInpStr")
+	}
+	"hashvalue" -> {
+	    val hasFunTyp = hashFunctionType()
+	    val hasInpStr = hashInputString()
+	    val hasValue = hashStringOfTypeOfInput(hasFunTyp, hasInpStr)
+	    println ("$here: hashFunctionType '$hasFunTyp'")
+	    println ("$here: hashInputString '$hasInpStr'")
+	    println ("$here: hash Value '$hasValue'")
+	}
+	else -> {
+	    fatalErrorPrint ("$here: command were '-provide hashtype' or '-provide hashinput' '-provide hashvalue","'-provide $wor'", "Check input", here)
+	}
+    }
+    
+    exiting(here)
+}
+
+fun provideTic(): String {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    val timLon = getTime()
+    val result = timLon.toString()
+
+    println()
+    println("Tic: $result")
+    println()
+    
+    exiting(here)
+    return result
 }
 
 fun wrapperExecuteGenerateOfWordList (wor_l: List<String>) {
