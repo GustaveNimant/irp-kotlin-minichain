@@ -31,7 +31,7 @@ import org.http4k.server.asServer
  * Author : Emile Achadde 12 mars 2020 at 15:13:49+01:00
  */
 
-fun executeExampleOfWordStack(wor_l: List<String>) {
+fun executeExampleOfWordStack(wor_s: Stack<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
@@ -98,77 +98,13 @@ fun executeExampleOfWordStack(wor_l: List<String>) {
     exiting(here)
 }
 
-fun executeGetOfWordStack(wor_l: List<String>) {
-    val (here, caller) = moduleHereAndCaller()
-    entering(here, caller)
-    
-    // Ex.: -http4k get port <port-type> host <host-type> route <route>
-    // Port and Host are defined in a previous command
-
-    if(isTrace(here)) println ("$here: input wor_l '$wor_l'")
-
-    // HTTP clients are also HttpHandlers!
-    val client: HttpHandler = OkHttp()
-    println("$here: client OkHttp started")
-    println("client")
-    
-    val networkResponse: Response = client(Request(GET, "http://localhost:9000/greet/Bob"))
-
-    println("$here: networkResponse")
-    println(networkResponse)
-
-    /* Local variables */
-    var hosStr =""
-    var porStr =""
-    var rouStr =""
-    
-    var done = false
-    var wor_s = wordStackOfWordList(wor_l)
-    
-    while (!done) {
-	try {
- 	    val wor = wor_s.pop()
-	    val wor_3 = threeFirstCharactersOfStringOfCaller(wor, here)
-	    if(isLoop(here)) println("$here: while wor '$wor'")
-	    
-	    when (wor_3) {
-		"hel" -> {
-		    printHelpOfString("get ")
-		}
-		"hos" -> {
-		    hosStr = wor_s.pop()
-		}
-		"por" -> {
-		    porStr = wor_s.pop()
-		}
-		"rou" -> {
-		    rouStr = wor_s.pop()
-		    println("$here: when porStr '$porStr'")
-		    println("$here: when hosStr '$hosStr'")
-		    println("$here: when rouStr '$rouStr'")
-		}
-		else -> {
-		    fatalErrorPrint ("command were 'hos't or 'por't or 'rou'te ","'$wor'", "Check input", here)
-		} // else
-	    } // when (wor_3)
-	} // try
-	catch (e: java.util.EmptyStackException) {done = true} // catch
-	
-    } // while
-
-    val porPro = PortProvider ()
-    val porTyp = PortType.make (porStr)
-    val porVal = porPro.provideOfPortType(porTyp)
-    
-    exiting(here)
-}
-
 fun executeHttp4kOfWordList(wor_l: List<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
     
     // Ex.: -http4k get port <port-type> host <host-type> route <route>
     // Ex.: -http4k quickstart
+    // Ex.: -http4k server jetty start
     // Ex.: -http4k example		
     // Port and Host are defined in a previous command
 
@@ -184,7 +120,7 @@ fun executeHttp4kOfWordList(wor_l: List<String>) {
 	    
 	    when (wor_3) {
 	    	 "exa" -> {wrapperExecuteExampleOfWordStack(wor_s)}
-		 "get" -> {wrapperExecuteGetOfWordStack(wor_s)}
+		 "get" -> {wrapperExecuteHttp4kGetOfWordStack(wor_s)}
 		 "hel" -> {printHelpOfString("-http4k ")}
 		 "qui" -> {wrapperExecuteQuickStartOfWordStack(wor_s)}
 		 "ser" -> {wrapperExecuteServerOfWordStack(wor_s)}
@@ -229,8 +165,8 @@ fun executeServerJettyOfWordStack(wor_s: Stack<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
     
-    // Ex.: -server jetty start
-    // Ex.: -server jetty stop	
+    // Ex.: -http4k server jetty start
+    // Ex.: -http4k server jetty stop	
 
     var done = false
     if(isTrace(here)) println ("$here: input wor_s '$wor_s'")
@@ -296,6 +232,70 @@ fun executeServerOfWordStack(wor_s: Stack<String>) {
     exiting(here)
 }
 
+fun responseFromGetRequestOfWordStack(wor_s: Stack<String>) {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    // Needs to launch server first (with -http4k example)
+    // Ex.: -http4k get port 9000 host localhost route /greet/Jules
+
+    if(isTrace(here)) println ("$here: input wor_s '$wor_s'")
+
+    /* Local variables */
+    var hosStr =""
+    var porStr =""
+    var rouStr =""
+    
+    var done = false
+    while (!done) {
+	try {
+ 	    val wor = wor_s.pop()
+	    val wor_3 = threeFirstCharactersOfStringOfCaller(wor, here)
+	    if(isLoop(here)) println("$here: while wor '$wor'")
+	    
+	    when (wor_3) {
+		"hel" -> {
+		    printHelpOfString("get ")
+		}
+		"hos" -> {
+		    hosStr = wor_s.pop()
+		}
+		"por" -> {
+		    porStr = wor_s.pop()
+		}
+		"rou" -> {
+		    rouStr = wor_s.pop()
+		    println("$here: when porStr '$porStr'")
+		    println("$here: when hosStr '$hosStr'")
+		    println("$here: when rouStr '$rouStr'")
+		}
+		else -> {
+		    fatalErrorPrint ("command were 'hos't or 'por't or 'rou'te ","'$wor'", "Check input", here)
+		} // else
+	    } // when (wor_3)
+	} // try
+	catch (e: java.util.EmptyStackException) {done = true} // catch
+	
+    } // while
+
+    // HTTP clients are also HttpHandlers!
+    val client: HttpHandler = OkHttp()
+
+    println("$here: client OkHttp started")
+    println("client")
+
+    val url = "http://" + hosStr + ":" + porStr + rouStr 
+
+    if(isDebug(here)) println ("$here: url '$url'")
+    
+    val networkResponse: Response = client(Request(GET, "http://localhost:9000/greet/Bob"))
+
+    println("$here: networkResponse")
+    println(networkResponse)
+
+    exiting(here)
+}
+
 fun wrapperExecuteExampleOfWordStack(wor_s: Stack<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
@@ -307,13 +307,13 @@ fun wrapperExecuteExampleOfWordStack(wor_s: Stack<String>) {
     exiting(here)
 }
 
-fun wrapperExecuteGetOfWordStack (wor_s: Stack<String>) {
+fun wrapperExecuteHttp4kGetOfWordStack (wor_s: Stack<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
     if (isTrace(here)) println("$here: input wor_s '$wor_s'")
     try {
-	executeGetOfWordStack(wor_s)
+	responseFromGetRequestOfWordStack(wor_s)
     }
     catch (e: java.net.ConnectException){
 	fatalErrorPrint ("Connection to Host:Port", "Connection refused", "Check", here)}

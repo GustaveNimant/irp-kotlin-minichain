@@ -37,7 +37,7 @@ class MultiHashProvider {
 	entering(here, caller)
 	
 	println("$here: input mulTyp '$mulTyp'")
-	// Improve get from ParameterMap Input
+// Improve get from ParameterMap Input
 	val hasFunTyp = hashFunctionType()
 	val hasInpStr = hashInputString()
 	val mulH = build(hasFunTyp, hasInpStr)
