@@ -39,6 +39,7 @@ fun executePrintOfWordStack(wor_s: Stack<String>) {
 		println ()
 	    }
 	    "reg" -> {printRegisterOfWordStack(wor_s)}
+	    "spo" -> {printSpotOfWordStack(wor_s)}
 	    "tic" -> {
 		val str = provideTic()
 		println ()
@@ -57,7 +58,7 @@ fun executePrintOfWordStack(wor_s: Stack<String>) {
     }
 	    }
 	    else -> {
-		fatalErrorPrint ("command were '-print hash|help|ipaddress|peerid|register|tic|url'","'$wor'", "Check input", here)
+		fatalErrorPrint ("command were '-print hash|help|ipaddress|peerid|register|spot|tic|url'","'$wor'", "Check input", here)
 	    } // else
 	    } // when (wor_3)
 	} // try
@@ -80,6 +81,7 @@ fun printRegisterOfWordStack(wor_s: Stack<String>) {
     if(isLoop(here)) println("$here: wor '$wor'")
     
     when (wor_3) {
+ 	"hel" -> {printHelpOfString("-print register")}
  	"hos" -> {
 	    println ("\nHost Register:")
 	    HostRegister.print()

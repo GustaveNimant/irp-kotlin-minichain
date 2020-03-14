@@ -32,12 +32,14 @@ fun helpList(): List<String> {
 	"gradlew run --args=\"-port 5001\" defines port with host default (127.0.0.1)",
 	"gradlew run --args=\"-print register host|port|url",
 	"gradlew run --args=\"-print register port",
+	"gradlew run --args=\"-print spot data|triple",
 	"gradlew run --args=\"-provide peerid",
 	"gradlew run --args=\"-provide hashtype|hashinput|hashvalue",
 	"gradlew run --args=\"-qui(ckStart) (https://www.http4k.org/quickstart/)",
 	"gradlew run --args=\"-trace <function name>|all\" print input and output data",
 	"gradlew run --args=\"-verbose<function name>|all\"",
 	"gradlew run --args=\"-when<function name>|all\" print message inside a when",
+	"gradlew run --args=\"-write spot <file-path|generator/spot.yml>",
 	"gradlew run --args=\"-url 127.0.0.1|<host name>:5001<port>\" defines an url"
 	)
     return hel_l
@@ -102,9 +104,15 @@ fun helpOfParameterMap(parMap: Map<String, List<String>>) {
 }
 
 fun printHelpOfString(str: String) {
+    val strHel = stringHelpOfString(str)
+    println()
+    println(strHel)
+    println()
+}
+
+fun stringHelpOfString(str: String): String {
     val hel_l = helpList()
     val h_l = hel_l.filter({h -> h.contains(str)})
-    println()
-    printOfStringList(h_l)
-    println()
+    val result = stringOfGlueOfStringList("\n", h_l)
+    return result
 }

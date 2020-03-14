@@ -253,7 +253,7 @@ fun ipfsAddOfWordStack(wor_s: Stack<String>) {
     exiting(here)
 }
 
-fun ipfsCommit (): String {
+fun ipfsCommit(): String {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
@@ -309,9 +309,16 @@ fun providePeerId(): String {
 	    if(isDebug(here)) println ("$here: peeId '$peeId'")
 	    peeId!!.Value
 	}
-    catch (e: java.net.UnknownHostException) {
-	fatalErrorPrint ("Connection to 127.0.0.1:5001", "Connection refused", "launch Host :\n\tgo to minichain jsm; . config.sh; ipmsd.sh", here)
-    }
+    catch (e: Exception) {
+	when (e) {
+	    is java.net.UnknownHostException, is java.net.ConnectException -> {
+		fatalErrorPrint ("Connection to 127.0.0.1:5001", "Connection refused", "launch Host :\n\tgo to minichain jsm; . config.sh; ipmsd.sh", here)
+	    }
+	    else -> {
+		fatalErrorPrint ("Connection to 127.0.0.1:5001", (e.message).toString(), "launch Host :\n\tgo to minichain jsm; . config.sh; ipmsd.sh", here)
+		}
+	}// when
+    } // catch
     
     exiting(here)
     return result

@@ -9,6 +9,7 @@ import kotlin.system.exitProcess
  * val content = LocalIpfs().get.cat(multihash)
  * val commit = LocalIpfs().info.version()!!.Commit
  * Author : Emile Achadde 22 février 2020 at 15:32:44+01:00
+ * Improve : split generateModule into string and write 
  */
 
 fun executeGenerateOfWordList(wor_l: List<String>) {
@@ -29,6 +30,10 @@ fun executeGenerateOfWordList(wor_l: List<String>) {
 	    if(isLoop(here)) println("$here: worKin '$worKin'")
 	    
 	    when (wor_3) {
+		"hel" -> {
+		    wor_s.clear()
+		    printHelpOfString("-generate ")
+    		}
 		"pro", "reg", "typ", "val" -> { //(-gen)erate provider module-name abbreviation
 		    val modNam = wor_s.pop()
 		    val abbNam = wor_s.pop()
@@ -36,14 +41,8 @@ fun executeGenerateOfWordList(wor_l: List<String>) {
 		    if(isDebug(here)) println ("modNam: '$modNam'")
 		    if(isDebug(here)) println ("abbNam: '$abbNam'")
 		    wor_s.clear()
-		    generate (worKin, modNam, abbNam)
+		    generateModule (worKin, modNam, abbNam)
 		}
-		"hel" -> {
-		    wor_s.clear()
-		    val hel_l = helpList()
-		    val h_l = hel_l.filter({h -> h.contains("-gen ")})
-		    printOfStringList(h_l)
-    		}
 		else -> {
 		    fatalErrorPrint ("command Kind were one of 'pro'vider 'reg'ister 'typ'e 'val'ue 'hel'p","'"+worKin+"'", "Check input", here)
 		} // else
@@ -55,16 +54,16 @@ fun executeGenerateOfWordList(wor_l: List<String>) {
     exiting(here)
 }
 
-fun generate (kin:String, moduleName: String, abbreviation: String) {
+fun generateModule(kin:String, moduleName: String, abbreviation: String) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
     //                     1         2         4      5
     //                            ELEMENT  ABBREVIATION 
     // Ex.: (-gen)erate provider immutable    imm
 
-    if(isTrace(here)) println("$here: kin '$kin'")
-    if(isTrace(here)) println("$here: moduleName '$moduleName'")
-    if(isTrace(here)) println("$here: abbreviation '$abbreviation'")
+    if(isTrace(here)) println("$here: input kin '$kin'")
+    if(isTrace(here)) println("$here: input moduleName '$moduleName'")
+    if(isTrace(here)) println("$here: input abbreviation '$abbreviation'")
 
     val kin_3 = kin.substring(0,3)
     val kind = when (kin_3) {
@@ -91,3 +90,4 @@ fun generate (kin:String, moduleName: String, abbreviation: String) {
     
     exiting(here)
 }
+

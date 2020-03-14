@@ -146,6 +146,7 @@ fun mainMenu (parMap: Map<String, List<String>>) {
 	    "kwe" -> {wrapperExecuteKeywordOfWordList(wor_l)}
 	    "por" -> {wrapperExecutePortOfWordList(wor_l)}
 	    "pri" -> {wrapperExecutePrintOfWordList(wor_l)}
+	    "wri" -> {wrapperExecuteWriteOfWordList(wor_l)}
 	    else -> {
 		fatalErrorPrint ("command were one of end, exi(t), gen(erate), has(h), hel(p), hos(t), htt(p4k), inp(ut), ipf(s, kwe(xtract), 'por't, 'pri'nt", "'$com'", "re Run", here)
 	    } // else
@@ -268,4 +269,5 @@ fun wrapperExecutePortOfWordList (wor_l: List<String>) {
     
     exiting(here)
 }
+
 
