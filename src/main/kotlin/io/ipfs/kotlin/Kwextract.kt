@@ -6,11 +6,12 @@ import java.io.File
 import java.util.Stack
 
 /**
- * kwextract (file: String) : Map<String, String>
+ * Example : --args="-kwe -input /home/achadde/sources/irp-kotlin-minichain/YMLS/current-block.yml"
  * Author : Emile Achadde 04 mars 2020 at 19:21:12+01:00
+ * Revision : Emile Achadde 14 mars 2020 at 10:49:41+01:00
  */
 
-fun kwextract(filPat: String): MutableMap<String, String> {
+fun kwextractOfFilePath(filPat: String): MutableMap<String, String> {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 

@@ -68,6 +68,17 @@ fun provideSpotData(): String {
     return result 
 }
 
+fun provideTic(): String {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    val timLon = getTime()
+    val result = timLon.toString()
+
+    exiting(here)
+    return result
+}
+
 fun writeSpotDataOfFilePath(filPat: String) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)

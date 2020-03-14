@@ -84,10 +84,26 @@ fun main(args: Array<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
-    val parMap = parameterMapOfArguments(args)
-    ParameterMap = parMap.toMap() // Globalization for Trace ...
-    
-    if (parMap.size == 0) {
+    val parMap_ = parameterMapOfArguments(args)
+
+    // verbose full
+    var parMutMap = mutableMapOf<String, List<String>>()
+    parMutMap.putAll(parMap_)
+    if(parMutMap.containsKey("verbose")) {
+	if(parMutMap.get("verbose")!!.first() == "full"){
+	    parMutMap.put("debug", listOf("all"))
+	    parMutMap.put("enterexit", listOf("all"))
+	    parMutMap.put("loop", listOf("all"))
+	    parMutMap.put("trace", listOf("all"))
+	    parMutMap.put("verbose", listOf("all"))
+	    parMutMap.put("when", listOf("all"))
+	}
+    }
+
+    // Globalization for Trace etc ...
+    ParameterMap = parMutMap.toMap() 
+
+    if (ParameterMap.size == 0) {
 	println ("$here: Commands are:")
 	val hel_l = helpList()
 	for (hel in hel_l) {
@@ -97,15 +113,15 @@ fun main(args: Array<String>) {
     }
 
     if(isVerbose(here)) {
-	if (parMap.size > 0) {
-	    println ("$here: Commands with their parameter list:")
-	    for ( (k, v) in parMap) {
+	if (ParameterMap.size > 0) {
+	    println ("$here: Commands ParameterMap:")
+	    for ( (k, v) in ParameterMap) {
 		println ("$here: $k => $v")
 	    }
 	}
     }
 
-    mainMenu(parMap)
+    mainMenu(ParameterMap)
     
     endProgram()
     
@@ -189,17 +205,6 @@ fun parameterMapOfArguments(args: Array<String>): Map<String, List<String>> {
   return result
 }
 
-fun provideTic(): String {
-    val (here, caller) = moduleHereAndCaller()
-    entering(here, caller)
-
-    val timLon = getTime()
-    val result = timLon.toString()
-
-    exiting(here)
-    return result
-}
-
 fun wrapperExecuteGenerateOfWordList (wor_l: List<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
@@ -242,12 +247,13 @@ fun wrapperExecuteKeywordOfWordList (wor_l: List<String>) {
 
     if (isTrace(here)) println("$here: input wor_l '$wor_l'")
 
-    val inpFilPat = try { (ParameterMap.getValue("input")).first()}
-                    catch(e:java.util.NoSuchElementException){
-			fatalErrorPrint("an input file path were given","there are none","add '-input <file-name>' to command line",here)
-		    }
+    val inpFilPat = try {
+	(ParameterMap.getValue("input")).first()}
+    catch(e:java.util.NoSuchElementException){
+	fatalErrorPrint("an input file path were given","there are none","add '-input <file-name>' to command line",here)
+    }
 
-     val keyValMap = kwextract(inpFilPat)
+     val keyValMap = kwextractOfFilePath(inpFilPat)
      println ("Extracted (key, value) from input")
      for ( (k, v) in keyValMap) {
 	 println ("$k => $v")
