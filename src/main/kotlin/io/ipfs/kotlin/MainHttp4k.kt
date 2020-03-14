@@ -88,9 +88,8 @@ fun main(args: Array<String>) {
 
     // verbose full
     var parMutMap = mutableMapOf<String, List<String>>()
-    parMutMap.putAll(parMap_)
-    if(parMutMap.containsKey("verbose")) {
-	if(parMutMap.get("verbose")!!.first() == "full"){
+    if(parMap_.containsKey("verbose")) {
+	if(parMap_.get("verbose")!!.first() == "full"){
 	    parMutMap.put("debug", listOf("all"))
 	    parMutMap.put("enterexit", listOf("all"))
 	    parMutMap.put("loop", listOf("all"))
@@ -99,6 +98,7 @@ fun main(args: Array<String>) {
 	    parMutMap.put("when", listOf("all"))
 	}
     }
+    parMutMap.putAll(parMap_)
 
     // Globalization for Trace etc ...
     ParameterMap = parMutMap.toMap() 
