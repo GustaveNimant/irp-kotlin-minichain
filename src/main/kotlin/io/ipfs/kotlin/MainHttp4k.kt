@@ -121,19 +121,19 @@ fun main(args: Array<String>) {
 	}
     }
 
-    mainMenu(ParameterMap)
+    mainMenu()
     
     endProgram()
     
     exiting(here)
 }
 
-fun mainMenu (parMap: Map<String, List<String>>) {
+fun mainMenu () {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
-    if(isTrace(here)) println ("$here: input parMap $parMap")
-    val com_s = commandSetOfParameterMap (parMap)
+    if(isTrace(here)) println ("$here: input ParameterMap $ParameterMap")
+    val com_s = commandSetOfParameterMap (ParameterMap)
     if(isTrace(here)) println ("$here: com_s $com_s")
 
     var step = 0
@@ -142,7 +142,7 @@ fun mainMenu (parMap: Map<String, List<String>>) {
 	println("$here: ----- command # $step '$com' -----")
 	val com_3 = com.substring(0,3)
 	
-	val wor_ml = parMap.get(com)
+	val wor_ml = ParameterMap.get(com)
 	val wor_l = wor_ml!!.map({w -> w.toString()}) 
 	if (isLoop(here)) println("$here: wor_l '$wor_l'")
 	
@@ -154,7 +154,7 @@ fun mainMenu (parMap: Map<String, List<String>>) {
 	    "end", "exi" -> {endProgram()}
 	    "gen" -> {wrapperExecuteGenerateOfWordList(wor_l)}
 	    "has" -> {wrapperExecuteHashOfWord(com)}
-	    "hel" -> {helpOfParameterMap(parMap)}
+	    "hel" -> {helpOfParameterMap(ParameterMap)}
 	    "hos" -> {wrapperExecuteHostOfWordList(wor_l)}
 	    "htt" -> {wrapperExecuteHttp4kOfWordList(wor_l)}
 	    "inp" -> {wrapperExecuteInputOfWordList(wor_l)}
