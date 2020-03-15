@@ -40,7 +40,7 @@ sealed class UrlType () {
 		  "localServer" -> UrlType.UrlLocal.UrlLocalServer 
 		  "remote" -> UrlType.UrlRemote.UrlRemoteIpfs
 		  else -> {
-		      fatalErrorPrint("localIpfsApi|localServer|remote", "'$wor'", "Check", here)
+		      fatalErrorPrint("url Type were localIpfsApi|localServer|remote", "'$wor'", "Check", here)
 		      }
 	      }
 	  if(isTrace(here)) println ("$here: output result $result")

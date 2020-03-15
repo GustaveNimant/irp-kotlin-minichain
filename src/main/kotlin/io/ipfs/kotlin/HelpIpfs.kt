@@ -43,8 +43,7 @@ fun helpList(): List<String> {
 	"gradlew run --args=\"-verbose<function name>|all\"",
 	"gradlew run --args=\"-when<function name>|all\" print message inside a when",
 	"gradlew run --args=\"-write spot <file-path|generator/spot.yml>",
-	"gradlew run --args=\"-url 127.0.0.1|<host name>:5001<port>\" defines an url"
-	)
+	"gradlew run --args=\"-url localIpfsApi|localServer|remote (uses -port and -host)"
     return hel_l
 }
 
