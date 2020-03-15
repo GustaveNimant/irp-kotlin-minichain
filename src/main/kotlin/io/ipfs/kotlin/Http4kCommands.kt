@@ -31,6 +31,64 @@ import org.http4k.server.asServer
  * Author : Emile Achadde 12 mars 2020 at 15:13:49+01:00
  */
 
+fun http4kServerJettyStart() {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    // we can bind HttpHandlers (which are just functions
+    //    from  Request -> Response) to paths/methods to create a Route,
+    // then combine many Routes together to make another HttpHandler
+    
+    val app: HttpHandler = routes(
+        "/ping" bind GET to { _: Request -> Response(OK).body("pong!") },
+        "/greet/{name}" bind GET to { req: Request ->
+            val name: String? = req.path("name")
+            Response(OK).body("hello ${name ?: "anon!"}")
+        }
+    )
+    app.asServer(Jetty(9000)).start()
+    
+    exiting(here)
+}
+
+fun http4kFilteredTest() {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    // we can bind HttpHandlers (which are just functions
+    //    from  Request -> Response) to paths/methods to create a Route,
+    // then combine many Routes together to make another HttpHandler
+    
+    val app: HttpHandler = routes(
+        "/ping" bind GET to { _: Request -> Response(OK).body("pong!") },
+        "/greet/{name}" bind GET to { req: Request ->
+            val name: String? = req.path("name")
+            Response(OK).body("hello ${name ?: "anon!"}")
+        }
+    )
+
+    val timingFilter = Filter {
+        next: HttpHandler ->
+        {
+            request: Request ->
+            val start = System.currentTimeMillis()
+            val response = next(request)
+            val latency = System.currentTimeMillis() - start
+            println("$here: Request to ${request.uri} took ${latency}ms")
+            response
+        }
+    }
+
+    val compositeFilter = CachingFilters.Response.NoCache().then(timingFilter)
+    val filteredApp: HttpHandler = compositeFilter.then(app)
+
+    filteredApp.asServer(Jetty(9000)).start()
+
+    app.asServer(Jetty(9000)).start()
+    
+    exiting(here)
+}
+
 fun http4kInMemoryResponse() {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
@@ -61,7 +119,7 @@ fun http4kInMemoryResponse() {
     exiting(here)
 }
 
-fun http4kFilteredJettyServer() {
+fun http4kJettyServerFiltered() {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
@@ -117,7 +175,7 @@ fun executeExampleOfWordStack(wor_s: Stack<String>) {
 //    hello Bob
      // <----- http4kInMemoryResponse()
 
-    // http4kFilteredJettyServer() ---->
+    // http4kJettyServerFiltered() ---->
     // this is a Filter - it performs pre/post processing on a request or response
     val timingFilter = Filter {
         next: HttpHandler ->
@@ -138,7 +196,7 @@ fun executeExampleOfWordStack(wor_s: Stack<String>) {
     // only 1 LOC to mount an app and start it in a container
     filteredApp.asServer(Jetty(9000)).start()
 
-    // <---- http4kFilteredJettyServer()
+    // <---- http4kJettyServerFiltered()
 
     // http4kClientResponse() ---->
     // HTTP clients are also HttpHandlers!
@@ -204,17 +262,7 @@ fun executeServerJettyOfWordStack(wor_s: Stack<String>) {
 	    if(isLoop(here)) println("$here: while wor '$wor'")
 	    
 	    when (wor_3) {
-		"sta" -> {
-		    jettyServer.start()
-		    println ("$here: jettyServer started on port 9000")
-		    val request = Request(Method.GET, "http://localhost:9000").query("name", "John Doe")
-		    println ("$here: request $request")
-    
-		    val client = ApacheClient()
-		    println ("$here: client $client")
-    
-		    println(client(request))
-    		}
+		"sta" -> {http4kServerJettyStart()}
 		"sto" -> {
 		    jettyServer.stop()
 		    println ("$here: jettyServer has been stopped")
@@ -265,7 +313,8 @@ fun menuHttp4kOfWordList(wor_l: List<String>) {
     // Ex.: -http4k get port <port-type> host <host-type> route <route>
     // Ex.: -http4k quickstart
     // Ex.: -http4k server jetty start
-    // Ex.: -http4k example		
+    // Ex.: -http4k example
+    // Ex.: -http4k inmemory		
     // Port and Host are defined in a previous command
 
     var done = false
@@ -280,10 +329,11 @@ fun menuHttp4kOfWordList(wor_l: List<String>) {
 	    
 	    when (wor_3) {
 		 "cli" -> {http4kClientResponse()}
-		 "fil" -> {http4kFilteredJettyServer()}
+		 "jet" -> {http4kJettyServerFiltered()}
 		 "get" -> {wrapperExecuteHttp4kGetOfWordStack(wor_s)}
 		 "hel" -> {printHelpOfString("-http4k ")}
 		 "inm" -> {http4kInMemoryResponse()}
+		 "fil" -> {http4kFilteredTest() }
 		 "qui" -> {wrapperExecuteQuickStartOfWordStack(wor_s)}
 		 "ser" -> {wrapperExecuteServerOfWordStack(wor_s)}
 	    	 "exa" -> {wrapperExecuteExampleOfWordStack(wor_s)}

@@ -16,6 +16,7 @@ fun helpList(): List<String> {
 	"gradlew run --args=\"-http4k get port <port-type> host <host-type> route <route>(client OkHttp)",
 	"gradlew run --args=\"-http4k get port 9000 host localhost route /greet/Jules\"",
 	"gradlew run --args=\"-http4k example (launches serveur Jetty on localhost:9000)",
+	"gradlew run --args=\"-http4k inmemory (server + client /greet/Bob)",
 	"gradlew run --args=\"-http4k quickstart (elementary example server + client)",
 	"gradlew run --args=\"-host 127.0.0.1|<host name>\" defines host with port default (5001)",
 	"gradlew run --args=\"-ipfs add [Options] <path> : add a file or a directory to Ipfs https://docs.ipfs.io/reference/api/cli/#ipfs-add",
