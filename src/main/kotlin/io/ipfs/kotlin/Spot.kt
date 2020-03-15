@@ -3,6 +3,10 @@ package io.ipfs.kotlin
 import java.io.File
 import java.util.Stack
 
+/**
+ * --args="-port webui 5001 -write spot"
+ */
+
 fun printSpotOfWordStack(wor_s: Stack<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)

@@ -24,31 +24,13 @@ object ImmutableRegister {
 	return result
     }
 
-    fun store (immTyp: ImmutableType, immVal: ImmutableValue) {
-	val (here, caller) = moduleHereAndCaller()
-	entering(here, caller)
-	
-	if(isTrace(here)) println ("$here: input immTyp '$immTyp'")
-	if(isTrace(here)) println ("$here: input immVal '$immVal'")
-	
-	if (isStored(immTyp)) {
-	    val con = retrieve(immTyp)
-	    if (con != immVal) {
-		fatalErrorPrint("ImmutableValue already stored for immTyp '$immTyp' were equal to new one", immVal.toString(), "Check", here)
-	    }
-	}
-	else {
-	    register.put(immTyp, immVal)
-	}
-	if(isTrace(here)) println ("$here: immVal couple has been stored")
-    }
-    
     fun isStored (immTyp: ImmutableType): Boolean {
 	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
 	if(isTrace(here)) println ("$here: input immTyp '$immTyp'")
-	
+
+	// Improve ???
 	val immVal = register.get(immTyp)
 	val result = when (immVal) {
 	    is ImmutableValue -> register.contains(immTyp) 
@@ -75,4 +57,24 @@ object ImmutableRegister {
 	exiting(here)
 	return result
     }
+
+    fun store (immTyp: ImmutableType, immVal: ImmutableValue) {
+	val (here, caller) = moduleHereAndCaller()
+	entering(here, caller)
+	
+	if(isTrace(here)) println ("$here: input immTyp '$immTyp'")
+	if(isTrace(here)) println ("$here: input immVal '$immVal'")
+	
+	if (isStored(immTyp)) {
+	    val con = retrieve(immTyp)
+	    if (con != immVal) {
+		fatalErrorPrint("ImmutableValue already stored for immTyp '$immTyp' were equal to new one", immVal.toString(), "Check", here)
+	    }
+	}
+	else {
+	    register.put(immTyp, immVal)
+	}
+	if(isTrace(here)) println ("$here: immVal couple has been stored")
+    }
+    
 }

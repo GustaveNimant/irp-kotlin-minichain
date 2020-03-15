@@ -6,7 +6,8 @@ import java.util.Stack
 
 /**
  * Author : Emile Achadde 11 mars 2020 at 17:50:37+01:00
- * Improve : to be done like others
+ * Improve : to be done as others
+ * Revision : Emile Achadde 15 mars 2020 at 17:54:24+01:00
  */
 
 object lexemeListRegister {
@@ -32,31 +33,34 @@ object lexemeListRegister {
      }
 }
 
-fun buildAndStoreLexemeList() {
+fun buildAndStoreLexemeList(): List<Lexeme> {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
     val ymlFileName = provideAnyFileNameOfWhat ("Yml")
-    var lex_l = lexemeListOfFileName(ymlFileName)
-    lexemeListRegister.store (lex_l)
+    var result = lexemeListOfFileName(ymlFileName)
+    lexemeListRegister.store (result)
 
-    if (isTrace(here)) println("$here: output lexeme List '$lex_l'")
+    if (isTrace(here)) println("$here: output lexeme List '$result'")
     exiting(here)
+    return result
 }
 
-fun provideLexemeList() : List<Lexeme> {
+fun provideLexemeList(): List<Lexeme> {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
-    if (lexemeListRegister.isEmpty()){
-       buildAndStoreLexemeList()
-    }
-    
-    val lex_l = lexemeListRegister.retrieve()
-
-    if (isTrace(here)) println("$here: output lexeme List '$lex_l'")
+    val result = 
+	if (lexemeListRegister.isEmpty()){
+	    buildAndStoreLexemeList()
+	}
+        else {
+	    lexemeListRegister.retrieve()
+	}
+	
+    if (isTrace(here)) println("$here: output lexeme List '$result'")
     exiting(here)
-    return lex_l
+    return result
 }
 
 fun printLexemeList () {

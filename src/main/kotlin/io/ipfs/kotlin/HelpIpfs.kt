@@ -33,6 +33,7 @@ fun helpList(): List<String> {
 	"gradlew run --args=\"-kwe -input /home/achadde/sources/irp-kotlin-minichain/YMLS/current-block.yml",
 	"gradlew run --args=\"-loop<function name>|all\" print message inside a loop",
 	"gradlew run --args=\"-port gateway|jetty|webui|user <integer>",
+	"gradlew run --args=\"-port webui 5001 -write spot\"",
 	"gradlew run --args=\"-print register host|port|url",
 	"gradlew run --args=\"-print register port",
 	"gradlew run --args=\"-print spot data|triple",
