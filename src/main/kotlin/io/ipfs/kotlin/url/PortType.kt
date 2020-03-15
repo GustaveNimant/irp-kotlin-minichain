@@ -10,19 +10,22 @@ import java.util.Stack
  * What to do : provide PortType by asking if stored in ParameterMap 
  * Author : Emile Achadde 26 février 2020 at 13:11:05+01:00
  * Revision : make Emile Achadde 28 février 2020 at 09:48:23+01:00
+ * Revision : Jetty by Emile Achadde 15 mars 2020 at 11:37:45+01:00
  */
 
 sealed class PortType {
   object PortUserDefined: PortType()
   object PortWebui: PortType()
+  object PortJetty: PortType()
   object PortGateway: PortType()
 
   override fun toString (): String {
       val result =
 	  when (this) {
+	      is PortType.PortGateway -> "PortGateway"
+	      is PortType.PortJetty -> "PortJetty"
 	      is PortType.PortUserDefined -> "PortUserDefined"
 	      is PortType.PortWebui -> "PortWebui"
-	      is PortType.PortGateway -> "PortGateway"
 	  }
       return result
   }
@@ -36,9 +39,13 @@ sealed class PortType {
 	  
 	  val result =
 	      when (wor) {
+		  "user" -> PortType.PortUserDefined
 		  "webui" -> PortType.PortWebui
+		  "jetty" -> PortType.PortJetty
 		  "gateway" -> PortType.PortGateway
-		  else -> PortType.PortUserDefined
+		  else -> {
+		      fatalErrorPrint("Port type were jetty|gateway|user|webui","'$wor'","Check input", here)
+		  }
 	      }
 
 	  if(isTrace(here)) println ("$here: output result $result")

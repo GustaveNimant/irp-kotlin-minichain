@@ -61,7 +61,7 @@ fun executePortOfWordList(wor_l: List<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
     
-    // Ex.: -port <PortType> <Integer>
+    // Ex.: -port gateway|jetty|webui <Integer>
     
     if(isTrace(here)) println ("$here: input wor_l '$wor_l'")
     var wor_s = wordStackOfWordList(wor_l)
@@ -70,10 +70,11 @@ fun executePortOfWordList(wor_l: List<String>) {
     
     try {
 	val wor = wor_s.pop()
-	if(isLoop(here)) println("$here: wor '$wor'")
+	if(isVerbose(here)) println("$here: wor '$wor'")
 	    
 	val porTyp = PortType.make (wor)
-
+	if(isVerbose(here)) println("$here: porTyp '$porTyp'")
+	
 	try { val worNex = wor_s.pop()
 	      if(isLoop(here)) println("$here: worNex '$worNex'")
 	      val int: Int = worNex.toInt() 
@@ -88,6 +89,9 @@ fun executePortOfWordList(wor_l: List<String>) {
 		    }		    
 		    is PortType.PortGateway -> {
 			5011
+		    }
+		    is PortType.PortJetty -> {
+			9000
 		    }
 		    is PortType.PortWebui -> {
 			5021
