@@ -68,29 +68,32 @@ class HostProvider {
 	return result
     }
 
-    private fun buildAndStoreUrl(hosTyp: HostType) {
+    private fun buildAndStoreUrl(hosTyp: HostType): HostValue {
 	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 
 	if(isTrace(here)) println ("$here: input hosTyp '$hosTyp'")
     
-	val porVal = build(hosTyp)
-	register.store (hosTyp, porVal)
-	
+	val result = build(hosTyp)
+	register.store (hosTyp, result)
+
+	if(isTrace(here)) println ("$here: output result $result")
 	exiting(here)
-	return
+	return result
     }
     
     public fun provideOfHostType(hosTyp: HostType) : HostValue {
 	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
-	if (register.isEmpty()){
-	    buildAndStoreUrl(hosTyp)
-	}
-	
-	val result = register.retrieve(hosTyp)!!
-	
+	val result = 
+	    if (register.isStored(hosTyp)){
+		register.retrieve(hosTyp)!!
+	    }
+	    else {
+		buildAndStoreUrl(hosTyp)
+	    }
+
 	println()
 	println(hosTyp.toString()+" => '$result'")
 	println()

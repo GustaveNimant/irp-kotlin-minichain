@@ -61,7 +61,7 @@ fun executePortOfWordList(wor_l: List<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
     
-    // Ex.: -port gateway|jetty|webui <Integer>
+    // Ex.: -port gateway|jetty|webui|user <Integer>
     
     if(isTrace(here)) println ("$here: input wor_l '$wor_l'")
     var wor_s = wordStackOfWordList(wor_l)
@@ -109,6 +109,27 @@ fun executePortOfWordList(wor_l: List<String>) {
     if(isTrace(here)){
     	println ("Port Register is:")
 	PortRegister.print() 
+    }
+
+    exiting(here)
+}
+
+fun executeUrlOfWordStack(wor_s: Stack<String>) {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+    
+    // Ex.: -url localIpfsApi|localServer|remote
+    
+    if(isTrace(here)) println ("$here: input wor_s '$wor_s'")
+
+    try {val urlStr = wor_s.pop()
+	 println ("$here: urlStr '$urlStr'")
+	 val urlTyp = UrlType.make(urlStr)
+	 val proUrl = UrlProvider()
+	 proUrl.provideOfUrlType(urlTyp)
+    }
+    catch (e: java.util.EmptyStackException) {
+	fatalErrorPrint ("urltype were localIpfsApi|localServer|remote","urltype is empty", "enter url localIpfsApi|localServer|remote", here)
     }
 
     exiting(here)

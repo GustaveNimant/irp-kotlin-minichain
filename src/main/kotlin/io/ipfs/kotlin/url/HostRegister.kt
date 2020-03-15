@@ -8,6 +8,7 @@ import java.util.Stack
  * What is it : the Register storing a Host knowing its Type.
  * Example : (HostLocal, "5001") 
  * Author : Emile Achadde 26 février 2020 at 17:42:58+01:00
+ * Revision : isStored by Emile Achadde 15 mars 2020 at 16:15:43+01:00
  */
 
 object HostRegister {
@@ -30,7 +31,7 @@ object HostRegister {
 	
 	if(isTrace(here)) println ("$here: input hosTyp '$hosTyp'")
 	
-	val result = (register.containsKey(hosTyp))
+	val result = (! register.isEmpty()) && (register.containsKey(hosTyp))
 	
 	if(isTrace(here)) println ("$here: output result '$result'")
 	

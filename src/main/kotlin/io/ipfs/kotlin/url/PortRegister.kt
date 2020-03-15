@@ -10,6 +10,7 @@ import java.util.Stack
  * What to do : provide host and port by asking if stored in ParameterMap 
  * Author : Emile Achadde 25 février 2020 at 19:03:02+01:00
  * Revision : class => object Emile Achadde 11 mars 2020 at 17:28:52+01:00
+ * Revision : isStored by Emile Achadde 15 mars 2020 at 16:11:38+01:00
  */
 
 object PortRegister {
@@ -31,8 +32,8 @@ object PortRegister {
 	entering(here, caller)
 	
 	if(isTrace(here)) println ("$here: input porTyp '$porTyp'")
-	
-	val result = (register.containsKey(porTyp)) 
+
+	val result = (! register.isEmpty()) && (register.containsKey(porTyp)) 
 		
 	if(isTrace(here)) println ("$here: output result '$result'")
 	

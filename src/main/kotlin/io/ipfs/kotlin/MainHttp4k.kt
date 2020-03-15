@@ -162,6 +162,7 @@ fun mainMenu () {
 	    "kwe" -> {wrapperExecuteKeywordOfWordList(wor_l)}
 	    "por" -> {wrapperExecutePortOfWordList(wor_l)}
 	    "pri" -> {wrapperExecutePrintOfWordList(wor_l)}
+	    "url" -> {wrapperExecuteUrlOfWordList(wor_l)}
 	    "wri" -> {wrapperExecuteWriteOfWordList(wor_l)}
 	    else -> {
 		fatalErrorPrint ("command were one of end, exi(t), gen(erate), has(h), hel(p), hos(t), htt(p4k), inp(ut), ipf(s, kwe(xtract), 'por't, 'pri'nt", "'$com'", "re Run", here)
@@ -267,11 +268,18 @@ fun wrapperExecutePortOfWordList (wor_l: List<String>) {
     entering(here, caller)
 
     if (isTrace(here)) println("$here: input wor_l '$wor_l'")
-    try {
-	executePortOfWordList(wor_l)
-    }
-    catch (e: java.net.ConnectException){
-	fatalErrorPrint ("Connection to 127.0.0.1:5001", "Connection refused", "launch Port :\n\tgo to minichain jsm; . config.sh; ipmsd.sh", here)}
+    executePortOfWordList(wor_l)
+    
+    exiting(here)
+}
+
+fun wrapperExecuteUrlOfWordList (wor_l: List<String>) {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    if (isTrace(here)) println("$here: input wor_l '$wor_l'")
+    var wor_s = wordStackOfWordList(wor_l)
+    executeUrlOfWordStack(wor_s)
     
     exiting(here)
 }

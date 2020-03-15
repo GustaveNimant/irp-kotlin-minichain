@@ -9,6 +9,7 @@ import java.util.Stack
  * Example : (LocalIpfsApi, "127.0.0.1:5001") 
  * What to do : provide host and port by asking if stored in ParameterMap 
  * Author : Emile Achadde 25 février 2020 at 19:03:02+01:00
+ * Revision : by buildAndStored returns PortValue by Emile Achadde 15 mars 2020 at 16:12:54+01:00
  */
 
 class PortProvider {
@@ -73,28 +74,30 @@ class PortProvider {
 	return result
     }
 
-    private fun buildAndStoreUrl(porTyp: PortType) {
+    private fun buildAndStoreUrl(porTyp: PortType): PortValue {
 	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 
 	if(isTrace(here)) println ("$here: input porTyp '$porTyp'")
     
-	val PorVal = build(porTyp)
-	register.store (porTyp, PorVal)
+	val result = build(porTyp)
+	register.store (porTyp, result)
 	
 	exiting(here)
-	return
+	return result
     }
     
     fun provideOfPortType(porTyp: PortType) : PortValue {
 	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
-	
-	if (register.isEmpty()){
-	    buildAndStoreUrl(porTyp)
-	}
-	
-	val result = register.retrieve(porTyp)!!
+
+	val result = 
+	    if (register.isStored(porTyp)){
+		register.retrieve(porTyp)!!
+	    }
+	    else {
+		buildAndStoreUrl(porTyp)
+	    }
 
 	println()
 	println(porTyp.toString()+" => '$result'")

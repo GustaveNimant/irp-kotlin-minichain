@@ -35,18 +35,29 @@ fun http4kServerJettyStart() {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
+    // Ex.: --args="-http4k server jetty start"
+    // Ex.: --args="-port jetty 8888 -http4k server jetty start"
+    
     // we can bind HttpHandlers (which are just functions
     //    from  Request -> Response) to paths/methods to create a Route,
     // then combine many Routes together to make another HttpHandler
+
+    val porTyp = PortType.make("jetty")
+    val porVal = PortProvider().provideOfPortType(porTyp)
+    val porInt = porVal.port
     
     val app: HttpHandler = routes(
-        "/ping" bind GET to { _: Request -> Response(OK).body("pong!") },
+        "/ping" bind GET to { _: Request ->
+				  Response(OK).body("pong!") },
         "/greet/{name}" bind GET to { req: Request ->
             val name: String? = req.path("name")
             Response(OK).body("hello ${name ?: "anon!"}")
         }
-    )
-    app.asServer(Jetty(9000)).start()
+    ) // routes
+
+    println("$here: jetty server started 'http://localhost:$porInt'")
+
+    app.asServer(Jetty(porInt)).start()
     
     exiting(here)
 }

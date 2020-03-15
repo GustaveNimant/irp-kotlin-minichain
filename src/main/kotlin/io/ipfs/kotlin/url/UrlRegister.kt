@@ -32,7 +32,8 @@ object UrlRegister {
 	
 	if(isTrace(here)) println ("$here: input urlTyp '$urlTyp'")
 	
-	val result = (register.containsKey(urlTyp))
+	val result = (! register.isEmpty()) && (register.containsKey(urlTyp))
+
 	if(isTrace(here)) println ("$here: output result '$result'")
 	
 	exiting(here)
