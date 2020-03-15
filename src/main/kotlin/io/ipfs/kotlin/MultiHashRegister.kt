@@ -22,6 +22,31 @@ object MultiHashRegister {
     return result
     }
     
+    fun isStored (mulTyp: MultiHashType): Boolean {
+	val (here, caller) = moduleHereAndCaller()
+	entering(here, caller)
+	
+	if(isTrace(here)) println ("$here: input mulTyp '$mulTyp'")
+	
+	val result = (! register.isEmpty()) && register.contains(mulTyp)
+
+	if(isTrace(here)) println ("$here: output result '$result'")
+	
+	exiting(here)
+	return result
+    }
+    
+    fun retrieve (mulTyp: MultiHashType): MultiHashValue {
+	val (here, caller) = moduleHereAndCaller()
+	entering(here, caller)
+	
+	val result = register.get(mulTyp)!! // Improve
+	if(isTrace(here)) println ("$here: output result '$result'")
+	
+	exiting(here)
+	return result
+    }
+
     fun store (mulTyp: MultiHashType, mulVal: MultiHashValue) {
 	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
@@ -41,31 +66,6 @@ object MultiHashRegister {
 	if(isTrace(here)) println ("$here: couple has been stored")
     }
     
-    fun isStored (mulTyp: MultiHashType): Boolean {
-	val (here, caller) = moduleHereAndCaller()
-	entering(here, caller)
-	
-	if(isTrace(here)) println ("$here: input mulTyp '$mulTyp'")
-	
-	val result = register.contains(mulTyp)
-
-	if(isTrace(here)) println ("$here: output result '$result'")
-	
-	exiting(here)
-	return result
-    }
-    
-    fun retrieve (mulTyp: MultiHashType): MultiHashValue {
-	val (here, caller) = moduleHereAndCaller()
-	entering(here, caller)
-	
-	val result = register.get(mulTyp)!! // Improve
-	if(isTrace(here)) println ("$here: output result '$result'")
-	
-	exiting(here)
-	return result
-    }
-
     fun print() {
 	val module = moduleName() 
 	for ( (k, v) in register) {

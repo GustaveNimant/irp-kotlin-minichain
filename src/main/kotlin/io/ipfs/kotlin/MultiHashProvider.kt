@@ -32,7 +32,7 @@ class MultiHashProvider {
 	return result 
     }
     
-    private fun buildAndStore(mulTyp: MultiHashType){
+    private fun buildAndStore(mulTyp: MultiHashType) : MultiHashValue {
 	val (here, caller) = moduleHereAndCaller()
 	entering(here, caller)
 	
@@ -40,10 +40,12 @@ class MultiHashProvider {
 // Improve get from ParameterMap Input
 	val hasFunTyp = hashFunctionType()
 	val hasInpStr = hashInputString()
-	val mulH = build(hasFunTyp, hasInpStr)
-	register.store(mulTyp, mulH)
-	
+	val result = build(hasFunTyp, hasInpStr)
+	register.store(mulTyp, result)
+
+	println("$here: output result $result")
 	exiting(here)
+	return result
     }
     
     public fun provideOfMultiHashType(mulTyp: MultiHashType) : MultiHashValue {
@@ -52,14 +54,14 @@ class MultiHashProvider {
 	
 	println("$here: input mulTyp '$mulTyp'")
 	
-	if (register.isStored(mulTyp)){
-	    register.retrieve(mulTyp)
-	}
-	else {
-	    buildAndStore(mulTyp)
-	}
-	
-	val result = register.retrieve(mulTyp)
+	val result =
+	    if (register.isStored(mulTyp)){
+	        register.retrieve(mulTyp)
+	    }
+  	    else {
+		buildAndStore(mulTyp)
+	    }
+
 	println()
 	println(mulTyp.toString()+" => '$result'")
 	println()
