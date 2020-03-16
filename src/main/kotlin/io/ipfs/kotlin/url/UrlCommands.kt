@@ -9,7 +9,7 @@ import kotlin.system.exitProcess
 /**
  * Author : Emile Achadde 27 février 2020 at 14:04:42+01:00
  * Revision : Registers are singletons by Emile Achadde 11 mars 2020 at 17:17:18+01:00
- * Improve : set Host defaults as Port are
+ * Revision : Server SunHttp by Emile Achadde 16 mars 2020 at 10:29:58+01:00
  */
 
 fun executeHostOfWordList(wor_l: List<String>) {
@@ -84,18 +84,11 @@ fun executePortOfWordList(wor_l: List<String>) {
 	catch (e: java.util.EmptyStackException) {
 	    val porInt = 
 		when (porTyp) {
-		    is PortType.PortUserDefined -> {
-			5001
-		    }		    
-		    is PortType.PortGateway -> {
-			5011
-		    }
-		    is PortType.PortJetty -> {
-			9000
-		    }
-		    is PortType.PortWebui -> {
-			5021
-		    }
+		    is PortType.PortGateway -> {8080}
+		    is PortType.PortJetty -> {9000}
+		    is PortType.PortSunHttp -> {8000}
+		    is PortType.PortUserDefined -> {5001}		    
+		    is PortType.PortWebui -> {5021}
 		} // when porTyp
 	    if(isDebug(here)) println("$here: Port Value set to default '$porInt'")
 	    val porVal = PortValue(porInt)

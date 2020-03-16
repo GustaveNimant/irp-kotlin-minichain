@@ -11,19 +11,22 @@ import java.util.Stack
  * Author : Emile Achadde 26 février 2020 at 13:11:05+01:00
  * Revision : make Emile Achadde 28 février 2020 at 09:48:23+01:00
  * Revision : Jetty by Emile Achadde 15 mars 2020 at 11:37:45+01:00
+ * Revision : SunHttp by Emile Achadde 16 mars 2020 at 10:17:09+01:00
  */
 
 sealed class PortType {
+  object PortGateway: PortType()
+  object PortJetty: PortType()
+  object PortSunHttp: PortType()
   object PortUserDefined: PortType()
   object PortWebui: PortType()
-  object PortJetty: PortType()
-  object PortGateway: PortType()
 
   override fun toString (): String {
       val result =
 	  when (this) {
 	      is PortType.PortGateway -> "PortGateway"
 	      is PortType.PortJetty -> "PortJetty"
+	      is PortType.PortSunHttp -> "PortSunHttp"
 	      is PortType.PortUserDefined -> "PortUserDefined"
 	      is PortType.PortWebui -> "PortWebui"
 	  }
@@ -39,12 +42,13 @@ sealed class PortType {
 	  
 	  val result =
 	      when (wor) {
+		  "gateway" -> PortType.PortGateway
+		  "jetty" -> PortType.PortJetty
+		  "sun", "sunHttp" -> PortType.PortSunHttp
 		  "user" -> PortType.PortUserDefined
 		  "webui" -> PortType.PortWebui
-		  "jetty" -> PortType.PortJetty
-		  "gateway" -> PortType.PortGateway
 		  else -> {
-		      fatalErrorPrint("Port type were jetty|gateway|user|webui","'$wor'","Check input", here)
+		      fatalErrorPrint("Port type were jetty|gateway|sun|user|webui","'$wor'","Check input", here)
 		  }
 	      }
 

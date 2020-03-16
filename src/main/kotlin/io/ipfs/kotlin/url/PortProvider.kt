@@ -64,6 +64,7 @@ class PortProvider {
 		    PortValue(int)
 		}
 		is PortType.PortJetty -> PortValue(9000)
+		is PortType.PortSunHttp -> PortValue(8000)
 		is PortType.PortWebui -> PortValue(5001)
 		is PortType.PortGateway -> PortValue(8080)
 	    }

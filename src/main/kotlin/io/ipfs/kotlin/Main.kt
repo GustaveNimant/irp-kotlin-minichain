@@ -3,6 +3,7 @@ package io.ipfs.kotlin
 import kotlin.system.exitProcess
 import io.ipfs.kotlin.defaults.*
 import io.ipfs.kotlin.url.*
+import io.ipfs.kotlin.http4k.*
 
 import java.io.File
 import java.util.Date

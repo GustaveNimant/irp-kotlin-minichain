@@ -61,5 +61,5 @@ dependencies {
 }
 
 application {
-    mainClassName = "io.ipfs.kotlin.MainHttp4kKt"
+    mainClassName = "io.ipfs.kotlin.MainKt"
 }

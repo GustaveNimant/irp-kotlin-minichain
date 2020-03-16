@@ -1,8 +1,9 @@
-package io.ipfs.kotlin
+package io.ipfs.kotlin.http4k
 
 import kotlin.system.exitProcess
 import io.ipfs.kotlin.defaults.*
 import io.ipfs.kotlin.url.*
+import io.ipfs.kotlin.*
 
 import java.io.File
 import java.util.Stack
@@ -25,6 +26,7 @@ import org.http4k.routing.bind
 import org.http4k.routing.path
 import org.http4k.routing.routes
 import org.http4k.server.Jetty
+import org.http4k.server.SunHttp
 import org.http4k.server.asServer
 
 /**
@@ -58,6 +60,31 @@ fun http4kServerJettyStart() {
     println("$here: jetty server started 'http://localhost:$porInt'")
 
     app.asServer(Jetty(porInt)).start()
+    
+    exiting(here)
+}
+
+fun http4kServerSunHttpStart() {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    // Ex.: --args="-http4k server sun start"
+    // Ex.: --args="-port sun 8000 -http4k server sun start"
+    
+    // from https://www.http4k.org/ first example
+
+    val porTyp = PortType.make("sun")
+    val porVal = PortProvider().provideOfPortType(porTyp)
+    val porInt = porVal.port
+    
+    val app: HttpHandler = { request: Request ->
+				 Response(OK).body(request.body) }
+
+    println("$here: sunHttp server started 'http://localhost:$porInt'")
+
+    val server = app.asServer(SunHttp(porInt)).start()
+
+    println("$here: sunHttp server $server")
     
     exiting(here)
 }
@@ -288,12 +315,41 @@ fun executeServerJettyOfWordStack(wor_s: Stack<String>) {
     exiting(here)
 }
 
+fun executeServerSunHttpOfWordStack(wor_s: Stack<String>) {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+    
+    // Ex.: -http4k server sun start
+
+    var done = false
+    if(isTrace(here)) println ("$here: input wor_s '$wor_s'")
+    
+    while (!done) {
+	try {
+	    val wor = wor_s.pop()
+	    val wor_3 = threeFirstCharactersOfStringOfCaller(wor, here)
+	    if(isLoop(here)) println("$here: while wor '$wor'")
+	    
+	    when (wor_3) {
+		"sta" -> {http4kServerSunHttpStart()}
+		else -> {
+		    fatalErrorPrint ("$here: command were 'sun start|stop","'-server $wor'", "Check input", here)
+		}
+	    }// when (wor)
+	} // try
+	catch (e: java.util.EmptyStackException) {done = true} // catch
+    } // while
+    exiting(here)
+}
+
 fun executeServerOfWordStack(wor_s: Stack<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
     
     // Ex.: -server jetty start
     // Ex.: -server jetty stop	
+    // Ex.: -server sun start
+    // Ex.: -server sun stop
 
     var done = false
     if(isTrace(here)) println ("$here: input wor_s '$wor_s'")
@@ -306,8 +362,9 @@ fun executeServerOfWordStack(wor_s: Stack<String>) {
 	    
 	    when (wor_3) {
 		"jet" -> {executeServerJettyOfWordStack(wor_s)}
+		"sun" -> {executeServerSunHttpOfWordStack(wor_s)}
 		else -> {
-		    fatalErrorPrint ("command were 'jet'ty","'$wor'", "Check input", here)
+		    fatalErrorPrint ("command were 'jet'ty or 'sun'","'$wor'", "Check input", here)
 		} // else
 	    } // when (wor_3)
 	} // try
@@ -323,6 +380,7 @@ fun menuHttp4kOfWordList(wor_l: List<String>) {
     
     // Ex.: -http4k get port <port-type> host <host-type> route <route>
     // Ex.: -http4k quickstart
+    // Ex.: -http4k server sun start
     // Ex.: -http4k server jetty start
     // Ex.: -http4k example
     // Ex.: -http4k inmemory		
