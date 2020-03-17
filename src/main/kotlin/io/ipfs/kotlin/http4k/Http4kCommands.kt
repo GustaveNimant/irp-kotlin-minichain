@@ -102,7 +102,7 @@ fun http4kClientResponse () {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
-    // -http4k client response
+    // Ex.: -http4k client response
     // HTTP clients are also HttpHandlers!
     // Improve get the Error
     
@@ -144,6 +144,8 @@ fun http4kFormsMultipartLens() {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
+    // Ex.: --args="-http4k form multipart lens"
+
     // define fields using the standard lens syntax
     val nameField = MultipartFormField.string().map(::Name, Name::value).required("name")
     val imageFile = MultipartFormFile.optional("image")
@@ -182,15 +184,17 @@ fun http4kFormsMultipartStandard() {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
+    // Ex.: -http4k form multi standard
+    
     // extract the body from the request and then the fields/files from it
     val server = { req: Request ->
 		   val receivedForm = MultipartFormBody.from(req)
-	       println()
-	       println(receivedForm.fieldValues("field"))
-               println(receivedForm.field("field2"))
-               println(receivedForm.files("file"))
-	       println()
-      Response(OK)
+		   println()
+		   println(receivedForm.fieldValues("field"))
+		   println(receivedForm.field("field2"))
+		   println(receivedForm.files("file"))
+		   println()
+		   Response(OK)
     }.asServer(SunHttp(8000)).start()
 
     // add fields and files to the multipart form body
@@ -364,6 +368,26 @@ fun http4kQuickStart() {
     
     jettyServer.stop()
 
+    exiting(here)
+}
+
+fun http4kIpfsPost() {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    // http://127.0.0.1:5001/api/v0/<command>
+
+    val spoDat = provideSpotData()
+    val request = Request(Method.POST, "http://localhost:5001/api/v0/files/write")
+	.form("file",spoDat)
+	.query("arg", "/etc/spot.yml")
+	.query("create", "true")
+	.query("parents", "true")
+	.header("Content-Type", "multipart/form-data;boundary=immutable-file-boundary-123")
+    println()
+    println("$here: request '$request'")
+    println()
+    
     exiting(here)
 }
 
@@ -558,7 +582,7 @@ fun http4kServerJettyStart(): Http4kServer {
         "/ping" bind GET to { _: Request ->
 				  Response(OK).body("pong!") },
         "/greet/{name}" bind GET to { req: Request ->
-            val name: String? = req.path("name")
+	          val name: String? = req.path("name")
             Response(OK).body("hello ${name ?: "anon!"}")
         }
     ) // routes
@@ -628,6 +652,31 @@ fun menuHttp4kClientOfWordStack(wor_s: Stack<String>) {
     exiting(here)
 }
 
+fun menuHttp4kIpfsOfWordStack(wor_s: Stack<String>) {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    if(isTrace(here)) println ("$here: input wor_s '$wor_s'")
+
+    try {
+ 	val wor = wor_s.pop()
+	val wor_3 = threeFirstCharactersOfStringOfCaller(wor, here)
+	if(isLoop(here)) println("$here: while wor '$wor'")
+	
+	when (wor_3) {
+	    "pos" -> {http4kIpfsPost()}
+	    "hel" -> {printHelpOfString("ipfs ")}
+	    else -> {
+		fatalErrorPrint ("command were 'pos't","'$wor'", "Check input", here)
+	    } // else
+	} // when (wor_3)
+    } // try
+    catch (e: java.util.EmptyStackException) {
+	fatalErrorPrint ("command were -http4k ipfs 'pos't","no arguments", "Complete input", here)
+    }
+    exiting(here)
+}
+
 fun menuHttp4kClientUrlGetOfWordStack(wor_s: Stack<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
@@ -687,7 +736,6 @@ fun menuHttp4kClientUrlGetOfWordStack(wor_s: Stack<String>) {
     val url = "http://" + hosStr + ":" + porStr + rouStr 
 
     if(isDebug(here)) println ("$here: url '$url'")
-    
     val networkResponse: Response = client(Request(GET, url))
 
     println("$here: networkResponse")
@@ -784,7 +832,8 @@ fun menuHttp4kOfWordStack(wor_s: Stack<String>) {
     // Ex.: -http4k client response
     // Ex.: -http4k example
     // Ex.: -http4k get port <port-type> host <host-type> route <route>
-    // Ex.: -http4k inmemory		
+    // Ex.: -http4k inmemory
+    // Ex.: -http4k ipfs post		
     // Ex.: -http4k quickstart
     // Ex.: -http4k routes simple
     // Ex.: -http4k routes nestable
@@ -806,6 +855,7 @@ fun menuHttp4kOfWordStack(wor_s: Stack<String>) {
 		"get" -> {menuHttp4kClientUrlGetOfWordStack(wor_s)}
 		"hel" -> {printHelpOfString("-http4k ")}
 		"inm" -> {http4kInMemoryResponse()}
+		"ipf" -> {menuHttp4kIpfsOfWordStack(wor_s)}
 		"qui" -> {http4kQuickStart()}
 		"for" -> {menuHttp4kFormsOfWordStack(wor_s)}
 		"rou" -> {menuHttp4kRoutesOfWordStack(wor_s)}
