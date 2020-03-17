@@ -628,6 +628,79 @@ fun menuHttp4kClientOfWordStack(wor_s: Stack<String>) {
     exiting(here)
 }
 
+fun menuHttp4kClientUrlGetOfWordStack(wor_s: Stack<String>) {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    // Same as http4kClientResponse
+    // Needs to launch server first (with -http4k server jetty full)
+    // Ex.: -http4k get port 9000 host localhost route /greet/Jules
+
+    if(isTrace(here)) println ("$here: input wor_s '$wor_s'")
+    if (wor_s.isEmpty()){
+	fatalErrorPrint ("command were -http4k get 'hos't or 'por't or 'rou'te ","no get arguments", "Check input", here)
+    }
+
+    /* Local variables */
+    var hosStr =""
+    var porStr =""
+    var rouStr =""
+    
+    var done = false
+    while (!done) {
+	try {
+ 	    val wor = wor_s.pop()
+	    val wor_3 = threeFirstCharactersOfStringOfCaller(wor, here)
+	    if(isLoop(here)) println("$here: while wor '$wor'")
+	    
+	    when (wor_3) {
+		"hel" -> {
+		    printHelpOfString("get ")
+		}
+		"hos" -> {
+		    hosStr = wor_s.pop()
+		}
+		"por" -> {
+		    porStr = wor_s.pop()
+		}
+		"rou" -> {
+		    rouStr = wor_s.pop()
+		    println("$here: when porStr '$porStr'")
+		    println("$here: when hosStr '$hosStr'")
+		    println("$here: when rouStr '$rouStr'")
+		}
+		else -> {
+		    fatalErrorPrint ("command were 'hos't or 'por't or 'rou'te ","'$wor'", "Check input", here)
+		} // else
+	    } // when (wor_3)
+	} // try
+	catch (e: java.util.EmptyStackException) {done = true} // catch
+	
+    } // while
+
+    // HTTP clients are also HttpHandlers!
+    val client: HttpHandler = OkHttp()
+
+    println("$here: client OkHttp started")
+    println("client")
+
+    val url = "http://" + hosStr + ":" + porStr + rouStr 
+
+    if(isDebug(here)) println ("$here: url '$url'")
+    
+    val networkResponse: Response = client(Request(GET, url))
+
+    println("$here: networkResponse")
+    println(networkResponse)
+
+    val pattern = Regex("Client Error: Connection Refused")
+    if(pattern.containsMatchIn(networkResponse.toString())){
+	fatalErrorPrint("server were started","it is not","run for example : -http4k server jetty start", here)
+    }
+
+    exiting(here)
+}
+
 fun menuHttp4kFormsMultipartOfWordStack(wor_s: Stack<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
@@ -865,79 +938,6 @@ fun menuHttp4kServerSunHttpOfWordStack(wor_s: Stack<String>) {
 	} // try
 	catch (e: java.util.EmptyStackException) {done = true} // catch
     } // while
-    exiting(here)
-}
-
-fun menuHttp4kClientUrlGetOfWordStack(wor_s: Stack<String>) {
-    val (here, caller) = moduleHereAndCaller()
-    entering(here, caller)
-
-    // Same as http4kClientResponse
-    // Needs to launch server first (with -http4k server jetty full)
-    // Ex.: -http4k get port 9000 host localhost route /greet/Jules
-
-    if(isTrace(here)) println ("$here: input wor_s '$wor_s'")
-    if (wor_s.isEmpty()){
-	fatalErrorPrint ("command were -http4k get 'hos't or 'por't or 'rou'te ","no get arguments", "Check input", here)
-    }
-
-    /* Local variables */
-    var hosStr =""
-    var porStr =""
-    var rouStr =""
-    
-    var done = false
-    while (!done) {
-	try {
- 	    val wor = wor_s.pop()
-	    val wor_3 = threeFirstCharactersOfStringOfCaller(wor, here)
-	    if(isLoop(here)) println("$here: while wor '$wor'")
-	    
-	    when (wor_3) {
-		"hel" -> {
-		    printHelpOfString("get ")
-		}
-		"hos" -> {
-		    hosStr = wor_s.pop()
-		}
-		"por" -> {
-		    porStr = wor_s.pop()
-		}
-		"rou" -> {
-		    rouStr = wor_s.pop()
-		    println("$here: when porStr '$porStr'")
-		    println("$here: when hosStr '$hosStr'")
-		    println("$here: when rouStr '$rouStr'")
-		}
-		else -> {
-		    fatalErrorPrint ("command were 'hos't or 'por't or 'rou'te ","'$wor'", "Check input", here)
-		} // else
-	    } // when (wor_3)
-	} // try
-	catch (e: java.util.EmptyStackException) {done = true} // catch
-	
-    } // while
-
-    // HTTP clients are also HttpHandlers!
-    val client: HttpHandler = OkHttp()
-
-    println("$here: client OkHttp started")
-    println("client")
-
-    val url = "http://" + hosStr + ":" + porStr + rouStr 
-
-    if(isDebug(here)) println ("$here: url '$url'")
-    
-    val networkResponse: Response = client(Request(GET, url))
-
-    println("$here: networkResponse")
-    println(networkResponse)
-
-    val pattern = Regex("Client Error: Connection Refused")
-    if(pattern.containsMatchIn(networkResponse.toString())){
-	fatalErrorPrint("server were started","it is not","run for example : -http4k server jetty start", here)
-    }
-
     exiting(here)
 }
 
