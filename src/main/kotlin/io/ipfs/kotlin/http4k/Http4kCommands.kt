@@ -142,7 +142,7 @@ fun executeExampleOfWordStack(wor_s: Stack<String>) {
     exiting(here)
 }
 
-fun executeServerJettyOfWordStack(wor_s: Stack<String>) {
+fun menuHttp4kServerJettyOfWordStack(wor_s: Stack<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
     
@@ -174,39 +174,7 @@ fun executeServerJettyOfWordStack(wor_s: Stack<String>) {
     exiting(here)
 }
 
-fun executeServerOfWordStack(wor_s: Stack<String>) {
-    val (here, caller) = moduleHereAndCaller()
-    entering(here, caller)
-    
-    // Ex.: -server jetty start
-    // Ex.: -server jetty stop	
-    // Ex.: -server sun start
-    // Ex.: -server sun stop
-
-    var done = false
-    if(isTrace(here)) println ("$here: input wor_s '$wor_s'")
-    
-    while (!done) {
-	try {
-	    val wor = wor_s.pop()
-	    val wor_3 = threeFirstCharactersOfStringOfCaller(wor, here)
-	    if(isLoop(here)) println("$here: while wor '$wor'")
-	    
-	    when (wor_3) {
-		"jet" -> {executeServerJettyOfWordStack(wor_s)}
-		"sun" -> {executeServerSunHttpOfWordStack(wor_s)}
-		else -> {
-		    fatalErrorPrint ("command were 'jet'ty or 'sun'","'$wor'", "Check input", here)
-		} // else
-	    } // when (wor_3)
-	} // try
-	catch (e: java.util.EmptyStackException) {done = true} // catch
-	
-    } // while
-    exiting(here)
-}
-
-fun executeServerSunHttpOfWordStack(wor_s: Stack<String>) {
+fun menuHttp4kServerSunHttpOfWordStack(wor_s: Stack<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
     
@@ -271,7 +239,7 @@ fun http4kClientResponse () {
     // HTTP clients are also HttpHandlers!
     
     val client: HttpHandler = OkHttp()
-
+    // Improve get the Error 
     val networkResponse: Response = client(Request(GET, "http://localhost:9000/greet/Bob"))
     println("$here: networkResponse")
     println(networkResponse)
@@ -325,45 +293,6 @@ fun http4kFilteredTest() {
 
     app.asServer(Jetty(9000)).start()
     
-    exiting(here)
-}
-
-fun http4kFormsUnipartLens() {
-    val (here, caller) = moduleHereAndCaller()
-    entering(here, caller)
-
-    // define fields using the standard lens syntax
-    val ageField = FormField.int().required("age")
-    val nameField = FormField.map(::Name, Name::value).optional("name")
-
-    // add fields to a form definition, along with a validator
-    val strictFormBody = Body.webForm(Validator.Strict, nameField, ageField).toLens()
-    val feedbackFormBody = Body.webForm(Validator.Feedback, nameField, ageField).toLens()
-
-    val invalidRequest = Request(GET, "/")
-        .with(Header.CONTENT_TYPE of ContentType.APPLICATION_FORM_URLENCODED)
-
-    // the "strict" form rejects (throws a LensFailure) because "age" is required
-    try {
-        strictFormBody(invalidRequest)
-    } catch (e: LensFailure) {
-        println(e.message)
-    }
-
-    // the "feedback" form doesn't throw, but collects errors to be reported later
-    val invalidForm = feedbackFormBody(invalidRequest)
-    println(invalidForm.errors)
-
-    // creating valid form using "with()" and setting it onto the request
-    val webForm = WebForm().with(ageField of 55, nameField of Name("rita"))
-    val validRequest = Request(GET, "/").with(strictFormBody of webForm)
-
-    // to extract the contents, we first extract the form and then extract the fields from it using the lenses
-    val validForm = strictFormBody(validRequest)
-    val age = ageField(validForm)
-
-    println("$here: age $age")
-
     exiting(here)
 }
 
@@ -435,6 +364,45 @@ fun http4kFormsMultipartStandard() {
 
     server.stop()
  
+    exiting(here)
+}
+
+fun http4kFormsUnipartLens() {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    // define fields using the standard lens syntax
+    val ageField = FormField.int().required("age")
+    val nameField = FormField.map(::Name, Name::value).optional("name")
+
+    // add fields to a form definition, along with a validator
+    val strictFormBody = Body.webForm(Validator.Strict, nameField, ageField).toLens()
+    val feedbackFormBody = Body.webForm(Validator.Feedback, nameField, ageField).toLens()
+
+    val invalidRequest = Request(GET, "/")
+        .with(Header.CONTENT_TYPE of ContentType.APPLICATION_FORM_URLENCODED)
+
+    // the "strict" form rejects (throws a LensFailure) because "age" is required
+    try {
+        strictFormBody(invalidRequest)
+    } catch (e: LensFailure) {
+        println(e.message)
+    }
+
+    // the "feedback" form doesn't throw, but collects errors to be reported later
+    val invalidForm = feedbackFormBody(invalidRequest)
+    println(invalidForm.errors)
+
+    // creating valid form using "with()" and setting it onto the request
+    val webForm = WebForm().with(ageField of 55, nameField of Name("rita"))
+    val validRequest = Request(GET, "/").with(strictFormBody of webForm)
+
+    // to extract the contents, we first extract the form and then extract the fields from it using the lenses
+    val validForm = strictFormBody(validRequest)
+    val age = ageField(validForm)
+
+    println("$here: age $age")
+
     exiting(here)
 }
 
@@ -517,24 +485,6 @@ fun http4kQuickStart() {
     exiting(here)
 }
 
-fun http4kRoutesSimple() {
-    val (here, caller) = moduleHereAndCaller()
-    entering(here, caller)
-
-    //https://www.http4k.org/cookbook/simple_routing/
-    val app = routes(
-        "bob" bind GET to { Response(OK).body("you GET bob") },
-        "rita" bind POST to { Response(OK).body("you POST rita") },
-        "sue" bind DELETE to { Response(OK).body("you DELETE sue") }
-    )
-
-    println(app(Request(GET, "/bob")))
-    println(app(Request(POST, "/rita")))
-    println(app(Request(DELETE, "/sue")))
-    
-    exiting(here)
-}
-
 fun http4kRoutesNestable() {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
@@ -565,6 +515,24 @@ fun http4kRoutesNestable() {
     println(app(Request(GET, "/static/someStaticFile.txt")))
     println(app(Request(GET, "/someSpaResource")))
 
+    exiting(here)
+}
+
+fun http4kRoutesSimple() {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    //https://www.http4k.org/cookbook/simple_routing/
+    val app = routes(
+        "bob" bind GET to { Response(OK).body("you GET bob") },
+        "rita" bind POST to { Response(OK).body("you POST rita") },
+        "sue" bind DELETE to { Response(OK).body("you DELETE sue") }
+    )
+
+    println(app(Request(GET, "/bob")))
+    println(app(Request(POST, "/rita")))
+    println(app(Request(DELETE, "/sue")))
+    
     exiting(here)
 }
 
@@ -701,6 +669,81 @@ fun menuHttp4kClientOfWordStack(wor_s: Stack<String>) {
     exiting(here)
 }
 
+fun menuHttp4kFormsMultipartOfWordStack(wor_s: Stack<String>) {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    if(isTrace(here)) println ("$here: input wor_s '$wor_s'")
+
+    try {
+ 	val wor = wor_s.pop()
+	val wor_3 = threeFirstCharactersOfStringOfCaller(wor, here)
+	if(isLoop(here)) println("$here: while wor '$wor'")
+	
+	when (wor_3) {
+	    "sta" -> {http4kFormsMultipartStandard()} 
+	    "len" -> {http4kFormsMultipartLens()}
+	    else -> {
+		fatalErrorPrint ("command were 'sta'ndard or 'len's","'$wor'", "Check input", here)
+	    } // else
+	} // when (wor_3)
+    } // try
+    catch (e: java.util.EmptyStackException) {
+	fatalErrorPrint ("command were -http4k forms multipart 'sta'ndard or 'len's","no arguments", "Complete input", here)
+    }
+    exiting(here)
+}
+
+fun menuHttp4kFormsOfWordStack(wor_s: Stack<String>) {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    if(isTrace(here)) println ("$here: input wor_s '$wor_s'")
+
+    try {
+ 	val wor = wor_s.pop()
+	val wor_3 = threeFirstCharactersOfStringOfCaller(wor, here)
+	if(isLoop(here)) println("$here: while wor '$wor'")
+	
+	when (wor_3) {
+	    "mul" -> {menuHttp4kFormsMultipartOfWordStack(wor_s)} 
+	    "uni" -> {menuHttp4kFormsUnipartOfWordStack(wor_s)} 
+	    else -> {
+		fatalErrorPrint ("command were 'mul'tipart or 'uni'part","'$wor'", "Check input", here)
+	    } // else
+	} // when (wor_3)
+    } // try
+    catch (e: java.util.EmptyStackException) {
+	fatalErrorPrint ("command were -http4k forms 'mul'tipart or 'uni'part","no arguments", "Complete input", here)
+    }
+    exiting(here)
+}
+
+fun menuHttp4kFormsUnipartOfWordStack(wor_s: Stack<String>) {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    if(isTrace(here)) println ("$here: input wor_s '$wor_s'")
+
+    try {
+ 	val wor = wor_s.pop()
+	val wor_3 = threeFirstCharactersOfStringOfCaller(wor, here)
+	if(isLoop(here)) println("$here: while wor '$wor'")
+	
+	when (wor_3) {
+	    "sta" -> {http4kFormsUnipartStandard()} 
+	    "len" -> {http4kFormsUnipartLens()}
+	    else -> {
+		fatalErrorPrint ("command were 'sta'ndard or 'len's","'$wor'", "Check input", here)
+	    } // else
+	} // when (wor_3)
+    } // try
+    catch (e: java.util.EmptyStackException) {
+	fatalErrorPrint ("command were -http4k forms unipart 'sta'ndard or 'len's","no arguments", "Complete input", here)
+    }
+    exiting(here)
+}
+
 fun menuHttp4kOfWordList(wor_l: List<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
@@ -714,6 +757,8 @@ fun menuHttp4kOfWordList(wor_l: List<String>) {
     // Ex.: -http4k routes simple
     // Ex.: -http4k routes nestable
     // Ex.: -http4k server jetty start
+    // Ex.: -http4k server function
+    // Ex.: -http4k server filtered
     // Ex.: -http4k server sun start
 
     var done = false
@@ -774,81 +819,6 @@ fun menuHttp4kRoutesOfWordStack(wor_s: Stack<String>) {
     exiting(here)
 }
 
-fun menuHttp4kFormsOfWordStack(wor_s: Stack<String>) {
-    val (here, caller) = moduleHereAndCaller()
-    entering(here, caller)
-
-    if(isTrace(here)) println ("$here: input wor_s '$wor_s'")
-
-    try {
- 	val wor = wor_s.pop()
-	val wor_3 = threeFirstCharactersOfStringOfCaller(wor, here)
-	if(isLoop(here)) println("$here: while wor '$wor'")
-	
-	when (wor_3) {
-	    "mul" -> {menuHttp4kFormsMultipartOfWordStack(wor_s)} 
-	    "uni" -> {menuHttp4kFormsUnipartOfWordStack(wor_s)} 
-	    else -> {
-		fatalErrorPrint ("command were 'mul'tipart or 'uni'part","'$wor'", "Check input", here)
-	    } // else
-	} // when (wor_3)
-    } // try
-    catch (e: java.util.EmptyStackException) {
-	fatalErrorPrint ("command were -http4k forms 'mul'tipart or 'uni'part","no arguments", "Complete input", here)
-    }
-    exiting(here)
-}
-
-fun menuHttp4kFormsMultipartOfWordStack(wor_s: Stack<String>) {
-    val (here, caller) = moduleHereAndCaller()
-    entering(here, caller)
-
-    if(isTrace(here)) println ("$here: input wor_s '$wor_s'")
-
-    try {
- 	val wor = wor_s.pop()
-	val wor_3 = threeFirstCharactersOfStringOfCaller(wor, here)
-	if(isLoop(here)) println("$here: while wor '$wor'")
-	
-	when (wor_3) {
-	    "sta" -> {http4kFormsMultipartStandard()} 
-	    "len" -> {http4kFormsMultipartLens()}
-	    else -> {
-		fatalErrorPrint ("command were 'sta'ndard or 'len's","'$wor'", "Check input", here)
-	    } // else
-	} // when (wor_3)
-    } // try
-    catch (e: java.util.EmptyStackException) {
-	fatalErrorPrint ("command were -http4k forms multipart 'sta'ndard or 'len's","no arguments", "Complete input", here)
-    }
-    exiting(here)
-}
-
-fun menuHttp4kFormsUnipartOfWordStack(wor_s: Stack<String>) {
-    val (here, caller) = moduleHereAndCaller()
-    entering(here, caller)
-
-    if(isTrace(here)) println ("$here: input wor_s '$wor_s'")
-
-    try {
- 	val wor = wor_s.pop()
-	val wor_3 = threeFirstCharactersOfStringOfCaller(wor, here)
-	if(isLoop(here)) println("$here: while wor '$wor'")
-	
-	when (wor_3) {
-	    "sta" -> {http4kFormsUnipartStandard()} 
-	    "len" -> {http4kFormsUnipartLens()}
-	    else -> {
-		fatalErrorPrint ("command were 'sta'ndard or 'len's","'$wor'", "Check input", here)
-	    } // else
-	} // when (wor_3)
-    } // try
-    catch (e: java.util.EmptyStackException) {
-	fatalErrorPrint ("command were -http4k forms unipart 'sta'ndard or 'len's","no arguments", "Complete input", here)
-    }
-    exiting(here)
-}
-
 fun menuHttp4kServerOfWordStack(wor_s: Stack<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
@@ -864,6 +834,8 @@ fun menuHttp4kServerOfWordStack(wor_s: Stack<String>) {
 	
 	when (wor_3) {
 	    "hel" -> {printHelpOfString("-http4k server")}
+	    "jet" -> {menuHttp4kServerJettyOfWordStack(wor_s)}
+	    "sun" -> {menuHttp4kServerSunHttpOfWordStack(wor_s)}
 	    "fun" -> {http4kServerAsAFunction()}
 	    "fil" -> {http4kServerFilteredJetty()} // Improve subMenu
 	    else -> {
@@ -972,20 +944,6 @@ fun wrapperExecuteHttp4kOfWordList (wor_l: List<String>) {
     entering(here, caller)
 
     menuHttp4kOfWordList(wor_l)
-    
-    exiting(here)
-}
-
-fun wrapperExecuteServerOfWordStack (wor_s: Stack<String>) {
-    val (here, caller) = moduleHereAndCaller()
-    entering(here, caller)
-
-    if (isTrace(here)) println("$here: input wor_s '$wor_s'")
-    try {
-	executeServerOfWordStack(wor_s)
-    }
-    catch (e: java.net.ConnectException){
-	fatalErrorPrint ("Connection to 127.0.0.1:5001", "Connection refused", "launch Port :\n\tgo to minichain jsm; . config.sh; ipmsd.sh", here)}
     
     exiting(here)
 }
