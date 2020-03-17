@@ -34,16 +34,17 @@ import org.http4k.core.with
 import org.http4k.filter.CachingFilters
 import org.http4k.filter.DebuggingFilters.PrintRequestAndResponse
 import org.http4k.filter.ServerFilters
+import org.http4k.hamkrest.hasStatus
 import org.http4k.lens.FormField
 import org.http4k.lens.Header
 import org.http4k.lens.LensFailure
 import org.http4k.lens.MultipartForm
 import org.http4k.lens.MultipartFormField
 import org.http4k.lens.MultipartFormFile
-import org.http4k.lens.multipartForm
 import org.http4k.lens.Validator
 import org.http4k.lens.WebForm
 import org.http4k.lens.int
+import org.http4k.lens.multipartForm
 import org.http4k.lens.webForm
 import org.http4k.routing.ResourceLoader.Companion.Classpath
 import org.http4k.routing.bind
@@ -71,6 +72,8 @@ fun executeExampleOfWordStack(wor_s: Stack<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
+    // Ex.: --args="-http4k example"
+    
     // http4kInMemoryResponse() ---->
     // we can bind HttpHandlers (which are just functions
     //    from  Request -> Response) to paths/methods to create a Route,
@@ -96,7 +99,7 @@ fun executeExampleOfWordStack(wor_s: Stack<String>) {
 //    hello Bob
      // <----- http4kInMemoryResponse()
 
-    // http4kServerFilteredJetty() ---->
+    // http4kServerJettyFiltered() ---->
     // this is a Filter - it performs pre/post processing on a request or response
     val timingFilter = Filter {
         next: HttpHandler ->
@@ -117,7 +120,7 @@ fun executeExampleOfWordStack(wor_s: Stack<String>) {
     // only 1 LOC to mount an app and start it in a container
     filteredApp.asServer(Jetty(9000)).start()
 
-    // <---- http4kServerFilteredJetty()
+    // <---- http4kServerJettyFiltered()
 
     // http4kClientResponse() ---->
     // HTTP clients are also HttpHandlers!
@@ -139,65 +142,6 @@ fun executeExampleOfWordStack(wor_s: Stack<String>) {
 //    hello Bob
     // <---- http4kClientResponse()
 
-    exiting(here)
-}
-
-fun menuHttp4kServerJettyOfWordStack(wor_s: Stack<String>) {
-    val (here, caller) = moduleHereAndCaller()
-    entering(here, caller)
-    
-    // Ex.: -http4k server jetty start
-    // Ex.: -http4k server jetty stop	
-
-    var done = false
-    if(isTrace(here)) println ("$here: input wor_s '$wor_s'")
-
-    while (!done) {
-	try {
-	    val wor = wor_s.pop()
-	    val wor_3 = threeFirstCharactersOfStringOfCaller(wor, here)
-	    if(isLoop(here)) println("$here: while wor '$wor'")
-	    
-	    when (wor_3) {
-		"sta" -> {http4kServerJettyStart()}
-		"sto" -> {
-//		    jettyServer.stop()
-		    println ("$here: jettyServer has been stopped")
-		}
-		else -> {
-		    fatalErrorPrint ("$here: command were 'jetty start|stop","'-server $wor'", "Check input", here)
-		}
-	    }// when (wor)
-	} // try
-	catch (e: java.util.EmptyStackException) {done = true} // catch
-    } // while
-    exiting(here)
-}
-
-fun menuHttp4kServerSunHttpOfWordStack(wor_s: Stack<String>) {
-    val (here, caller) = moduleHereAndCaller()
-    entering(here, caller)
-    
-    // Ex.: -http4k server sun start
-
-    var done = false
-    if(isTrace(here)) println ("$here: input wor_s '$wor_s'")
-    
-    while (!done) {
-	try {
-	    val wor = wor_s.pop()
-	    val wor_3 = threeFirstCharactersOfStringOfCaller(wor, here)
-	    if(isLoop(here)) println("$here: while wor '$wor'")
-	    
-	    when (wor_3) {
-		"sta" -> {http4kServerSunHttpStart()}
-		else -> {
-		    fatalErrorPrint ("$here: command were 'sun start|stop","'-server $wor'", "Check input", here)
-		}
-	    }// when (wor)
-	} // try
-	catch (e: java.util.EmptyStackException) {done = true} // catch
-    } // while
     exiting(here)
 }
 
@@ -237,13 +181,28 @@ fun http4kClientResponse () {
 
     // -http4k client response
     // HTTP clients are also HttpHandlers!
+    // Improve get the Error
+    
     
     val client: HttpHandler = OkHttp()
-    // Improve get the Error 
     val networkResponse: Response = client(Request(GET, "http://localhost:9000/greet/Bob"))
-    println("$here: networkResponse")
-    println(networkResponse)
 
+    println()
+    println("$here: networkResponse is")
+    println(networkResponse)
+    println()
+
+    if(Response(OK) == hasStatus(OK)){ // Improve this does not Work
+	   println("$here: networkResponse is OK")
+       }
+       else {
+	   println("$here: networkResponse is NOT OK")
+       }
+    
+    val pattern = Regex("Client Error: Connection Refused")
+    if(pattern.containsMatchIn(networkResponse.toString())){
+	fatalErrorPrint("server were started","it is not","run for example : -http4k server jetty start", here)
+    }
 // Produces:
 //    Request to /api/greet/Bob took 1ms
 //    HTTP/1.1 200
@@ -552,7 +511,7 @@ fun http4kServerAsAFunction() {
     exiting(here)
 }
 
-fun http4kServerFilteredJetty() {
+fun http4kServerJettyFiltered() {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
@@ -756,9 +715,9 @@ fun menuHttp4kOfWordList(wor_l: List<String>) {
     // Ex.: -http4k quickstart
     // Ex.: -http4k routes simple
     // Ex.: -http4k routes nestable
-    // Ex.: -http4k server jetty start
     // Ex.: -http4k server function
-    // Ex.: -http4k server filtered
+    // Ex.: -http4k server jetty filtered
+    // Ex.: -http4k server jetty start
     // Ex.: -http4k server sun start
 
     var done = false
@@ -819,6 +778,39 @@ fun menuHttp4kRoutesOfWordStack(wor_s: Stack<String>) {
     exiting(here)
 }
 
+fun menuHttp4kServerJettyOfWordStack(wor_s: Stack<String>) {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+    
+    // Ex.: -http4k server jetty start
+    // Ex.: -http4k server jetty filtered	
+
+    var done = false
+    if(isTrace(here)) println ("$here: input wor_s '$wor_s'")
+
+    while (!done) {
+	try {
+	    val wor = wor_s.pop()
+	    val wor_3 = threeFirstCharactersOfStringOfCaller(wor, here)
+	    if(isLoop(here)) println("$here: while wor '$wor'")
+	    
+	    when (wor_3) {
+		"sta" -> {http4kServerJettyStart()}
+		"fil" -> {http4kServerJettyFiltered()} 
+		"sto" -> {
+//		    jettyServer.stop()
+		    println ("$here: jettyServer has been stopped")
+		}
+		else -> {
+		    fatalErrorPrint ("$here: command were 'jetty start|stop","'-server $wor'", "Check input", here)
+		}
+	    }// when (wor)
+	} // try
+	catch (e: java.util.EmptyStackException) {done = true} // catch
+    } // while
+    exiting(here)
+}
+
 fun menuHttp4kServerOfWordStack(wor_s: Stack<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
@@ -826,6 +818,9 @@ fun menuHttp4kServerOfWordStack(wor_s: Stack<String>) {
     if(isTrace(here)) println ("$here: input wor_s '$wor_s'")
 
     // --args="-http4k server function"
+    // --args="-http4k server jetty start"
+    // --args="-http4k server sun start"
+    // --args="-http4k server filtered jetty"
     
     try {
  	val wor = wor_s.pop()
@@ -837,7 +832,6 @@ fun menuHttp4kServerOfWordStack(wor_s: Stack<String>) {
 	    "jet" -> {menuHttp4kServerJettyOfWordStack(wor_s)}
 	    "sun" -> {menuHttp4kServerSunHttpOfWordStack(wor_s)}
 	    "fun" -> {http4kServerAsAFunction()}
-	    "fil" -> {http4kServerFilteredJetty()} // Improve subMenu
 	    else -> {
 		fatalErrorPrint ("command were 'fun'ction or 'fil'tered","'$wor'", "Check input", here)
 	    } // else
@@ -847,6 +841,33 @@ fun menuHttp4kServerOfWordStack(wor_s: Stack<String>) {
 	fatalErrorPrint ("command were -http4k server 'fun'ction|'fil'tered","no arguments", "Complete input", here)
     }
     
+    exiting(here)
+}
+
+fun menuHttp4kServerSunHttpOfWordStack(wor_s: Stack<String>) {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+    
+    // Ex.: -http4k server sun start
+
+    var done = false
+    if(isTrace(here)) println ("$here: input wor_s '$wor_s'")
+    
+    while (!done) {
+	try {
+	    val wor = wor_s.pop()
+	    val wor_3 = threeFirstCharactersOfStringOfCaller(wor, here)
+	    if(isLoop(here)) println("$here: while wor '$wor'")
+	    
+	    when (wor_3) {
+		"sta" -> {http4kServerSunHttpStart()}
+		else -> {
+		    fatalErrorPrint ("$here: command were 'sun start|stop","'-server $wor'", "Check input", here)
+		}
+	    }// when (wor)
+	} // try
+	catch (e: java.util.EmptyStackException) {done = true} // catch
+    } // while
     exiting(here)
 }
 
