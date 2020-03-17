@@ -68,83 +68,6 @@ import org.http4k.server.asServer
 
 data class Name(val value: String)
 
-fun http4kServerJettyFull() {
-    val (here, caller) = moduleHereAndCaller()
-    entering(here, caller)
-
-    // Ex.: --args="-http4k example"
-    
-    // http4kInMemoryResponse() ---->
-    // we can bind HttpHandlers (which are just functions
-    //    from  Request -> Response) to paths/methods to create a Route,
-    // then combine many Routes together to make another HttpHandler
-    
-    val app: HttpHandler = routes(
-        "/ping" bind GET to { _: Request -> Response(OK).body("pong!") },
-        "/greet/{name}" bind GET to { req: Request ->
-            val name: String? = req.path("name")
-            Response(OK).body("hello ${name ?: "anon!"}")
-        }
-    )
-
-    // call the handler in-memory without spinning up a server
-    val inMemoryResponse: Response = app(Request(GET, "/greet/Bob"))
-    println("$here: inMemoryResponse")
-    println(inMemoryResponse)
-
-// Produces:
-//    HTTP/1.1 200 OK
-//
-//
-//    hello Bob
-     // <----- http4kInMemoryResponse()
-
-    // http4kServerJettyFiltered() ---->
-    // this is a Filter - it performs pre/post processing on a request or response
-    val timingFilter = Filter {
-        next: HttpHandler ->
-        {
-            request: Request ->
-            val start = System.currentTimeMillis()
-            val response = next(request)
-            val latency = System.currentTimeMillis() - start
-            println("Request to ${request.uri} took ${latency}ms")
-            response
-        }
-    }
-
-    // we can "stack" filters to create reusable units, and then apply them to an HttpHandler
-    val compositeFilter = CachingFilters.Response.NoCache().then(timingFilter)
-    val filteredApp: HttpHandler = compositeFilter.then(app)
-
-    // only 1 LOC to mount an app and start it in a container
-    filteredApp.asServer(Jetty(9000)).start()
-
-    // <---- http4kServerJettyFiltered()
-
-    // http4kClientResponse() ---->
-    // HTTP clients are also HttpHandlers!
-    val client: HttpHandler = OkHttp()
-
-    val networkResponse: Response = client(Request(GET, "http://localhost:9000/greet/Bob"))
-    println("$here: networkResponse")
-    println(networkResponse)
-
-// Produces:
-//    Request to /api/greet/Bob took 1ms
-//    HTTP/1.1 200
-//    cache-control: private, must-revalidate
-//    content-length: 9
-//    date: Thu, 08 Jun 2017 13:01:13 GMT
-//    expires: 0
-//    server: Jetty(9.3.16.v20170120)
-//
-//    hello Bob
-    // <---- http4kClientResponse()
-
-    exiting(here)
-}
-
 fun http4kClientAsAFunction () {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
@@ -214,44 +137,6 @@ fun http4kClientResponse () {
 //
 //    hello Bob
  
-    exiting(here)
-}
-
-fun http4kFilteredTest() {
-    val (here, caller) = moduleHereAndCaller()
-    entering(here, caller)
-
-    // we can bind HttpHandlers (which are just functions
-    //    from  Request -> Response) to paths/methods to create a Route,
-    // then combine many Routes together to make another HttpHandler
-    
-    val app: HttpHandler = routes(
-        "/ping" bind GET to { _: Request -> Response(OK).body("pong!") },
-        "/greet/{name}" bind GET to { req: Request ->
-            val name: String? = req.path("name")
-            Response(OK).body("hello ${name ?: "anon!"}")
-        }
-    )
-
-    val timingFilter = Filter {
-        next: HttpHandler ->
-        {
-            request: Request ->
-            val start = System.currentTimeMillis()
-            val response = next(request)
-            val latency = System.currentTimeMillis() - start
-            println("$here: Request to ${request.uri} took ${latency}ms")
-            response
-        }
-    }
-
-    val compositeFilter = CachingFilters.Response.NoCache().then(timingFilter)
-    val filteredApp: HttpHandler = compositeFilter.then(app)
-
-    filteredApp.asServer(Jetty(9000)).start()
-
-    app.asServer(Jetty(9000)).start()
-    
     exiting(here)
 }
 
@@ -387,6 +272,44 @@ fun http4kFormsUnipartStandard() {
 // Improve    assertEquals(listOf("55"), parameters["age"])
 // Improve    assertNull(parameters["height"])
 
+    exiting(here)
+}
+
+fun http4kFullTest() {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    // we can bind HttpHandlers (which are just functions
+    //    from  Request -> Response) to paths/methods to create a Route,
+    // then combine many Routes together to make another HttpHandler
+    
+    val app: HttpHandler = routes(
+        "/ping" bind GET to { _: Request -> Response(OK).body("pong!") },
+        "/greet/{name}" bind GET to { req: Request ->
+            val name: String? = req.path("name")
+            Response(OK).body("hello ${name ?: "anon!"}")
+        }
+    )
+
+    val timingFilter = Filter {
+        next: HttpHandler ->
+        {
+            request: Request ->
+            val start = System.currentTimeMillis()
+            val response = next(request)
+            val latency = System.currentTimeMillis() - start
+            println("$here: Request to ${request.uri} took ${latency}ms")
+            response
+        }
+    }
+
+    val compositeFilter = CachingFilters.Response.NoCache().then(timingFilter)
+    val filteredApp: HttpHandler = compositeFilter.then(app)
+
+    filteredApp.asServer(Jetty(9000)).start()
+
+    app.asServer(Jetty(9000)).start()
+    
     exiting(here)
 }
 
@@ -535,6 +458,83 @@ fun http4kServerJettyFiltered() {
 
     // only 1 LOC to mount an app and start it in a container
     filteredApp.asServer(Jetty(9000)).start()
+
+    exiting(here)
+}
+
+fun http4kServerJettyFull() {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    // Ex.: --args="-http4k example"
+    
+    // http4kInMemoryResponse() ---->
+    // we can bind HttpHandlers (which are just functions
+    //    from  Request -> Response) to paths/methods to create a Route,
+    // then combine many Routes together to make another HttpHandler
+    
+    val app: HttpHandler = routes(
+        "/ping" bind GET to { _: Request -> Response(OK).body("pong!") },
+        "/greet/{name}" bind GET to { req: Request ->
+            val name: String? = req.path("name")
+            Response(OK).body("hello ${name ?: "anon!"}")
+        }
+    )
+
+    // call the handler in-memory without spinning up a server
+    val inMemoryResponse: Response = app(Request(GET, "/greet/Bob"))
+    println("$here: inMemoryResponse")
+    println(inMemoryResponse)
+
+// Produces:
+//    HTTP/1.1 200 OK
+//
+//
+//    hello Bob
+     // <----- http4kInMemoryResponse()
+
+    // http4kServerJettyFiltered() ---->
+    // this is a Filter - it performs pre/post processing on a request or response
+    val timingFilter = Filter {
+        next: HttpHandler ->
+        {
+            request: Request ->
+            val start = System.currentTimeMillis()
+            val response = next(request)
+            val latency = System.currentTimeMillis() - start
+            println("Request to ${request.uri} took ${latency}ms")
+            response
+        }
+    }
+
+    // we can "stack" filters to create reusable units, and then apply them to an HttpHandler
+    val compositeFilter = CachingFilters.Response.NoCache().then(timingFilter)
+    val filteredApp: HttpHandler = compositeFilter.then(app)
+
+    // only 1 LOC to mount an app and start it in a container
+    filteredApp.asServer(Jetty(9000)).start()
+
+    // <---- http4kServerJettyFiltered()
+
+    // http4kClientResponse() ---->
+    // HTTP clients are also HttpHandlers!
+    val client: HttpHandler = OkHttp()
+
+    val networkResponse: Response = client(Request(GET, "http://localhost:9000/greet/Bob"))
+    println("$here: networkResponse")
+    println(networkResponse)
+
+// Produces:
+//    Request to /api/greet/Bob took 1ms
+//    HTTP/1.1 200
+//    cache-control: private, must-revalidate
+//    content-length: 9
+//    date: Thu, 08 Jun 2017 13:01:13 GMT
+//    expires: 0
+//    server: Jetty(9.3.16.v20170120)
+//
+//    hello Bob
+    // <---- http4kClientResponse()
 
     exiting(here)
 }
@@ -703,7 +703,7 @@ fun menuHttp4kFormsUnipartOfWordStack(wor_s: Stack<String>) {
     exiting(here)
 }
 
-fun menuHttp4kOfWordList(wor_l: List<String>) {
+fun menuHttp4kOfWordStack(wor_s: Stack<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
     
@@ -717,14 +717,11 @@ fun menuHttp4kOfWordList(wor_l: List<String>) {
     // Ex.: -http4k routes nestable
     // Ex.: -http4k server function
     // Ex.: -http4k server jetty filtered
+    // Ex.: -http4k server jetty full 
     // Ex.: -http4k server jetty start
     // Ex.: -http4k server sun start
 
-    var done = false
-    if(isTrace(here)) println ("$here: input wor_l '$wor_l'")
-    var wor_s = wordStackOfWordList(wor_l)
-    
-    while (!done) {
+    if(isTrace(here)) println ("$here: input wor_s '$wor_s'")
 	try {
  	    val wor = wor_s.pop()
 	    val wor_3 = threeFirstCharactersOfStringOfCaller(wor, here)
@@ -732,8 +729,8 @@ fun menuHttp4kOfWordList(wor_l: List<String>) {
 	    
 	    when (wor_3) {
 		"cli" -> {menuHttp4kClientOfWordStack(wor_s)}
-		"fil" -> {http4kFilteredTest() }
-		"get" -> {wrapperExecuteHttp4kGetOfWordStack(wor_s)}
+		"ful" -> {http4kFullTest() }
+		"get" -> {menuHttp4kClientUrlGetOfWordStack(wor_s)}
 		"hel" -> {printHelpOfString("-http4k ")}
 		"inm" -> {http4kInMemoryResponse()}
 		"qui" -> {http4kQuickStart()}
@@ -741,14 +738,13 @@ fun menuHttp4kOfWordList(wor_l: List<String>) {
 		"rou" -> {menuHttp4kRoutesOfWordStack(wor_s)}
 		"ser" -> {menuHttp4kServerOfWordStack(wor_s)}
 		else -> {
-		    fatalErrorPrint ("command were 'exa'mple or 'get' or 'qui'ckstart","'$wor'", "Check input", here)
+		    fatalErrorPrint ("command were client|full|get|help|inmemory|forms|routes|server","'$wor'", "Check input", here)
 		} // else
 	    } // when (wor_3)
 	} // try
-	catch (e: java.util.EmptyStackException) {done = true} // catch
-	
-    } // while
-    
+	catch (e: java.util.EmptyStackException) {
+	    fatalErrorPrint ("command were client|full|get|help|inmemory|forms|routes|server","no command", "Check input", here)
+	    }
     exiting(here)
 }
 
@@ -872,14 +868,18 @@ fun menuHttp4kServerSunHttpOfWordStack(wor_s: Stack<String>) {
     exiting(here)
 }
 
-fun responseFromGetRequestOfWordStack(wor_s: Stack<String>) {
+fun menuHttp4kClientUrlGetOfWordStack(wor_s: Stack<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
-    // Needs to launch server first (with -http4k example)
+    // Same as http4kClientResponse
+    // Needs to launch server first (with -http4k server jetty full)
     // Ex.: -http4k get port 9000 host localhost route /greet/Jules
 
     if(isTrace(here)) println ("$here: input wor_s '$wor_s'")
+    if (wor_s.isEmpty()){
+	fatalErrorPrint ("command were -http4k get 'hos't or 'por't or 'rou'te ","no get arguments", "Check input", here)
+    }
 
     /* Local variables */
     var hosStr =""
@@ -928,25 +928,16 @@ fun responseFromGetRequestOfWordStack(wor_s: Stack<String>) {
 
     if(isDebug(here)) println ("$here: url '$url'")
     
-    val networkResponse: Response = client(Request(GET, "http://localhost:9000/greet/Bob"))
+    val networkResponse: Response = client(Request(GET, url))
 
     println("$here: networkResponse")
     println(networkResponse)
 
-    exiting(here)
-}
-
-fun wrapperExecuteHttp4kGetOfWordStack (wor_s: Stack<String>) {
-    val (here, caller) = moduleHereAndCaller()
-    entering(here, caller)
-
-    if (isTrace(here)) println("$here: input wor_s '$wor_s'")
-    try {
-	responseFromGetRequestOfWordStack(wor_s)
+    val pattern = Regex("Client Error: Connection Refused")
+    if(pattern.containsMatchIn(networkResponse.toString())){
+	fatalErrorPrint("server were started","it is not","run for example : -http4k server jetty start", here)
     }
-    catch (e: java.net.ConnectException){
-	fatalErrorPrint ("Connection to Host:Port", "Connection refused", "Check", here)}
-    
+
     exiting(here)
 }
 
@@ -954,7 +945,8 @@ fun wrapperExecuteHttp4kOfWordList (wor_l: List<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
-    menuHttp4kOfWordList(wor_l)
+    val wor_s = wordStackOfWordList(wor_l)
+    menuHttp4kOfWordStack(wor_s)
     
     exiting(here)
 }
