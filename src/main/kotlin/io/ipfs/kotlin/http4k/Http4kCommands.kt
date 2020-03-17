@@ -68,7 +68,7 @@ import org.http4k.server.asServer
 
 data class Name(val value: String)
 
-fun executeExampleOfWordStack(wor_s: Stack<String>) {
+fun http4kServerJettyFull() {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
@@ -740,7 +740,6 @@ fun menuHttp4kOfWordList(wor_l: List<String>) {
 		"for" -> {menuHttp4kFormsOfWordStack(wor_s)}
 		"rou" -> {menuHttp4kRoutesOfWordStack(wor_s)}
 		"ser" -> {menuHttp4kServerOfWordStack(wor_s)}
-	    	"exa" -> {wrapperExecuteExampleOfWordStack(wor_s)}
 		else -> {
 		    fatalErrorPrint ("command were 'exa'mple or 'get' or 'qui'ckstart","'$wor'", "Check input", here)
 		} // else
@@ -783,7 +782,8 @@ fun menuHttp4kServerJettyOfWordStack(wor_s: Stack<String>) {
     entering(here, caller)
     
     // Ex.: -http4k server jetty start
-    // Ex.: -http4k server jetty filtered	
+    // Ex.: -http4k server jetty filtered
+    // Ex.: -http4k server jetty full	
 
     var done = false
     if(isTrace(here)) println ("$here: input wor_s '$wor_s'")
@@ -795,8 +795,9 @@ fun menuHttp4kServerJettyOfWordStack(wor_s: Stack<String>) {
 	    if(isLoop(here)) println("$here: while wor '$wor'")
 	    
 	    when (wor_3) {
+		"fil" -> {http4kServerJettyFiltered()}
+		"ful" -> {http4kServerJettyFull()} 
 		"sta" -> {http4kServerJettyStart()}
-		"fil" -> {http4kServerJettyFiltered()} 
 		"sto" -> {
 //		    jettyServer.stop()
 		    println ("$here: jettyServer has been stopped")
@@ -932,17 +933,6 @@ fun responseFromGetRequestOfWordStack(wor_s: Stack<String>) {
     println("$here: networkResponse")
     println(networkResponse)
 
-    exiting(here)
-}
-
-fun wrapperExecuteExampleOfWordStack(wor_s: Stack<String>) {
-    val (here, caller) = moduleHereAndCaller()
-    entering(here, caller)
-
-    if (isTrace(here)) println("$here: input wor_s '$wor_s'")
-
-    executeExampleOfWordStack(wor_s)
-    
     exiting(here)
 }
 
