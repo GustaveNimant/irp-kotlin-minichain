@@ -3,8 +3,16 @@ package io.ipfs.kotlin
 import java.io.File
 import java.util.Stack
 
+// https://iph.heliohost.org/cgi-bin/posted.pl
+// https://www.postman.com/
+// https://docs.postman-echo.com/?version=latest
+// https://postman-echo.com/ip
+// https://iph.heliohost.org/cgi-bin/remote_addr.pl
+
 /**
- * --args="-port webui 5001 -write spot"
+ * Improve : missing local Ip from network card 
+ * Example : --args="-write spot"
+ * Author : Emile Achadde 17 mars 2020 at 11:24:18+01:00
  */
 
 fun printSpotOfWordStack(wor_s: Stack<String>) {
@@ -58,11 +66,21 @@ fun provideSpotData(): String {
     entering(here, caller)
 
     val (peeId, tic, ipSys) = provideSpotTriple()
+
+    val ticInt = tic.toInt()
+    val ipRedStr = ipSys.replace(".", "")
+    val ipSInt = ipRedStr.toInt()
+    
+    if(isVerbose(here)) println ("$here: ticInt ticInt")
+    if(isVerbose(here)) println ("$here: ipSInt ipSInt")
+
+    val spot = ticInt.xor(ipSInt)
     
     var result = ""
     result += "--- # spot for $peeId\n"
     result += "tic: $tic\n"
-    result += "ip: $ipSys"
+    result += "ip: $ipSys\n"
+    result += "spot: $spot"
     
     if(isTrace(here)) {
 	println ("$here: output result:")
@@ -76,7 +94,7 @@ fun provideTic(): String {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
-    val timLon = getTime()
+    val timLon = getTime()/1000
     val result = timLon.toString()
 
     exiting(here)

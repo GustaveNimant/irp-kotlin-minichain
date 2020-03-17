@@ -83,7 +83,6 @@ fun getTime (): Long {
 
 fun main(args: Array<String>) {
     val (here, caller) = moduleHereAndCaller()
-    entering(here, caller)
 
     val parMap_ = parameterMapOfArguments(args)
 
@@ -125,8 +124,6 @@ fun main(args: Array<String>) {
     mainMenu()
     
     endProgram()
-    
-    exiting(here)
 }
 
 fun mainMenu () {

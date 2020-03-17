@@ -5,6 +5,11 @@ import java.io.*;
 import java.util.*; 
 import java.net.InetAddress; 
 
+/**
+ * Improve : translate in Kotlin-native http4k
+ * Author : Emile Achadde 17 mars 2020 at 11:29:54+01:00
+ */
+
 fun localIpAddress(): String {
     val localHost = InetAddress.getLocalHost()
     val result = (localHost.getHostAddress()).trim()

@@ -50,6 +50,7 @@ dependencies {
     implementation("com.squareup.okio:okio:${extra["okioVersion"]}")
     //implementation("com.squareup.okhttp3:okhttp:${extra["okhttpVersion"]}")
     implementation("org.http4k:http4k-core:${extra["http4kVersion"]}")
+        implementation("org.http4k:http4k-multipart:${extra["http4kVersion"]}")
     implementation("org.http4k:http4k-server-jetty:${extra["http4kVersion"]}")
     implementation("org.http4k:http4k-client-okhttp:${extra["http4kVersion"]}")
     implementation("org.http4k:http4k-client-apache:${extra["http4kVersion"]}")
