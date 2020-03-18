@@ -85,21 +85,23 @@ fun main(args: Array<String>) {
     val (here, caller) = moduleHereAndCaller()
 
     val parMap_ = parameterMapOfArguments(args)
-
-    // verbose full
+    val parMap__ = parMap_.minus("verbose")
+    val isVerboseFull = if(parMap_.containsKey("verbose")) {
+    	(parMap_.get("verbose")!!.first() == "full")
+    } else {false}
+    
     var parMutMap = mutableMapOf<String, List<String>>()
-    if(parMap_.containsKey("verbose")) {
-	if(parMap_.get("verbose")!!.first() == "full"){
-	    parMutMap.put("debug", listOf("all"))
-	    parMutMap.put("enterexit", listOf("all"))
-	    parMutMap.put("loop", listOf("all"))
-	    parMutMap.put("trace", listOf("all"))
-	    parMutMap.put("verbose", listOf("all"))
-	    parMutMap.put("when", listOf("all"))
-	}
+    if(isVerboseFull){
+	parMutMap.put("debug", listOf("all"))
+	parMutMap.put("enterexit", listOf("all"))
+	parMutMap.put("loop", listOf("all"))
+	parMutMap.put("trace", listOf("all"))
+	parMutMap.put("verbose", listOf("all"))
+	parMutMap.put("when", listOf("all"))
     }
-    parMutMap.putAll(parMap_)
+    parMutMap.putAll(parMap__)
 
+	
     // Globalization for Trace etc ...
     ParameterMap = parMutMap.toMap() 
 

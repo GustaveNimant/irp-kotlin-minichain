@@ -25,6 +25,7 @@ import org.http4k.core.Method.POST
 import org.http4k.core.MultipartFormBody
 import org.http4k.core.Request
 import org.http4k.core.Response
+import org.http4k.core.Status
 import org.http4k.core.Status.Companion.OK
 import org.http4k.core.body.form
 import org.http4k.core.getFirst
@@ -64,6 +65,7 @@ import org.http4k.server.asServer
 
 /**
  * Author : Emile Achadde 12 mars 2020 at 15:13:49+01:00
+ * Revision : Response.status done by Emile Achadde 18 mars 2020 at 19:20:17+01:00
  */
 
 data class Name(val value: String)
@@ -81,7 +83,7 @@ fun http4kClientAsAFunction () {
     exiting(here)
 }
 
-fun http4kClientGetOfUrlJson (url: String) {
+fun http4kClientGetOfUrl (url: String) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
     
@@ -104,36 +106,34 @@ fun http4kClientResponse () {
 
     // Ex.: -http4k client response
     // HTTP clients are also HttpHandlers!
-    // Improve get the Error
-    
     
     val client: HttpHandler = OkHttp()
     val request = Request(GET, "http://localhost:9000/greet/Bob")
-    println("$here: request starts here")
-    println(request)
-    println("$here: request ends here")
-    println("$here: toMessage starts here")
-    println(request.toMessage())
-    println("$here: toMessage ends here")
+
+    if(isVerbose(here)){
+	println("$here: request starts here")
+	println(request)
+	println("$here: request ends here")
+    }
 
     val networkResponse: Response = client(request)
 
-    println()
-    println("$here: networkResponse starts here")
-    println(networkResponse)
-    println("$here: networkResponse ends here")
-    println()
-
-    if(Response(OK) == hasStatus(OK)){ // Improve this does not Work
-	   println("$here: networkResponse is OK")
-       }
-       else {
-	   println("$here: networkResponse is NOT OK")
-       }
+    if(isVerbose(here)){
+	println("$here: networkResponse starts here")
+	println(networkResponse)
+	println("$here: networkResponse ends here")
+    }
     
-    val pattern = Regex("Client Error: Connection Refused")
-    if(pattern.containsMatchIn(networkResponse.toString())){
-	fatalErrorPrint("server were started","it is not","run for example : -http4k server jetty start", here)
+    val status = networkResponse.status
+    if (! status.successful) {
+	val description = status.description
+	val code = status.code
+	when(code) {
+	    503 ->
+		fatalErrorPrint("server were started ",description," run for example : -http4k server jetty start", here)
+	    else ->
+		fatalErrorPrint("Response were successful ",description,"Check", here)
+	}
     }
 // Produces:
 //    Request to /api/greet/Bob took 1ms
@@ -390,6 +390,7 @@ fun http4kIpfsPost() {
     println("$here: ApacheClient ends here")
 
     println("$here: client(request) starts here")
+    
     println(client(request))
     println("$here: client(request) ends here")
     
@@ -414,7 +415,7 @@ fun http4kQuickStart() {
     println ("$here: client $client")
     
     println(client(request))
-    
+
     jettyServer.stop()
 
     exiting(here)
@@ -658,6 +659,9 @@ fun menuHttp4kClientOfWordStack(wor_s: Stack<String>) {
 
     if(isTrace(here)) println ("$here: input wor_s '$wor_s'")
 
+    // Ex.: -http4k client function
+    // Ex.: -http4k client get http://82.67.137.54/js/json/files/test.json
+    
     try {
  	val wor = wor_s.pop()
 	val wor_3 = threeFirstCharactersOfStringOfCaller(wor, here)
@@ -665,18 +669,18 @@ fun menuHttp4kClientOfWordStack(wor_s: Stack<String>) {
 	
 	when (wor_3) {
 	    "fun" -> {http4kClientAsAFunction()}
-	    "jso" -> {
-		val urlJso = wor_s.pop()
-		http4kClientGetOfUrlJson(urlJso)
+	    "get" -> {
+		val url = wor_s.pop()
+		http4kClientGetOfUrl(url)
 	    }
 	    "res" -> {http4kClientResponse()}
 	    else -> {
-		fatalErrorPrint ("command were 'fun'ction or 'res'ponse","'$wor'", "Check input", here)
+		fatalErrorPrint ("command were 'fun'ction or 'get' or'res'ponse","'$wor'", "Check input", here)
 	    } // else
 	} // when (wor_3)
     } // try
     catch (e: java.util.EmptyStackException) {
-	fatalErrorPrint ("command were -http4k client 'fun'ction or 'res'ponse","no arguments", "Complete input", here)
+	fatalErrorPrint ("command were -http4k client 'fun'ction or 'get' or 'res'ponse","no arguments", "Complete input", here)
     }
     exiting(here)
 }

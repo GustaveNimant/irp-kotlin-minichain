@@ -1,0 +1,15 @@
+    val status = networkResponse.status
+    println()
+    println("$here: status is "+status)
+    val code = networkResponse.status.code
+    println("$here: status code is "+code)
+    val description = networkResponse.status.description
+    println("$here: status description '$description'")
+    val clientError = networkResponse.status.clientError
+    println("$here: status clientError '$clientError'")
+    val serverError = networkResponse.status.serverError
+    println("$here: status serverError '$serverError'")
+    val successful = networkResponse.status.successful
+    println("$here: status successful '$successful'")
+    println()
+
