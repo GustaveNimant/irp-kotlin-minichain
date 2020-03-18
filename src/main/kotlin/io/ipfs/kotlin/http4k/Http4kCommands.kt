@@ -108,11 +108,20 @@ fun http4kClientResponse () {
     
     
     val client: HttpHandler = OkHttp()
-    val networkResponse: Response = client(Request(GET, "http://localhost:9000/greet/Bob"))
+    val request = Request(GET, "http://localhost:9000/greet/Bob")
+    println("$here: request starts here")
+    println(request)
+    println("$here: request ends here")
+    println("$here: toMessage starts here")
+    println(request.toMessage())
+    println("$here: toMessage ends here")
+
+    val networkResponse: Response = client(request)
 
     println()
-    println("$here: networkResponse is")
+    println("$here: networkResponse starts here")
     println(networkResponse)
+    println("$here: networkResponse ends here")
     println()
 
     if(Response(OK) == hasStatus(OK)){ // Improve this does not Work
@@ -190,6 +199,7 @@ fun http4kFormsMultipartStandard() {
     val server = { req: Request ->
 		   val receivedForm = MultipartFormBody.from(req)
 		   println()
+		   println("$here: server receivedForm")
 		   println(receivedForm.fieldValues("field"))
 		   println(receivedForm.field("field2"))
 		   println(receivedForm.files("file"))
@@ -203,13 +213,22 @@ fun http4kFormsMultipartStandard() {
         .plus("field2" to MultipartFormField("my-value2", listOf("my-header" to "my-value")))
         .plus("file" to MultipartFormFile("image.txt", ContentType.OCTET_STREAM, "somebinarycontent".byteInputStream()))
 
-    // we need to set both the body AND the correct content type header on the the request
+    println()
+    println("$here: body starts here")
+    println(body)
+    println("$here: body ends here")
+    println()
+    
+    // we need to set both the body AND the correct content type header on the request
     val request = Request(POST, "http://localhost:8000")
         .header("content-type", "multipart/form-data; boundary=${body.boundary}")
         .body(body)
 
+    println("$here: body.boundary "+body.boundary)
+    println("$here: ApacheClient()(request) starts here")
     println(ApacheClient()(request))
-
+    println("$here: ApacheClient()(request) ends here")
+    
     server.stop()
  
     exiting(here)
@@ -347,6 +366,36 @@ fun http4kInMemoryResponse() {
     exiting(here)
 }
 
+fun http4kIpfsPost() {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    // http://127.0.0.1:5001/api/v0/<command>
+    // Ex.: -http4k ipfs post
+    
+    val spoDat = provideSpotData()
+    val request = Request(Method.POST, "http://localhost:5001/api/v0/files/write")
+	.form("file", spoDat)
+	.query("arg", "/etc/spot.yml")
+	.query("create", "true")
+	.query("parents", "true")
+	.header("Content-Type", "multipart/form-data;boundary=immutable-file-boundary-123")
+    println()
+    println("$here: request '$request'")
+    println()
+
+    println("$here: ApacheClient starts here")
+    val client = ApacheClient()
+    println ("$here: client $client")
+    println("$here: ApacheClient ends here")
+
+    println("$here: client(request) starts here")
+    println(client(request))
+    println("$here: client(request) ends here")
+    
+    exiting(here)
+}
+
 fun http4kQuickStart() {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
@@ -368,26 +417,6 @@ fun http4kQuickStart() {
     
     jettyServer.stop()
 
-    exiting(here)
-}
-
-fun http4kIpfsPost() {
-    val (here, caller) = moduleHereAndCaller()
-    entering(here, caller)
-
-    // http://127.0.0.1:5001/api/v0/<command>
-
-    val spoDat = provideSpotData()
-    val request = Request(Method.POST, "http://localhost:5001/api/v0/files/write")
-	.form("file",spoDat)
-	.query("arg", "/etc/spot.yml")
-	.query("create", "true")
-	.query("parents", "true")
-	.header("Content-Type", "multipart/form-data;boundary=immutable-file-boundary-123")
-    println()
-    println("$here: request '$request'")
-    println()
-    
     exiting(here)
 }
 
@@ -490,7 +519,7 @@ fun http4kServerJettyFull() {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
-    // Ex.: --args="-http4k example"
+    // Ex.: --args="-http4k server jetty full"
     
     // http4kInMemoryResponse() ---->
     // we can bind HttpHandlers (which are just functions
@@ -652,31 +681,6 @@ fun menuHttp4kClientOfWordStack(wor_s: Stack<String>) {
     exiting(here)
 }
 
-fun menuHttp4kIpfsOfWordStack(wor_s: Stack<String>) {
-    val (here, caller) = moduleHereAndCaller()
-    entering(here, caller)
-
-    if(isTrace(here)) println ("$here: input wor_s '$wor_s'")
-
-    try {
- 	val wor = wor_s.pop()
-	val wor_3 = threeFirstCharactersOfStringOfCaller(wor, here)
-	if(isLoop(here)) println("$here: while wor '$wor'")
-	
-	when (wor_3) {
-	    "pos" -> {http4kIpfsPost()}
-	    "hel" -> {printHelpOfString("ipfs ")}
-	    else -> {
-		fatalErrorPrint ("command were 'pos't","'$wor'", "Check input", here)
-	    } // else
-	} // when (wor_3)
-    } // try
-    catch (e: java.util.EmptyStackException) {
-	fatalErrorPrint ("command were -http4k ipfs 'pos't","no arguments", "Complete input", here)
-    }
-    exiting(here)
-}
-
 fun menuHttp4kClientUrlGetOfWordStack(wor_s: Stack<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
@@ -820,6 +824,31 @@ fun menuHttp4kFormsUnipartOfWordStack(wor_s: Stack<String>) {
     } // try
     catch (e: java.util.EmptyStackException) {
 	fatalErrorPrint ("command were -http4k forms unipart 'sta'ndard or 'len's","no arguments", "Complete input", here)
+    }
+    exiting(here)
+}
+
+fun menuHttp4kIpfsOfWordStack(wor_s: Stack<String>) {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    if(isTrace(here)) println ("$here: input wor_s '$wor_s'")
+
+    try {
+ 	val wor = wor_s.pop()
+	val wor_3 = threeFirstCharactersOfStringOfCaller(wor, here)
+	if(isLoop(here)) println("$here: while wor '$wor'")
+	
+	when (wor_3) {
+	    "pos" -> {http4kIpfsPost()}
+	    "hel" -> {printHelpOfString("ipfs ")}
+	    else -> {
+		fatalErrorPrint ("command were 'pos't","'$wor'", "Check input", here)
+	    } // else
+	} // when (wor_3)
+    } // try
+    catch (e: java.util.EmptyStackException) {
+	fatalErrorPrint ("command were -http4k ipfs 'pos't","no arguments", "Complete input", here)
     }
     exiting(here)
 }

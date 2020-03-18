@@ -152,7 +152,7 @@ fun mainMenu () {
 	    "end", "exi" -> {endProgram()}
 	    "gen" -> {wrapperExecuteGenerateOfWordList(wor_l)}
 	    "has" -> {wrapperExecuteHashOfWord(com)}
-	    "hel" -> {helpOfParameterMap(ParameterMap)}
+	    "hel" -> {wrapperExecuteHelpOfWordList(wor_l)}
 	    "hos" -> {wrapperExecuteHostOfWordList(wor_l)}
 	    "htt" -> {wrapperExecuteHttp4kOfWordList(wor_l)}
 	    "inp" -> {wrapperExecuteInputOfWordList(wor_l)}
@@ -219,13 +219,17 @@ fun wrapperExecuteHostOfWordList (wor_l: List<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
-    if (isTrace(here)) println("$here: input wor_l '$wor_l'")
-    try {
-	executeHostOfWordList(wor_l)
-    }
-    catch (e: java.net.ConnectException){
-	fatalErrorPrint ("Connection to 127.0.0.1:5001", "Connection refused", "launch Host :\n\tgo to minichain jsm; . config.sh; ipmsd.sh", here)}
+    executeHostOfWordList(wor_l)
     
+    exiting(here)
+}
+
+fun wrapperExecuteHelpOfWordList (wor_l: List<String>) {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    if (isTrace(here)) println("$here: input wor_l '$wor_l'")
+    printHelpOfStringList(wor_l)
     exiting(here)
 }
 

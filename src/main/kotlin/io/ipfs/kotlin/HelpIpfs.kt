@@ -17,15 +17,16 @@ fun helpList(): List<String> {
 	"gradlew run --args=\"-http4k client json http://82.67.137.54/js/files/test.json\"",
 	"gradlew run --args=\"-http4k client json https://xkcd.com/info.0.json\"",
 	"gradlew run --args=\"-http4k client response\"",
-	"gradlew run --args=\"-http4k example (launches serveur Jetty on localhost:9000)",
 	"gradlew run --args=\"-http4k forms lens\"",
 	"gradlew run --args=\"-http4k forms standard\"",
 	"gradlew run --args=\"-http4k get port 9000 host localhost route /greet/Jules\"",
 	"gradlew run --args=\"-http4k get port <port-type> host <host-type> route <route>(client OkHttp)",
 	"gradlew run --args=\"-http4k inmemory (server + client /greet/Bob)",
+	"gradlew run --args=\"-http4k ipfs post (post spotData)",
 	"gradlew run --args=\"-http4k quickstart (elementary example server + client)",
 	"gradlew run --args=\"-http4k server filtered\"",
 	"gradlew run --args=\"-http4k server function\"",
+	"gradlew run --args=\"-http4k server jetty full",
 	"gradlew run --args=\"-ipfs add [Options] <path> : add a file or a directory to Ipfs https://docs.ipfs.io/reference/api/cli/#ipfs-add",
 	"gradlew run --args=\"-input <file-path> : stores file-path in ParameterMap",
 	"gradlew run --args=\"-ipaddress local|system",
@@ -50,7 +51,7 @@ fun helpList(): List<String> {
 	"gradlew run --args=\"-trace <function name>|all\" print input and output data",
 	"gradlew run --args=\"-verbose<function name>|all\"",
 	"gradlew run --args=\"-when<function name>|all\" print message inside a when",
-	"gradlew run --args=\"-write spot <file-path|generator/spot.yml>",
+	"gradlew run --args=\"-write spot <file-path:./generator/spot.yml>",
 	"gradlew run --args=\"-url localIpfsApi|localServer|remote (uses -port and -host)\""
 	)
 
@@ -97,26 +98,15 @@ fun helpListOfStringList(str_l: List<String>): List<String> {
 	return result 
 }
 
-fun helpOfParameterMap(parMap: Map<String, List<String>>) {
-    val (here, caller) = moduleHereAndCaller()
-    entering(here, caller)
-
-    if(isTrace(here)) println ("$here: input parMap $parMap")
-    
-    if (parMap.containsKey("help"))
-    { 
-      val str_l = parMap.getValue("help")
-      if(isVerbose(here)) println ("$here: str_l $str_l")
-      val hel_l = helpListOfStringList(str_l)
-      printOfStringList(hel_l)
-
-      exiting(here)
-      exitProcess(0)
-    }
-}
-
 fun printHelpOfString(str: String) {
     val strHel = stringHelpOfString(str)
+    println()
+    println(strHel)
+    println()
+}
+
+fun printHelpOfStringList(str_l: List<String>) {
+    val strHel = stringHelpOfStringList(str_l)
     println()
     println(strHel)
     println()
@@ -126,5 +116,16 @@ fun stringHelpOfString(str: String): String {
     val hel_l = helpList()
     val h_l = hel_l.filter({h -> h.contains(str)})
     val result = stringOfGlueOfStringList("\n", h_l)
+    return result
+}
+
+fun stringHelpOfStringList(str_l: List<String>): String {
+    var hel_l = helpList()
+    var h_l = listOf("")
+    for (str in str_l) {
+	h_l = hel_l
+	hel_l = h_l.filter({h -> h.contains(str)})
+    }
+    val result = stringOfGlueOfStringList("\n", hel_l)
     return result
 }

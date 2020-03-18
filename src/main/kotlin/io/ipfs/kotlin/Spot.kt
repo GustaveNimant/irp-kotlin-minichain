@@ -11,7 +11,9 @@ import java.util.Stack
 
 /**
  * Improve : missing local Ip from network card 
- * Example : --args="-write spot"
+ * Ex.: --args="-write spot [file-path:.generator/spot.yml]"
+ * Ex.: --args="-print spot data"
+ * Ex.: --args="-print spot triple"
  * Author : Emile Achadde 17 mars 2020 at 11:24:18+01:00
  */
 

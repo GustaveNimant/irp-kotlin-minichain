@@ -7,7 +7,7 @@ fun executeWriteOfWordStack(wor_s: Stack<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
     
-    // Ex.: -write spot
+    // Ex.: -write spot [<file-path:./generator/spot.yml>]
 
     if(isTrace(here)) println ("$here: input wor_s '$wor_s'")
     
