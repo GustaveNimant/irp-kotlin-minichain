@@ -80,7 +80,7 @@ import com.beust.klaxon.Klaxon
  */
 
 data class Name(val value: String)
-data class MyData(val hash: String, val size: Int, val cum: Int, val blocks: Int, val type: String)
+data class MyData(val Hash: String, val Size: Int, val CumulativeSize: Int, val Blocks: Int, val Type: String)
 data class MyHash(val hash: String)
 
 fun http4kClientAsAFunction () {
@@ -404,20 +404,17 @@ fun http4kIpfsGetStatOfFileName(filNam: String) {
     val body = response.body
     println("$here: body '$body'")
 
-    //    val jsonStr = body.toString()
-//    println("$here: jsonStr '$jsonStr'")
-    val result = Klaxon().parse<MyHash>("""
-					{
-					    "hash": "Qm123",
-					}
-					""")
-    println("$here: result '$result'")
-    val hash = result?.hash
-    println("$here: hash '$hash'")
-/*
-    val hash = body("""{"Hash"
+    val jsonStr = body.toString()
     println("$here: jsonStr '$jsonStr'")
-*/
+    val result = Klaxon().parse<MyData>(jsonStr)
+
+    println("$here: result '$result'")
+    val hash = result?.Hash
+    println("$here: hash '$hash'")
+
+    val blocks = result?.Blocks
+    println("$here: blocks '$blocks'")
+
     val payload = body.payload
     println("$here: payload '$payload'")
 
