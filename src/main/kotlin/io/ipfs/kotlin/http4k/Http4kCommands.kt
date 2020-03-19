@@ -58,6 +58,17 @@ import org.http4k.server.Jetty
 import org.http4k.server.SunHttp
 import org.http4k.server.asServer
 
+import org.http4k.format.Jackson
+import org.http4k.format.Jackson.asJsonArray
+import org.http4k.format.Jackson.asJsonObject
+import org.http4k.format.Jackson.asJsonValue
+import org.http4k.format.Jackson.asPrettyJsonString
+import org.http4k.format.Jackson.json
+
+import com.beust.klaxon.Klaxon
+
+// import org.http4k.format.Moshi.auto
+
 //import org.junit.jupiter.api.Assertions.assertEquals
 //import org.junit.jupiter.api.Assertions.assertNull
 //import org.junit.Test
@@ -69,6 +80,8 @@ import org.http4k.server.asServer
  */
 
 data class Name(val value: String)
+data class MyData(val hash: String, val size: Int, val cum: Int, val blocks: Int, val type: String)
+data class MyHash(val hash: String)
 
 fun http4kClientAsAFunction () {
     val (here, caller) = moduleHereAndCaller()
@@ -366,6 +379,67 @@ fun http4kInMemoryResponse() {
     exiting(here)
 }
 
+fun http4kIpfsGetStatOfFileName(filNam: String) {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+    
+    // Ex.: -http4k ipfs get stat /etc/spot.json
+    
+    if(isTrace(here)) println ("$here: input filNam '$filNam'")
+
+    val uri = "http://localhost:5001/api/v0/files/stat"
+    val method = Method.GET
+    val request = Request(method, uri).query("arg", filNam)
+    
+    val message = request.toMessage()
+    println("$here: message '$message'")
+    println()
+
+    val client: HttpHandler = JavaHttpClient()
+    println("$here: client '$client'")
+    
+    val response = client(request) 
+    println("$here: response '$response'")
+    
+    val body = response.body
+    println("$here: body '$body'")
+
+    //    val jsonStr = body.toString()
+//    println("$here: jsonStr '$jsonStr'")
+    val result = Klaxon().parse<MyHash>("""
+					{
+					    "hash": "Qm123",
+					}
+					""")
+    println("$here: result '$result'")
+    val hash = result?.hash
+    println("$here: hash '$hash'")
+/*
+    val hash = body("""{"Hash"
+    println("$here: jsonStr '$jsonStr'")
+*/
+    val payload = body.payload
+    println("$here: payload '$payload'")
+
+    val stream = body.stream
+    println("$here: stream '$stream'")
+
+    val status = response.status
+    println("$here: status '$status'")
+    if (! status.successful) {
+	val description = status.description
+	val code = status.code
+	when(code) {
+	    503 ->
+		fatalErrorPrint("IPFS server were started ",description," run for example : jsm; . config.sh; ipmsd.sh", here)
+	    else ->
+		fatalErrorPrint("Response were successful ",description,"Check", here)
+	}
+    }
+
+    exiting(here)
+}
+
 fun http4kIpfsPostWrite() {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
@@ -374,9 +448,10 @@ fun http4kIpfsPostWrite() {
     // Ex.: -http4k ipfs post
     
     val spoDat = provideSpotData()
+    
     val request = Request(Method.POST, "http://localhost:5001/api/v0/files/write")
-	.form("file", spoDat)
-	.query("arg", "/etc/spot.yml")
+	.form("file", "./generator/spot.json")
+	.query("arg", "/etc/spot.json")
 	.query("create", "true")
 	.query("parents", "true")
 	.header("Content-Type", "multipart/form-data;boundary=immutable-file-boundary-123")
@@ -829,26 +904,6 @@ fun menuHttp4kFormsUnipartOfWordStack(wor_s: Stack<String>) {
     catch (e: java.util.EmptyStackException) {
 	fatalErrorPrint ("command were -http4k forms unipart 'sta'ndard or 'len's","no arguments", "Complete input", here)
     }
-    exiting(here)
-}
-
-fun http4kIpfsGetStatOfFileName(filNam: String) {
-    val (here, caller) = moduleHereAndCaller()
-    entering(here, caller)
-    
-    // Ex.: -http4k ipfs get stat <file-name>
-    
-    if(isTrace(here)) println ("$here: input filNam '$filNam'")
-
-    val request = Request(Method.GET, "http://localhost:5001/api/v0/files/stat")
-	.query("arg", filNam)
-    
-    val client: HttpHandler = JavaHttpClient()
-    
-    println("$here: request")
-    println(client(request))
-    println()
-    
     exiting(here)
 }
 

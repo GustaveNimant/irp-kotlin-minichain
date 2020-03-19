@@ -55,7 +55,13 @@ dependencies {
     implementation("org.http4k:http4k-server-jetty:${extra["http4kVersion"]}")
     implementation("org.http4k:http4k-client-okhttp:${extra["http4kVersion"]}")
     implementation("org.http4k:http4k-client-apache:${extra["http4kVersion"]}")
-    
+
+    implementation("org.http4k:http4k-format-argo:${extra["http4kVersion"]}")
+    implementation("org.http4k:http4k-format-gson:${extra["http4kVersion"]}")
+    implementation("org.http4k:http4k-format-jackson:${extra["http4kVersion"]}")
+
+    implementation("com.beust:klaxon:5.0.1")
+
     testImplementation("junit:junit:${extra["junitVersion"]}")
     testImplementation("org.mockito:mockito-core:${extra["mockitoVersion"]}")
     testImplementation("com.squareup.okhttp3:mockwebserver:${extra["okhttpVersion"]}")

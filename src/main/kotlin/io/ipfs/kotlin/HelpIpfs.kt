@@ -22,6 +22,7 @@ fun helpList(): List<String> {
 	"gradlew run --args=\"-http4k get port 9000 host localhost route /greet/Jules\"",
 	"gradlew run --args=\"-http4k get port <port-type> host <host-type> route <route>(client OkHttp)",
 	"gradlew run --args=\"-http4k inmemory (server + client /greet/Bob)",
+	"gradlew run --args=\"-http4k ipfs get stat etc/spot.yml",
 	"gradlew run --args=\"-http4k ipfs post (post spotData)",
 	"gradlew run --args=\"-http4k quickstart (elementary example server + client)",
 	"gradlew run --args=\"-http4k server filtered\"",
