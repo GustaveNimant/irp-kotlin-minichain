@@ -366,7 +366,7 @@ fun http4kInMemoryResponse() {
     exiting(here)
 }
 
-fun http4kIpfsPost() {
+fun http4kIpfsPostWrite() {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
@@ -832,6 +832,59 @@ fun menuHttp4kFormsUnipartOfWordStack(wor_s: Stack<String>) {
     exiting(here)
 }
 
+fun http4kIpfsGetStatOfFileName(filNam: String) {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+    
+    // Ex.: -http4k ipfs get stat <file-name>
+    
+    if(isTrace(here)) println ("$here: input filNam '$filNam'")
+
+    val request = Request(Method.GET, "http://localhost:5001/api/v0/files/stat")
+	.query("arg", filNam)
+    
+    val client: HttpHandler = JavaHttpClient()
+    
+    println("$here: request")
+    println(client(request))
+    println()
+    
+    exiting(here)
+}
+
+fun menuHttp4kIpfsGetOfWordStack(wor_s: Stack<String>) {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    if(isTrace(here)) println ("$here: input wor_s '$wor_s'")
+
+    try {
+ 	val wor = wor_s.pop()
+	val wor_3 = threeFirstCharactersOfStringOfCaller(wor, here)
+	if(isLoop(here)) println("$here: while wor '$wor'")
+	
+	when (wor_3) {
+	    "sta" -> {
+		try {
+		    val filNam = wor_s.pop()
+		    http4kIpfsGetStatOfFileName(filNam)
+		}
+		catch(e: java.util.EmptyStackException) {
+		    fatalErrorPrint ("file name were provided","no argument", "Check input", here)
+		}
+	    }
+	    "hel" -> {printHelpOfString("ipfs get ")}
+	    else -> {
+		fatalErrorPrint ("command were 'sta't <file-name>","'$wor'", "Check input", here)
+	    } // else
+	} // when (wor_3)
+    } // try
+    catch (e: java.util.EmptyStackException) {
+	fatalErrorPrint ("command were -http4k ipfs get 'sta't","no arguments", "Complete input", here)
+    }
+    exiting(here)
+}
+
 fun menuHttp4kIpfsOfWordStack(wor_s: Stack<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
@@ -844,15 +897,16 @@ fun menuHttp4kIpfsOfWordStack(wor_s: Stack<String>) {
 	if(isLoop(here)) println("$here: while wor '$wor'")
 	
 	when (wor_3) {
-	    "pos" -> {http4kIpfsPost()}
+	    "get" -> {menuHttp4kIpfsGetOfWordStack(wor_s)}
+	    "pos" -> {http4kIpfsPostWrite()}
 	    "hel" -> {printHelpOfString("ipfs ")}
 	    else -> {
-		fatalErrorPrint ("command were 'pos't","'$wor'", "Check input", here)
+		fatalErrorPrint ("command were 'get' or 'pos't","'$wor'", "Check input", here)
 	    } // else
 	} // when (wor_3)
     } // try
     catch (e: java.util.EmptyStackException) {
-	fatalErrorPrint ("command were -http4k ipfs 'pos't","no arguments", "Complete input", here)
+	fatalErrorPrint ("command were -http4k ipfs 'get' or 'pos't","no arguments", "Complete input", here)
     }
     exiting(here)
 }
