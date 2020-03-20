@@ -135,6 +135,7 @@ fun http4kIpfsPostWrite() {
     // Improve : file created is empty
     // http://127.0.0.1:5001/api/v0/<command>
     // Ex.: -http4k ipfs post
+    // https://www.http4k.org/cookbook/multipart_forms/
     
     //val spoDat = provideSpotData()
     val spoDat = """{
@@ -144,13 +145,16 @@ fun http4kIpfsPostWrite() {
 	"spot": 1865810819,
     }"""
     
+    val body = MultipartFormBody()
+        .plus("file" to MultipartFormFile("file", ContentType.APPLICATION_JSON, spoDat.byteInputStream()))
+	      
     val request = Request(Method.POST, "http://localhost:5001/api/v0/files/write")
-	.form("file", "./generator/spot.json")
- //     .body(spoDat)
-      .query("arg", "/etc/spot.json")
-      .query("create", "true")
-      .query("parents", "true")
-      .header("Content-Type", "multipart/form-data;boundary=immutable-file-boundary-123")
+	.body(body)
+	.query("arg", "/etc/spot.json")
+	.query("create", "true")
+	.query("parents", "true")
+	.header("Content-Type", "multipart/form-data;boundary=${body.boundary}")
+ 
     println()
     println("$here: request '$request'")
     println()

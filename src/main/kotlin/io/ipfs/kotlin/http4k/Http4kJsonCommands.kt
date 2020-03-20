@@ -43,32 +43,7 @@ fun http4kKlaxonOnJsonString() {
     exiting(here)
 }
 
-fun http4kJacksonObjectMapperOnJsonArray() {
-    val (here, caller) = moduleHereAndCaller()
-    entering(here, caller)
-
-    // Ex.: --args="-http4k jackson object"
-    // https://stackoverflow.com/questions/33368328/how-to-use-jackson-to-deserialize-to-kotlin-collections
-
-    val jsonStr = """[{"a": "value1", "b": 1}, {"a": "value2", "b": 2}]"""
-
-    val mapper = jacksonObjectMapper()
-    val res_l: List<MyInts> = mapper.readValue<List<MyInts>>(jsonStr)
-	
-    println("$here: result starts here ----->")
-    println("$here res_l '$res_l'")
-    for (res in res_l) {
-	println("$here res '"+res+"'")
-	val a = res.a
-	val b = res.b
-	println("$here a '$a' b '$b'")
-
-	}
-    println("$here: <----- result ends here")
-    exiting(here)
-}
-
-fun http4kJacksonSimpleOnJsonArray() {
+fun http4kJacksonOnJsonArray() {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
@@ -79,7 +54,7 @@ fun http4kJacksonSimpleOnJsonArray() {
 
      val mapper = jacksonObjectMapper()  
      val res_l: List<MyInts> = mapper.readValue(jsonStr)
-
+    // val res_l: List<MyInts> = mapper.readValue<List<MyInts>>(jsonStr)
     println("$here: result starts here ----->")
     println("$here res_l '$res_l'")
     for (res in res_l) {
@@ -108,8 +83,7 @@ fun menuHttp4kJsonOfWordStack(wor_s: Stack<String>) {
 	
 	when (wor_3) {
 	    "kla" -> {http4kKlaxonOnJsonString()}
-	    "sim" -> {http4kJacksonSimpleOnJsonArray()}
-	    "obj" -> {http4kJacksonObjectMapperOnJsonArray()} 
+	    "jac" -> {http4kJacksonOnJsonArray()}
 	    else -> {
 		fatalErrorPrint ("command were json","'$wor'", "Check input", here)
 	    } // else

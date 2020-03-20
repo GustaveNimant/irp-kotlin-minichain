@@ -78,6 +78,7 @@ import com.fasterxml.jackson.module.kotlin.*
 
 data class Name(val value: String)
 data class MyHash(val hash: String)
+
 fun http4kFullTest() {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
@@ -193,6 +194,7 @@ fun http4kRoutesNestable() {
     entering(here, caller)
 
     // https://www.http4k.org/cookbook/nestable_routes/
+    // Ex.: -http4k routes nestable
     
     val routesWithFilter =
         PrintRequestAndResponse().then(
