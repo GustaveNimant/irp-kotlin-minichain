@@ -140,18 +140,19 @@ fun http4kIpfsPostWrite() {
     //val spoDat = provideSpotData()
     val spoDat = """{
 	"Hash":"QmZYVoscbWWJJZWy7Ue19iGXC5SRh3kune3gKSYHv3kzKn",
-	"tic": 1584440601,
+	"tic": 1584440602,
 	"ip": "82.67.137.54",
-	"spot": 1865810819,
+	"spot": 1866816819,
     }"""
     
     val body = MultipartFormBody()
-        .plus("file" to MultipartFormFile("file", ContentType.APPLICATION_JSON, spoDat.byteInputStream()))
+        .plus("upload" to MultipartFormFile("file", ContentType.APPLICATION_JSON, spoDat.byteInputStream()))
 	      
     val request = Request(Method.POST, "http://localhost:5001/api/v0/files/write")
 	.body(body)
 	.query("arg", "/etc/spot.json")
 	.query("create", "true")
+    	.query("truncate", "true")
 	.query("parents", "true")
 	.header("Content-Type", "multipart/form-data;boundary=${body.boundary}")
  
