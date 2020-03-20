@@ -35,6 +35,9 @@ import org.http4k.core.with
 import org.http4k.filter.CachingFilters
 import org.http4k.filter.DebuggingFilters.PrintRequestAndResponse
 import org.http4k.filter.ServerFilters
+import org.http4k.filter.GenerateDataClasses
+import org.http4k.format.Jackson
+
 import org.http4k.hamkrest.hasStatus
 import org.http4k.lens.FormField
 import org.http4k.lens.Header
@@ -60,6 +63,9 @@ import org.http4k.server.asServer
 
 // import org.http4k.format.Moshi.auto
 
+import com.fasterxml.jackson.module.kotlin.readValue
+import com.fasterxml.jackson.module.kotlin.*
+
 //import org.junit.jupiter.api.Assertions.assertEquals
 //import org.junit.jupiter.api.Assertions.assertNull
 //import org.junit.Test
@@ -72,7 +78,84 @@ import org.http4k.server.asServer
 
 data class Name(val value: String)
 data class MyHash(val hash: String)
+data class MyInts(val a: String, val b: Int)
 
+fun http4kJacksonObjectMapperOnJsonArray() {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    // Ex.: --args="-http4k jackson object"
+    // https://stackoverflow.com/questions/33368328/how-to-use-jackson-to-deserialize-to-kotlin-collections
+
+    val jsonStr = """[{"a": "value1", "b": 1}, {"a": "value2", "b": 2}]"""
+
+    val mapper = jacksonObjectMapper()
+    val res_l: List<MyInts> = mapper.readValue<List<MyInts>>(jsonStr)
+	
+    println("$here: result starts here ----->")
+    println("$here res_l '$res_l'")
+    for (res in res_l) {
+	println("$here res '"+res+"'")
+	val a = res.a
+	val b = res.b
+	println("$here a '$a' b '$b'")
+
+	}
+    println("$here: <----- result ends here")
+    exiting(here)
+}
+
+fun http4kJacksonSimpleOnJsonArray() {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    // Ex.: --args="-http4k jackson simple"
+    // https://stackoverflow.com/questions/33368328/how-to-use-jackson-to-deserialize-to-kotlin-collections
+
+     val jsonStr = """[{"a": "value1", "b": 1}, {"a": "value2", "b": 2}]"""
+
+     val mapper = jacksonObjectMapper()  
+     val res_l: List<MyInts> = mapper.readValue(jsonStr)
+
+    println("$here: result starts here ----->")
+    println("$here res_l '$res_l'")
+    for (res in res_l) {
+	println("$here res '"+res+"'")
+	val a = res.a
+	val b = res.b
+	println("$here a '$a' b '$b'")
+
+	}
+    println("$here: <----- result ends here")
+    exiting(here)
+}
+
+fun menuHttp4kJacksonOfWordStack(wor_s: Stack<String>) {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    // Ex.: -http4k jackson array
+    
+    if(isTrace(here)) println ("$here: input wor_s '$wor_s'")
+
+    try {
+ 	val wor = wor_s.pop()
+	val wor_3 = threeFirstCharactersOfStringOfCaller(wor, here)
+	if(isLoop(here)) println("$here: while wor '$wor'")
+	
+	when (wor_3) {
+	    "sim" -> {http4kJacksonSimpleOnJsonArray()}
+	    "obj" -> {http4kJacksonObjectMapperOnJsonArray()} 
+	    else -> {
+		fatalErrorPrint ("command were json","'$wor'", "Check input", here)
+	    } // else
+	} // when (wor_3)
+    } // try
+    catch (e: java.util.EmptyStackException) {
+	fatalErrorPrint ("command were -http4k jackson json","no arguments", "Complete input", here)
+    }
+    exiting(here)
+}
 
 fun http4kFullTest() {
     val (here, caller) = moduleHereAndCaller()
@@ -109,6 +192,24 @@ fun http4kFullTest() {
 
     app.asServer(Jetty(9000)).start()
     
+    exiting(here)
+}
+
+fun http4kGenerateDataClasses() {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    // Ex.: --args="-http4k generate"
+    // https://www.http4k.org/cookbook/generating_data_classes/
+
+    val request = Request(Method.GET, "http://api.icndb.com/jokes/random/3")
+
+    println("$here request '$request'")
+    
+    val result = GenerateDataClasses(Jackson, System.out).then(ApacheClient()).invoke(request)
+    println("$here: result starts here ----->")
+    println("$here result '$result'")
+    println("$here: <----- result ends here")
     exiting(here)
 }
 
@@ -221,6 +322,10 @@ fun menuHttp4kOfWordStack(wor_s: Stack<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
     
+    /**
+     * Main Menu for http4k
+     */
+    
     // Ex.: -http4k client function
     // Ex.: -http4k client response
     // Ex.: -http4k example
@@ -249,13 +354,15 @@ fun menuHttp4kOfWordStack(wor_s: Stack<String>) {
 	    
 	    when (wor_3) {
 		"cli" -> {menuHttp4kClientOfWordStack(wor_s)}
+		"for" -> {menuHttp4kFormsOfWordStack(wor_s)}
 		"ful" -> {http4kFullTest() }
+		"gen" -> {http4kGenerateDataClasses() }
 		"get" -> {menuHttp4kClientUrlGetOfWordStack(wor_s)}
 		"hel" -> {printHelpOfString("-http4k ")}
 		"inm" -> {http4kInMemoryResponse()}
 		"ipf" -> {menuHttp4kIpfsOfWordStack(wor_s)}
+		"jac" -> {menuHttp4kJacksonOfWordStack(wor_s)}
 		"qui" -> {http4kQuickStart()}
-		"for" -> {menuHttp4kFormsOfWordStack(wor_s)}
 		"rou" -> {menuHttp4kRoutesOfWordStack(wor_s)}
 		"ser" -> {menuHttp4kServerOfWordStack(wor_s)}
 		else -> {
