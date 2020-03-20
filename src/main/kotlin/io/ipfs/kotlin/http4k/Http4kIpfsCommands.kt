@@ -14,6 +14,7 @@ import java.time.format.FormatStyle
 import org.http4k.client.ApacheClient
 import org.http4k.client.JavaHttpClient
 import org.http4k.client.OkHttp
+
 import org.http4k.core.Body
 import org.http4k.core.ContentType
 import org.http4k.core.Filter
@@ -32,10 +33,11 @@ import org.http4k.core.getFirst
 import org.http4k.core.then
 import org.http4k.core.toParametersMap
 import org.http4k.core.with
+
 import org.http4k.filter.CachingFilters
 import org.http4k.filter.DebuggingFilters.PrintRequestAndResponse
 import org.http4k.filter.ServerFilters
-import org.http4k.hamkrest.hasStatus
+
 import org.http4k.lens.FormField
 import org.http4k.lens.Header
 import org.http4k.lens.LensFailure
@@ -47,12 +49,6 @@ import org.http4k.lens.WebForm
 import org.http4k.lens.int
 import org.http4k.lens.multipartForm
 import org.http4k.lens.webForm
-import org.http4k.routing.ResourceLoader.Companion.Classpath
-import org.http4k.routing.bind
-import org.http4k.routing.path
-import org.http4k.routing.routes
-import org.http4k.routing.singlePageApp
-import org.http4k.routing.static
 import org.http4k.server.Http4kServer
 import org.http4k.server.Jetty
 import org.http4k.server.SunHttp
@@ -67,66 +63,7 @@ import org.http4k.format.Jackson.json
 
 import com.beust.klaxon.Klaxon
 
-
-
-fun menuHttp4kIpfsGetOfWordStack(wor_s: Stack<String>) {
-    val (here, caller) = moduleHereAndCaller()
-    entering(here, caller)
-
-    if(isTrace(here)) println ("$here: input wor_s '$wor_s'")
-
-    try {
- 	val wor = wor_s.pop()
-	val wor_3 = threeFirstCharactersOfStringOfCaller(wor, here)
-	if(isLoop(here)) println("$here: while wor '$wor'")
-	
-	when (wor_3) {
-	    "sta" -> {
-		try {
-		    val filNam = wor_s.pop()
-		    http4kIpfsGetStatOfFileName(filNam)
-		}
-		catch(e: java.util.EmptyStackException) {
-		    fatalErrorPrint ("file name were provided","no argument", "Check input", here)
-		}
-	    }
-	    "hel" -> {printHelpOfString("ipfs get ")}
-	    else -> {
-		fatalErrorPrint ("command were 'sta't <file-name>","'$wor'", "Check input", here)
-	    } // else
-	} // when (wor_3)
-    } // try
-    catch (e: java.util.EmptyStackException) {
-	fatalErrorPrint ("command were -http4k ipfs get 'sta't","no arguments", "Complete input", here)
-    }
-    exiting(here)
-}
-
-fun menuHttp4kIpfsOfWordStack(wor_s: Stack<String>) {
-    val (here, caller) = moduleHereAndCaller()
-    entering(here, caller)
-
-    if(isTrace(here)) println ("$here: input wor_s '$wor_s'")
-
-    try {
- 	val wor = wor_s.pop()
-	val wor_3 = threeFirstCharactersOfStringOfCaller(wor, here)
-	if(isLoop(here)) println("$here: while wor '$wor'")
-	
-	when (wor_3) {
-	    "get" -> {menuHttp4kIpfsGetOfWordStack(wor_s)}
-	    "pos" -> {http4kIpfsPostWrite()}
-	    "hel" -> {printHelpOfString("ipfs ")}
-	    else -> {
-		fatalErrorPrint ("command were 'get' or 'pos't","'$wor'", "Check input", here)
-	    } // else
-	} // when (wor_3)
-    } // try
-    catch (e: java.util.EmptyStackException) {
-	fatalErrorPrint ("command were -http4k ipfs 'get' or 'pos't","no arguments", "Complete input", here)
-    }
-    exiting(here)
-}
+data class MyData(val Hash: String, val Size: Int, val CumulativeSize: Int, val Blocks: Int, val Type: String)
 
 fun http4kIpfsGetStatOfFileName(filNam: String) {
     val (here, caller) = moduleHereAndCaller()
@@ -195,6 +132,7 @@ fun http4kIpfsPostWrite() {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
+    // Improve : file created is empty
     // http://127.0.0.1:5001/api/v0/<command>
     // Ex.: -http4k ipfs post
     
@@ -207,8 +145,8 @@ fun http4kIpfsPostWrite() {
     }"""
     
     val request = Request(Method.POST, "http://localhost:5001/api/v0/files/write")
-//    .form("file", "./generator/spot.json")
-      .body(spoDat)
+	.form("file", "./generator/spot.json")
+ //     .body(spoDat)
       .query("arg", "/etc/spot.json")
       .query("create", "true")
       .query("parents", "true")
@@ -227,6 +165,65 @@ fun http4kIpfsPostWrite() {
     println(client(request))
     println("$here: client(request) ends here")
     
+    exiting(here)
+}
+
+fun menuHttp4kIpfsGetOfWordStack(wor_s: Stack<String>) {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    if(isTrace(here)) println ("$here: input wor_s '$wor_s'")
+
+    try {
+ 	val wor = wor_s.pop()
+	val wor_3 = threeFirstCharactersOfStringOfCaller(wor, here)
+	if(isLoop(here)) println("$here: while wor '$wor'")
+	
+	when (wor_3) {
+	    "sta" -> {
+		try {
+		    val filNam = wor_s.pop()
+		    http4kIpfsGetStatOfFileName(filNam)
+		}
+		catch(e: java.util.EmptyStackException) {
+		    fatalErrorPrint ("file name were provided","no argument", "Check input", here)
+		}
+	    }
+	    "hel" -> {printHelpOfString("ipfs get ")}
+	    else -> {
+		fatalErrorPrint ("command were 'sta't <file-name>","'$wor'", "Check input", here)
+	    } // else
+	} // when (wor_3)
+    } // try
+    catch (e: java.util.EmptyStackException) {
+	fatalErrorPrint ("command were -http4k ipfs get 'sta't","no arguments", "Complete input", here)
+    }
+    exiting(here)
+}
+
+fun menuHttp4kIpfsOfWordStack(wor_s: Stack<String>) {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    if(isTrace(here)) println ("$here: input wor_s '$wor_s'")
+
+    try {
+ 	val wor = wor_s.pop()
+	val wor_3 = threeFirstCharactersOfStringOfCaller(wor, here)
+	if(isLoop(here)) println("$here: while wor '$wor'")
+	
+	when (wor_3) {
+	    "get" -> {menuHttp4kIpfsGetOfWordStack(wor_s)}
+	    "pos" -> {http4kIpfsPostWrite()}
+	    "hel" -> {printHelpOfString("ipfs ")}
+	    else -> {
+		fatalErrorPrint ("command were 'get' or 'pos't","'$wor'", "Check input", here)
+	    } // else
+	} // when (wor_3)
+    } // try
+    catch (e: java.util.EmptyStackException) {
+	fatalErrorPrint ("command were -http4k ipfs 'get' or 'pos't","no arguments", "Complete input", here)
+    }
     exiting(here)
 }
 

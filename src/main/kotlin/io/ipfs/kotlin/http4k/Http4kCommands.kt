@@ -71,36 +71,40 @@ import org.http4k.server.asServer
  */
 
 data class Name(val value: String)
-data class MyData(val Hash: String, val Size: Int, val CumulativeSize: Int, val Blocks: Int, val Type: String)
 data class MyHash(val hash: String)
 
 fun http4kClientAsAFunction () {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
+
+    // --args="-http4k client func"
     
     val request = Request(Method.GET, "https://xkcd.com/info.0.json")
     val client: HttpHandler = JavaHttpClient()
 
-    println("$here: request")
-    println(client(request))
-    println()
+    println("$here: response ------>")
+    val response = client(request)
+    println(response)
+    println("$here: <------ end of response")
     exiting(here)
 }
 
-fun http4kClientGetOfUrl (url: String) {
+fun http4kClientGetOfUri (uri: String) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
     
-    // Ex.: -http4k client json http://82.67.137.54/js/json/files/test.json"
+    // Ex.: -http4k client get http://82.67.137.54/js/json/files/test.json"
 
-    if(isTrace(here)) println ("$here: input url '$url'")
+    if(isTrace(here)) println ("$here: input uri '$uri'")
 
-    val request = Request(Method.GET, url)
+    val request = Request(Method.GET, uri)
     val client: HttpHandler = JavaHttpClient()
 
-    println("$here: request")
-    println(client(request))
-    println()
+    println("$here: response ------>")
+    val response = client(request)
+    println(response)
+    println("$here: <------ end of response")
+
     exiting(here)
 }
 
@@ -120,15 +124,16 @@ fun http4kClientResponse () {
 	println("$here: request ends here")
     }
 
-    val networkResponse: Response = client(request)
+    val response: Response = client(request)
 
     if(isVerbose(here)){
-	println("$here: networkResponse starts here")
-	println(networkResponse)
-	println("$here: networkResponse ends here")
+	println("$here: response starts here")
+	println(response)
+	println("$here: response ends here")
     }
     
-    val status = networkResponse.status
+    val status = response.status
+    if(isVerbose(here))println("$here: response status $status")
     if (! status.successful) {
 	val description = status.description
 	val code = status.code
@@ -549,9 +554,9 @@ fun http4kServerJettyFull() {
     // HTTP clients are also HttpHandlers!
     val client: HttpHandler = OkHttp()
 
-    val networkResponse: Response = client(Request(GET, "http://localhost:9000/greet/Bob"))
-    println("$here: networkResponse")
-    println(networkResponse)
+    val response: Response = client(Request(GET, "http://localhost:9000/greet/Bob"))
+    println("$here: response")
+    println(response)
 
 // Produces:
 //    Request to /api/greet/Bob took 1ms
@@ -645,8 +650,8 @@ fun menuHttp4kClientOfWordStack(wor_s: Stack<String>) {
 	when (wor_3) {
 	    "fun" -> {http4kClientAsAFunction()}
 	    "get" -> {
-		val url = wor_s.pop()
-		http4kClientGetOfUrl(url)
+		val uri = wor_s.pop()
+		http4kClientGetOfUri(uri)
 	    }
 	    "res" -> {http4kClientResponse()}
 	    else -> {
@@ -716,16 +721,17 @@ fun menuHttp4kClientUrlGetOfWordStack(wor_s: Stack<String>) {
     println("$here: client OkHttp started")
     println("client")
 
-    val url = "http://" + hosStr + ":" + porStr + rouStr 
+    val uri = "http://" + hosStr + ":" + porStr + rouStr 
 
-    if(isDebug(here)) println ("$here: url '$url'")
-    val networkResponse: Response = client(Request(GET, url))
+    if(isDebug(here)) println ("$here: uri '$uri'")
+    val request = Request(GET, uri)
+    val response: Response = client(request)
 
-    println("$here: networkResponse")
-    println(networkResponse)
+    println("$here: response")
+    println(response)
 
     val pattern = Regex("Client Error: Connection Refused")
-    if(pattern.containsMatchIn(networkResponse.toString())){
+    if(pattern.containsMatchIn(response.toString())){
 	fatalErrorPrint("server were started","it is not","run for example : -http4k server jetty start", here)
     }
 
