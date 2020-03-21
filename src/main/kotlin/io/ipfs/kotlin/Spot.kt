@@ -11,10 +11,12 @@ import java.util.Stack
 
 /**
  * Improve : missing local Ip from network card 
+ * Improve : SpotType as sealed Class  
  * Ex.: --args="-write spot [file-path:.generator/spot.yml]"
- * Ex.: --args="-print spot data"
+ * Ex.: --args="-print spot yml|json"
  * Ex.: --args="-print spot triple"
  * Author : Emile Achadde 17 mars 2020 at 11:24:18+01:00
+ * Revision : yml and json by Emile Achadde 21 mars 2020 at 17:28:10+01:00
  */
 
 fun printSpotOfWordStack(wor_s: Stack<String>) {
@@ -27,17 +29,20 @@ fun printSpotOfWordStack(wor_s: Stack<String>) {
 
     val str = 
 	when(spoTyp) {
-	    "data" -> {
-		provideSpotData()
+	    "yml" -> {
+		provideSpotDataOfDataType("yml")
+	    }
+	    "json" -> {
+		provideSpotDataOfDataType("json")
 	    }
 	    "help" -> {
-		stringHelpOfString("-print spot")
+		stringHelpOfString("-print spot ")
 	    }
 	    "triple" -> {
 		provideSpotTriple()
 	    }
 	    else -> {
-		fatalErrorPrint("-print spot data|triple","'spoTyp'","reset arguments",here)}
+		fatalErrorPrint("-print spot json|triple|yml","'spoTyp'","reset arguments",here)}
 	}
     println ()
     println ("Spot $spoTyp:")
@@ -63,9 +68,11 @@ fun provideSpotTriple(): Triple<String, String, String> {
     return result
 }
 
-fun provideSpotData(): String {
+fun provideSpotDataOfDataType(datTyp: String): String {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
+
+    if(isTrace(here)) println ("$here: input datTyp '$datTyp'")
 
     val (peeId, tic, ipSys) = provideSpotTriple()
 
@@ -77,12 +84,28 @@ fun provideSpotData(): String {
     if(isVerbose(here)) println ("$here: ipSInt ipSInt")
 
     val spot = ticInt.xor(ipSInt)
-    
-    var result = ""
-    result += "--- # spot for $peeId\n"
-    result += "tic: $tic\n"
-    result += "ip: $ipSys\n"
-    result += "spot: $spot"
+
+    var ymlDat = ""
+    ymlDat += "--- # spot for $peeId\n"
+    ymlDat += "tic: $tic\n"
+    ymlDat += "ip: $ipSys\n"
+    ymlDat += "spot: $spot"
+
+    val jsonDat = """{
+	"Hash":"$peeId",
+	"tic": $tic,
+	"ip": "$ipSys",
+	"spot": $spot,
+    }"""
+
+    val result =
+	when(datTyp) {
+	    "yml" -> ymlDat
+	    "json" -> jsonDat
+	    else -> {
+		fatalErrorPrint("Data type were yml|json","'$datTyp'","Check", here)
+	    }
+	}
     
     if(isTrace(here)) {
 	println ("$here: output result:")
@@ -108,8 +131,8 @@ fun writeSpotDataOfFilePath(filPat: String) {
     entering(here, caller)
     
     if(isDebug(here)) println ("$here: input filPat '$filPat'")
-
-    val str = provideSpotData()
+    val filExt = fileExtensionOfFilePath(filPat)
+    val str = provideSpotDataOfDataType(filExt)
     outputWriteOfFilePath(filPat, str)
     
     exiting(here)

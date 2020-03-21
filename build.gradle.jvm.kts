@@ -8,6 +8,7 @@ buildscript {
     extra["moshiVersion"]   = "1.4.0"
     extra["okhttpVersion"]  = "4.4.0"
     extra["okioVersion"]  = "2.4.3"
+    extra["http4kVersion"]  = "3.239.0"
     
     repositories {
         jcenter()
@@ -47,7 +48,19 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib:${extra["kotlinVersion"]}")
     implementation("com.squareup.moshi:moshi:${extra["moshiVersion"]}")
     implementation("com.squareup.okio:okio:${extra["okioVersion"]}")
-    implementation("com.squareup.okhttp3:okhttp:${extra["okhttpVersion"]}")
+    //implementation("com.squareup.okhttp3:okhttp:${extra["okhttpVersion"]}")
+    implementation("org.http4k:http4k-core:${extra["http4kVersion"]}")
+    implementation("org.http4k:http4k-multipart:${extra["http4kVersion"]}")
+    implementation("org.http4k:http4k-testing-hamkrest:${extra["http4kVersion"]}")
+    implementation("org.http4k:http4k-server-jetty:${extra["http4kVersion"]}")
+    implementation("org.http4k:http4k-client-okhttp:${extra["http4kVersion"]}")
+    implementation("org.http4k:http4k-client-apache:${extra["http4kVersion"]}")
+
+    implementation("org.http4k:http4k-format-argo:${extra["http4kVersion"]}")
+    implementation("org.http4k:http4k-format-gson:${extra["http4kVersion"]}")
+    implementation("org.http4k:http4k-format-jackson:${extra["http4kVersion"]}")
+
+    implementation("com.beust:klaxon:5.0.1")
 
     testImplementation("junit:junit:${extra["junitVersion"]}")
     testImplementation("org.mockito:mockito-core:${extra["mockitoVersion"]}")
@@ -56,5 +69,5 @@ dependencies {
 }
 
 application {
-    mainClassName = "io.ipfs.kotlin.MainIpfsKt"
+    mainClassName = "io.ipfs.kotlin.MainKt"
 }

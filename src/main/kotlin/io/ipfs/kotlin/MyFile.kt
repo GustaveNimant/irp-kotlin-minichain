@@ -2,6 +2,7 @@ package io.ipfs.kotlin
 
 import java.io.File
 import java.io.InputStream
+// import kotlin.io
 
 /**
  * Author : Emile Achadde 25 février 2020 at 17:00:54+01:00

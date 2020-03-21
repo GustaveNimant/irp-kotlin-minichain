@@ -128,23 +128,16 @@ fun http4kIpfsGetStatOfFileName(filNam: String) {
     exiting(here)
 }
 
-fun http4kIpfsPostWrite() {
+fun http4kIpfsFilesWrite() {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
     // Improve : file created is empty
-    // http://127.0.0.1:5001/api/v0/<command>
+    // http://127.0.0.1:5001/api/v0/files/write
     // Ex.: -http4k ipfs post
     // https://www.http4k.org/cookbook/multipart_forms/
     
-    //val spoDat = provideSpotData()
-    val spoDat = """{
-	"Hash":"QmZYVoscbWWJJZWy7Ue19iGXC5SRh3kune3gKSYHv3kzKn",
-	"tic": 1584440602,
-	"ip": "82.67.137.54",
-	"spot": 1866816819,
-    }"""
-    
+    val spoDat = provideSpotDataOfDataType("json")
     val body = MultipartFormBody()
         .plus("upload" to MultipartFormFile("file", ContentType.APPLICATION_JSON, spoDat.byteInputStream()))
 	      
@@ -165,11 +158,22 @@ fun http4kIpfsPostWrite() {
     println ("$here: client $client")
     println("$here: ApacheClient ends here")
 
-    println("$here: client(request) starts here")
-    
-    println(client(request))
-    println("$here: client(request) ends here")
-    
+    println("$here: response starts here")
+    val response = client(request) 
+    println(response)
+    println("$here: response ends here")
+    val status = response.status
+    if(isVerbose(here)) println("$here: response status $status")
+    if (! status.successful) {
+	val description = status.description
+	val code = status.code
+	when(code) {
+	    503 ->
+		fatalErrorPrint("IPFS server were started ",description," run for example : jsm; . config.sh; ipmsd.sh", here)
+	    else ->
+		fatalErrorPrint("Response were successful ",description,"Check", here)
+	}
+    }
     exiting(here)
 }
 
@@ -219,7 +223,7 @@ fun menuHttp4kIpfsOfWordStack(wor_s: Stack<String>) {
 	
 	when (wor_3) {
 	    "get" -> {menuHttp4kIpfsGetOfWordStack(wor_s)}
-	    "pos" -> {http4kIpfsPostWrite()}
+	    "pos" -> {http4kIpfsFilesWrite()}
 	    "hel" -> {printHelpOfString("ipfs ")}
 	    else -> {
 		fatalErrorPrint ("command were 'get' or 'pos't","'$wor'", "Check input", here)
