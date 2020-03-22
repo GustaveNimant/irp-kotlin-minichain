@@ -128,22 +128,31 @@ fun http4kIpfsGetStatOfFileName(filNam: String) {
     exiting(here)
 }
 
-fun http4kIpfsFilesWrite() {
+fun http4kIpfsPostFilesWriteSpotOfIpfsPath(ipfPat: String) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
     // Improve : file created is empty
     // http://127.0.0.1:5001/api/v0/files/write
-    // Ex.: -http4k ipfs post
+    // Ex.: -http4k ipfs post write spot /etc/spot.json
     // https://www.http4k.org/cookbook/multipart_forms/
+
+    if(isTrace(here)) println("$here: ipfPat '$ipfPat'")
+
+    val datTyp = fileExtensionOfFilePath(ipfPat)
+    println("$here: datTyp '$datTyp'")
+    val spoDat = provideSpotDataOfDataType(datTyp)
+
+    if(datTyp != "json") {
+	fatalErrorPrint("Ipfs File extension were 'json'","'$datTyp'","Check", here)
+    }
     
-    val spoDat = provideSpotDataOfDataType("json")
     val body = MultipartFormBody()
         .plus("upload" to MultipartFormFile("file", ContentType.APPLICATION_JSON, spoDat.byteInputStream()))
 	      
     val request = Request(Method.POST, "http://localhost:5001/api/v0/files/write")
 	.body(body)
-	.query("arg", "/etc/spot.json")
+	.query("arg", ipfPat)
 	.query("create", "true")
     	.query("truncate", "true")
 	.query("parents", "true")
@@ -181,6 +190,8 @@ fun menuHttp4kIpfsGetOfWordStack(wor_s: Stack<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
 
+    // Ex.: -http4k ipfs get stat <file-name>
+
     if(isTrace(here)) println ("$here: input wor_s '$wor_s'")
 
     try {
@@ -210,9 +221,76 @@ fun menuHttp4kIpfsGetOfWordStack(wor_s: Stack<String>) {
     exiting(here)
 }
 
+fun menuHttp4kIpfsPostFilesWriteOfWordStack(wor_s: Stack<String>) {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    // Ex.: -http4k ipfs post write spot <ipfs-file-name>
+
+    if(isTrace(here)) println ("$here: input wor_s '$wor_s'")
+
+    try {
+ 	val wor = wor_s.pop()
+	val wor_3 = threeFirstCharactersOfStringOfCaller(wor, here)
+	if(isLoop(here)) println("$here: while wor '$wor'")
+	
+	when (wor_3) {
+	    "spo" -> {
+		try {
+		    val ipfPat = wor_s.pop()
+		    http4kIpfsPostFilesWriteSpotOfIpfsPath(ipfPat) 
+		}
+		catch(e: java.util.EmptyStackException) {
+		    fatalErrorPrint ("Ipfs file path were provided","it was not", "Check input", here)
+		}
+	    }
+	    "hel" -> {printHelpOfString("ipfs post write")}
+	    else -> {
+		fatalErrorPrint ("command were post write","'$wor'", "Check input", here)
+	    } // else
+	} // when (wor_3)
+    } // try
+    catch (e: java.util.EmptyStackException) {
+	fatalErrorPrint ("command were -http4k ipfs post write","no arguments", "Complete input", here)
+    }
+    exiting(here)
+}
+
+fun menuHttp4kIpfsPostOfWordStack(wor_s: Stack<String>) {
+    val (here, caller) = moduleHereAndCaller()
+    entering(here, caller)
+
+    // Ex.: -http4k ipfs post write spot <ipfs-file-name>
+
+    if(isTrace(here)) println ("$here: input wor_s '$wor_s'")
+
+    try {
+ 	val wor = wor_s.pop()
+	val wor_3 = threeFirstCharactersOfStringOfCaller(wor, here)
+	if(isLoop(here)) println("$here: while wor '$wor'")
+	
+	when (wor_3) {
+	    "wri" -> {
+		menuHttp4kIpfsPostFilesWriteOfWordStack(wor_s) 
+		}
+	    "hel" -> {printHelpOfString("ipfs post write")}
+	    else -> {
+		fatalErrorPrint ("command were post write","'$wor'", "Check input", here)
+	    } // else
+	} // when (wor_3)
+    } // try
+    catch (e: java.util.EmptyStackException) {
+	fatalErrorPrint ("command were -http4k ipfs post write","no arguments", "Complete input", here)
+    }
+    exiting(here)
+}
+
 fun menuHttp4kIpfsOfWordStack(wor_s: Stack<String>) {
     val (here, caller) = moduleHereAndCaller()
     entering(here, caller)
+
+    // Ex.: -http4k ipfs post write spot /etc/spot.json"
+    // Ex.: -http4k ipfs get
 
     if(isTrace(here)) println ("$here: input wor_s '$wor_s'")
 
@@ -223,7 +301,7 @@ fun menuHttp4kIpfsOfWordStack(wor_s: Stack<String>) {
 	
 	when (wor_3) {
 	    "get" -> {menuHttp4kIpfsGetOfWordStack(wor_s)}
-	    "pos" -> {http4kIpfsFilesWrite()}
+	    "pos" -> {menuHttp4kIpfsPostOfWordStack(wor_s)}
 	    "hel" -> {printHelpOfString("ipfs ")}
 	    else -> {
 		fatalErrorPrint ("command were 'get' or 'pos't","'$wor'", "Check input", here)
